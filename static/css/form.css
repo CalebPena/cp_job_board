@@ -1,0 +1,22 @@
+.select {
+	border: black;
+}
+
+.select__item {
+	padding: 3px;
+	margin: 0px 5px;
+	cursor: pointer;
+	text-align: center;
+	border-radius: 10px;
+	background: #eeeeee;
+	transition: background 0.1s;
+}
+
+.select__item--selected {
+	background: #009578;
+	color: #ffffff;
+}
+
+form > div {
+	margin: 5px;
+}
