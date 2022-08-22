@@ -55,3 +55,35 @@ class CustomSelect {
 document.querySelectorAll('.custom-select').forEach((selectElement) => {
 	new CustomSelect(selectElement);
 });
+
+const removeMultiSelect = function () {
+	const multiTextInputs = document.querySelector('#careerTracks');
+	multiTextInputs.removeChild(multiTextInputs.lastChild);
+};
+
+const addMultiSelect = function () {
+	const multiTextInputs = document.querySelector('#careerTracks');
+	const template = document.createElement('template');
+	template.innerHTML = `<div class="careerTrack">
+						<label for="careerTrack">Career Track</label>
+						<input type="text" id="careerTrack" name="careerTracks" required/>
+					</div>`;
+	multiTextInputs.appendChild(template.content.firstElementChild);
+};
+
+const multiInputButtonAdd = document.querySelector('#careerTrack-btn-add');
+multiInputButtonAdd.addEventListener('click', (e) => {
+	e.preventDefault();
+	addMultiSelect();
+});
+
+const multiInputButtonremove = document.querySelector(
+	'#careerTrack-btn-remove'
+);
+console.log(multiInputButtonAdd);
+multiInputButtonremove.addEventListener('click', (e) => {
+	e.preventDefault();
+	removeMultiSelect();
+});
+
+addMultiSelect();

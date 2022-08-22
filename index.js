@@ -4,12 +4,14 @@ const path = require('path');
 var bodyParser = require('body-parser');
 var multer = require('multer');
 var upload = multer();
-const { Classroom, JobListings } = require('./schemas.js');
+const { Classroom, JobListing } = require('./schemas.js');
 
 const app = express();
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+
+app.use(express.static(path.join(__dirname, 'static')));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -28,21 +30,40 @@ app.get('/class/create', (req, res) => {
 app.post('/class/create', async (req, res) => {
 	const classroom = new Classroom({
 		className: req.body.className,
+		jobListings: [],
 	});
 	await classroom.save();
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
-app.get('/class/:id', (req, res) => {
-	res.render('jobListings');
+app.get('/class/:id', async (req, res) => {
+	const classroom = await Classroom.findById(req.params.id).populate(
+		'jobListings'
+	);
+	const jobs = classroom.jobListings;
+	res.render('jobListings', { id: req.params.id, jobs: jobs });
+});
+
+app.get('/class/:id/create', (req, res) => {
+	res.render('createJob', { id: req.params.id });
+});
+
+app.post('/class/:id/create', async (req, res) => {
+	console.log(req.body);
+	const job = new JobListing(req.body);
+	await job.save();
+	await Classroom.findByIdAndUpdate(req.params.id, {
+		$push: { jobListings: job.id },
+	});
+	res.redirect(`/class/${req.params.id}`);
 });
 
 app.get('/class/:id/dashboard', (req, res) => {
-	res.render('dashboard');
+	res.render('dashboard', { id: req.params.id });
 });
 
 app.get('/class/:id/admin', (req, res) => {
-	res.render('admin');
+	res.render('admin', { id: req.params.id });
 });
 
 app.get('/login', (req, res) => {
