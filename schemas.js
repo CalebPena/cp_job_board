@@ -7,17 +7,17 @@ async function main() {
 }
 const Schema = mongoose.Schema;
 
-const classroom = new Schema({
+const classroomSchema = new Schema({
 	className: { type: String, required: true },
 	leaders: [{ type: mongoose.ObjectId, ref: 'users' }],
 	admin: [{ type: mongoose.ObjectId, ref: 'users' }],
-	owner: { type: mongoose.ObjectId, ref: 'users', required: true },
+	// owner: { type: mongoose.ObjectId, ref: 'users', required: true },
 	jobListings: [{ type: mongoose.ObjectId, ref: 'jobListings' }],
 });
 
-const Classroom = mongoose.model('classroom', classroom);
+const Classroom = mongoose.model('classroom', classroomSchema);
 
-const jobListings = new Schema({
+const jobListingSchema = new Schema({
 	jobTitle: { type: String, required: true },
 	company: { type: String, required: true },
 	careerTracks: [{ type: String, required: true }],
@@ -33,6 +33,6 @@ const jobListings = new Schema({
 	],
 });
 
-const JobListings = mongoose.model('jobListings', jobListings);
+const JobListing = mongoose.model('jobListing', jobListingSchema);
 
-module.exports = { Classroom, JobListings };
+module.exports = { Classroom, JobListing };
