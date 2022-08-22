@@ -45,6 +45,21 @@ app.get('/class/:id/admin', (req, res) => {
 	res.render('admin');
 });
 
+app.get('/login', (req, res) => {
+	res.render('login');
+});
+
+app.post('/login', (req, res) => {
+	res.redirect('/');
+});
+
+app.get('/register', (req, res) => {
+	res.render('register');
+});
+app.post('/register', (req, res) => {
+	res.redirect('/');
+});
+
 app.listen(3000, () => {
 	console.log('Listening on port 3000');
 });
