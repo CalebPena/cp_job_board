@@ -1,25 +1,30 @@
 const express = require('express');
+const ejs = require('ejs');
+const path = require('path');
 
 const app = express()
 
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.render('home')
 })
 
 app.get('/class/create', (req, res) => {
-      res.send('Hello World!')
+      res.render('create')
 })
 
 app.get('/class/:id', (req, res) => {
-  res.send('Hello World!')
+  res.render('jobListings')
 })
 
 app.get('/class/:id/dashboard', (req, res) => {
-  res.send('Hello World!')
+  res.render('dashboard')
 })
 
 app.get('/class/:id/admin', (req, res) => {
-  res.send('Hello World!')
+  res.render('admin')
 })
 
 app.listen(3000, () => {
