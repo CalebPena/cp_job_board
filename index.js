@@ -44,15 +44,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(express.static('public'));
 
+const isLogedIn = function (req, res, next) {
+	if (req.isAuthenticated()) {
+		next();
+	} else {
+		res.redirect('/login');
+	}
+};
+
 app.get('/', (req, res) => {
 	res.render('home');
 });
 
-app.get('/class/create', (req, res) => {
+app.get('/class/create', isLogedIn, (req, res) => {
 	res.render('create');
 });
 
-app.post('/class/create', async (req, res) => {
+app.post('/class/create', isLogedIn, async (req, res) => {
 	const classroom = new Classroom({
 		className: req.body.className,
 		jobListings: [],
@@ -61,7 +69,7 @@ app.post('/class/create', async (req, res) => {
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
-app.get('/class/:id', async (req, res) => {
+app.get('/class/:id', isLogedIn, async (req, res) => {
 	const classroom = await Classroom.findById(req.params.id).populate(
 		'jobListings'
 	);
@@ -69,11 +77,11 @@ app.get('/class/:id', async (req, res) => {
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });
 
-app.get('/class/:id/create', (req, res) => {
+app.get('/class/:id/create', isLogedIn, (req, res) => {
 	res.render('createJob', { id: req.params.id });
 });
 
-app.post('/class/:id/create', async (req, res) => {
+app.post('/class/:id/create', isLogedIn, async (req, res) => {
 	console.log(req.body);
 	const job = new JobListing(req.body);
 	await job.save();
@@ -83,11 +91,11 @@ app.post('/class/:id/create', async (req, res) => {
 	res.redirect(`/class/${req.params.id}`);
 });
 
-app.get('/class/:id/dashboard', (req, res) => {
+app.get('/class/:id/dashboard', isLogedIn, (req, res) => {
 	res.render('dashboard', { id: req.params.id });
 });
 
-app.get('/class/:id/admin', (req, res) => {
+app.get('/class/:id/admin', isLogedIn, (req, res) => {
 	res.render('admin', { id: req.params.id });
 });
 
@@ -95,19 +103,34 @@ app.get('/login', (req, res) => {
 	res.render('login');
 });
 
-app.post('/login', (req, res) => {
-	res.redirect('/');
-});
+app.post(
+	'/login',
+	passport.authenticate('local', {
+		failureFlash: true,
+		failureRedirect: '/login',
+	}),
+	(req, res) => {
+		res.redirect('/');
+	}
+);
 
 app.get('/register', (req, res) => {
 	res.render('register');
 });
+
 app.post('/register', async (req, res) => {
 	const user = new User({
 		email: req.body.email,
 		username: req.body.username,
 	});
 	const newUser = await User.register(user, req.body.password);
+	res.redirect('/');
+});
+
+app.get('/logout', (req, res, next) => {
+	req.logOut((e) => {
+		next(e);
+	});
 	res.redirect('/');
 });
 
