@@ -11,9 +11,25 @@
 		<div>
 			<form action="/register" method="post">
 				<label for="email">Email</label>
-				<input type="text" id="email" name="email" />
+				<input
+					type="text"
+					id="email"
+					name="email"
+					autocomplete="email"
+					required
+					autofocus
+				/>
+				<label for="username">Username</label>
+				<input
+					type="text"
+					id="username"
+					name="username"
+					autocomplete="username"
+					required
+					autofocus
+				/>
 				<label for="password">Password</label>
-				<input type="password" id="password" name="password" />
+				<input type="password" id="password" name="password" required />
 				<button>Create Account</button>
 			</form>
 		</div>

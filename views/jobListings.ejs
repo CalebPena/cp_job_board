@@ -17,11 +17,11 @@
 			<h2><%= job.jobTitle %></h2>
 			<h3><%= job.company %></h3>
 			<% for (let j = 0; j < job.careerTracks.length; j++) {%>
-			<span><%= job.careerTracks[j] %>, </span><% } %>
+			<span><%= job.careerTracks[j] %> </span><% } %>
 			<div><%= job.salary %> <%=job.salaryType%></div>
 			<p><%=job.description%></p>
 			<% for (let j = 0; j < job.tags.length; j++) {%>
-			<span><%=job.tags[j]%>, </span>
+			<span><%=job.tags[j]%> </span>
 			<% } %>
 		</div>
 		<% } %>

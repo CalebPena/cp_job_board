@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const passportLocalMongoose = require('passport-local-mongoose');
 
 main().catch((err) => console.log(err));
 
@@ -43,4 +44,11 @@ const jobListingSchema = new Schema({
 
 const JobListing = mongoose.model('job-Listing', jobListingSchema);
 
-module.exports = { Classroom, JobListing };
+const userScema = new Schema({
+	email: { type: String, reequired: true, unique: true },
+});
+userScema.plugin(passportLocalMongoose);
+
+const User = mongoose.model('user', userScema);
+
+module.exports = { Classroom, JobListing, User };
