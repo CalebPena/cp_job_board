@@ -8,10 +8,20 @@
 	</head>
 	<body>
 		<h1>Home</h1>
+		
 		<a href="/class/create">Create</a>
-		<a href="/class/6303e9e895ba15e741e5b5c8">Class</a>
 		<a href="/login">login</a>
 		<a href="/register">register</a>
 		<a href="/logout">Log Out</a>
+		<% if (user) { %>
+		<h2><%=user.username%></h2>
+		<% for (i=0; i<Array.from(user.classes).length; i++) {%> 
+			<div>
+				<h3><%=user.classes[i].className%></h3>
+				<a href="/class/<%= user.classes[i].id %> ">Go to <%= user.classes[i].className %></a>
+			</div>
+		<% } %> 
+		<% } %>
+		
 	</body>
 </html>

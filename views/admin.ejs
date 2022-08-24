@@ -8,6 +8,11 @@
 	</head>
 	<body>
 		<h1>Admin</h1>
-		<a href="/class/<%= id %> ">Class</a>
+		<a href="/class/<%= id %>">Class</a>
+		<form action="/class/<%= id %>/admin/add-admin" method="post">
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" required />
+			<button type="submit">Submit</button>
+		</form>
 	</body>
 </html>

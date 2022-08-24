@@ -44,21 +44,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(express.static('public'));
 
+app.use(async (req, res, next) => {
+	if (req.user) {
+		res.locals.user = await User.findById(req.user.id).populate('classes');
+	} else {
+		res.locals.user = undefined;
+	}
+	next();
+});
+
 const permissions = async function (req, res, next) {
 	const classId = req.params.id;
 	const userId = req.user.id;
 	const hasId = (element) => {
 		return element.id === userId;
 	};
-	const classroom = await Classroom.findById(classId)
+	res.locals.classroom = await Classroom.findById(classId)
 		.populate('leaders')
 		.populate('admin')
 		.populate('owner');
-	if (classroom.owner.id === userId) {
+	if (res.locals.classroom.owner.id === userId) {
 		req.permissions = 'owner';
-	} else if (Array.from(classroom.admin).some(hasId)) {
+	} else if (Array.from(res.locals.classroom.admin).some(hasId)) {
 		req.permissions = 'admin';
-	} else if (Array.from(classroom.leaders).some(hasId)) {
+	} else if (Array.from(res.locals.classroom.leaders).some(hasId)) {
 		req.permissions = 'leader';
 	} else {
 		req.permissions = false;
@@ -70,7 +79,7 @@ const isOwner = function (req, res, next) {
 	if (req.permissions === 'owner') {
 		next();
 		return;
-	} else if (!req.permissions) {
+	} else if (req.permissions) {
 		res.redirect(`/class/${req.params.id}`);
 	} else {
 		res.redirect(`/`);
@@ -80,7 +89,7 @@ const isAdmin = function (req, res, next) {
 	if ((req.permissions === 'owner') | (req.permissions === 'admin')) {
 		next();
 		return;
-	} else if (!req.permissions) {
+	} else if (req.permissions) {
 		res.redirect(`/class/${req.params.id}`);
 	} else {
 		res.redirect(`/`);
@@ -118,6 +127,9 @@ app.post('/class/create', isLogedIn, async (req, res) => {
 		owner: req.user._id,
 	});
 	await classroom.save();
+	await User.findByIdAndUpdate(req.user.id, {
+		$push: { classes: classroom.id },
+	});
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
@@ -156,6 +168,24 @@ app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('admin', { id: req.params.id });
 });
 
+app.post(
+	'/class/:id/admin/add-admin',
+	isLogedIn,
+	permissions,
+	isOwner,
+	async (req, res) => {
+		const username = req.body.username;
+		const newAdmin = await User.findOneAndUpdate(
+			{ username: username },
+			{ $push: { classes: res.locals.classroom.id } }
+		);
+		await Classroom.findByIdAndUpdate(req.params.id, {
+			$push: { admin: newAdmin.id },
+		});
+		res.redirect(`/class/${req.params.id}/admin`);
+	}
+);
+
 app.get('/login', (req, res) => {
 	res.render('login');
 });
@@ -179,9 +209,14 @@ app.post('/register', async (req, res) => {
 	const user = new User({
 		email: req.body.email,
 		username: req.body.username,
+		classes: [],
 	});
 	const newUser = await User.register(user, req.body.password);
-	res.redirect('/');
+	req.login(user, (err) => {
+		if (!err) {
+			res.redirect('/');
+		}
+	});
 });
 
 app.get('/logout', (req, res, next) => {
