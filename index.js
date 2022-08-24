@@ -44,7 +44,29 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(express.static('public'));
 
-const isLogedIn = function (req, res, next) {
+const permitions = async function (req, res, next) {
+	const classId = req.params.id;
+	const userId = req.user.id;
+	const hasId = (element) => {
+		return element.id === userId;
+	};
+	const classroom = await Classroom.findById(classId)
+		.populate('leaders')
+		.populate('admin')
+		.populate('owner');
+	if (classroom.owner.id === req.user.id) {
+		req.permisions = 'owner';
+	} else if (classroom.admin.some(hasId(element))) {
+		req.permisions = 'admin';
+	} else if (classroom.leaders.some(hasId(element))) {
+		req.permisions = 'leader';
+	} else {
+		req.permisions = false;
+	}
+	next();
+};
+
+const isLogedIn = function async(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
@@ -64,12 +86,13 @@ app.post('/class/create', isLogedIn, async (req, res) => {
 	const classroom = new Classroom({
 		className: req.body.className,
 		jobListings: [],
+		owner: req.user._id,
 	});
 	await classroom.save();
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
-app.get('/class/:id', isLogedIn, async (req, res) => {
+app.get('/class/:id', isLogedIn, permitions, async (req, res) => {
 	const classroom = await Classroom.findById(req.params.id).populate(
 		'jobListings'
 	);
@@ -77,12 +100,11 @@ app.get('/class/:id', isLogedIn, async (req, res) => {
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });
 
-app.get('/class/:id/create', isLogedIn, (req, res) => {
+app.get('/class/:id/create', isLogedIn, permitions, (req, res) => {
 	res.render('createJob', { id: req.params.id });
 });
 
-app.post('/class/:id/create', isLogedIn, async (req, res) => {
-	console.log(req.body);
+app.post('/class/:id/create', isLogedIn, permitions, async (req, res) => {
 	const job = new JobListing(req.body);
 	await job.save();
 	await Classroom.findByIdAndUpdate(req.params.id, {
@@ -91,11 +113,11 @@ app.post('/class/:id/create', isLogedIn, async (req, res) => {
 	res.redirect(`/class/${req.params.id}`);
 });
 
-app.get('/class/:id/dashboard', isLogedIn, (req, res) => {
+app.get('/class/:id/dashboard', isLogedIn, permitions, (req, res) => {
 	res.render('dashboard', { id: req.params.id });
 });
 
-app.get('/class/:id/admin', isLogedIn, (req, res) => {
+app.get('/class/:id/admin', isLogedIn, permitions, (req, res) => {
 	res.render('admin', { id: req.params.id });
 });
 

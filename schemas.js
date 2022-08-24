@@ -12,8 +12,8 @@ const classroomSchema = new Schema({
 	className: { type: String, required: true },
 	leaders: [{ type: mongoose.ObjectId, ref: 'user' }],
 	admin: [{ type: mongoose.ObjectId, ref: 'user' }],
-	// owner: { type: mongoose.ObjectId, ref: 'users', required: true },
-	jobListings: [{ type: mongoose.ObjectId, ref: 'job-Listing' }],
+	owner: { type: mongoose.ObjectId, ref: 'user', required: true },
+	jobListings: [{ type: mongoose.ObjectId, ref: 'job_Listing' }],
 });
 
 const Classroom = mongoose.model('classroom', classroomSchema);
@@ -42,7 +42,7 @@ const jobListingSchema = new Schema({
 	],
 });
 
-const JobListing = mongoose.model('job-Listing', jobListingSchema);
+const JobListing = mongoose.model('job_Listing', jobListingSchema);
 
 const userScema = new Schema({
 	email: { type: String, reequired: true, unique: true },
