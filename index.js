@@ -1,9 +1,9 @@
 const express = require('express');
 const ejs = require('ejs');
 const path = require('path');
-var bodyParser = require('body-parser');
-var multer = require('multer');
-var upload = multer();
+const bodyParser = require('body-parser');
+const multer = require('multer');
+const upload = multer();
 const { Classroom, JobListing, User } = require('./schemas.js');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -44,7 +44,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(upload.array());
 app.use(express.static('public'));
 
-const permitions = async function (req, res, next) {
+const permissions = async function (req, res, next) {
 	const classId = req.params.id;
 	const userId = req.user.id;
 	const hasId = (element) => {
@@ -54,16 +54,45 @@ const permitions = async function (req, res, next) {
 		.populate('leaders')
 		.populate('admin')
 		.populate('owner');
-	if (classroom.owner.id === req.user.id) {
-		req.permisions = 'owner';
-	} else if (classroom.admin.some(hasId(element))) {
-		req.permisions = 'admin';
-	} else if (classroom.leaders.some(hasId(element))) {
-		req.permisions = 'leader';
+	if (classroom.owner.id === userId) {
+		req.permissions = 'owner';
+	} else if (Array.from(classroom.admin).some(hasId)) {
+		req.permissions = 'admin';
+	} else if (Array.from(classroom.leaders).some(hasId)) {
+		req.permissions = 'leader';
 	} else {
-		req.permisions = false;
+		req.permissions = false;
 	}
 	next();
+};
+
+const isOwner = function (req, res, next) {
+	if (req.permissions === 'owner') {
+		next();
+		return;
+	} else if (!req.permissions) {
+		res.redirect(`/class/${req.params.id}`);
+	} else {
+		res.redirect(`/`);
+	}
+};
+const isAdmin = function (req, res, next) {
+	if ((req.permissions === 'owner') | (req.permissions === 'admin')) {
+		next();
+		return;
+	} else if (!req.permissions) {
+		res.redirect(`/class/${req.params.id}`);
+	} else {
+		res.redirect(`/`);
+	}
+};
+const isInClass = function (req, res, next) {
+	if (req.permissions) {
+		next();
+		return;
+	} else {
+		res.redirect(`/`);
+	}
 };
 
 const isLogedIn = function async(req, res, next) {
@@ -92,7 +121,7 @@ app.post('/class/create', isLogedIn, async (req, res) => {
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
-app.get('/class/:id', isLogedIn, permitions, async (req, res) => {
+app.get('/class/:id', isLogedIn, permissions, isInClass, async (req, res) => {
 	const classroom = await Classroom.findById(req.params.id).populate(
 		'jobListings'
 	);
@@ -100,24 +129,30 @@ app.get('/class/:id', isLogedIn, permitions, async (req, res) => {
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });
 
-app.get('/class/:id/create', isLogedIn, permitions, (req, res) => {
+app.get('/class/:id/create', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('createJob', { id: req.params.id });
 });
 
-app.post('/class/:id/create', isLogedIn, permitions, async (req, res) => {
-	const job = new JobListing(req.body);
-	await job.save();
-	await Classroom.findByIdAndUpdate(req.params.id, {
-		$push: { jobListings: job.id },
-	});
-	res.redirect(`/class/${req.params.id}`);
-});
+app.post(
+	'/class/:id/create',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	async (req, res) => {
+		const job = new JobListing(req.body);
+		await job.save();
+		await Classroom.findByIdAndUpdate(req.params.id, {
+			$push: { jobListings: job.id },
+		});
+		res.redirect(`/class/${req.params.id}`);
+	}
+);
 
-app.get('/class/:id/dashboard', isLogedIn, permitions, (req, res) => {
+app.get('/class/:id/dashboard', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('dashboard', { id: req.params.id });
 });
 
-app.get('/class/:id/admin', isLogedIn, permitions, (req, res) => {
+app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('admin', { id: req.params.id });
 });
 
