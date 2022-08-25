@@ -54,7 +54,7 @@ app.use(express.static('public'));
 
 app.use((req, res, next) => {
 	res.locals.success = req.flash('success');
-	res.locals.fail = req.flash('fail');
+	res.locals.error = req.flash('error');
 	next();
 });
 
@@ -78,47 +78,47 @@ const permissions = async function (req, res, next) {
 		.populate('admin')
 		.populate('owner');
 	if (res.locals.classroom.owner.id === userId) {
-		req.permissions = 'owner';
+		req.user.permissions = 'owner';
 	} else if (Array.from(res.locals.classroom.admin).some(hasId)) {
-		req.permissions = 'admin';
+		req.user.permissions = 'admin';
 	} else if (Array.from(res.locals.classroom.leaders).some(hasId)) {
-		req.permissions = 'leader';
+		req.user.permissions = 'leader';
 	} else {
-		req.permissions = false;
+		req.user.permissions = false;
 	}
 	next();
 };
 
 const isOwner = function (req, res, next) {
-	if (req.permissions === 'owner') {
+	if (req.user.permissions === 'owner') {
 		next();
 		return;
-	} else if (req.permissions) {
-		req.flash('fail', 'You do not have access to this page');
+	} else if (req.user.permissions) {
+		req.flash('error', 'You do not have access to this page');
 		res.redirect(`/class/${req.params.id}`);
 	} else {
-		req.flash('fail', 'You are not in this class');
+		req.flash('error', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
 const isAdmin = function (req, res, next) {
-	if ((req.permissions === 'owner') | (req.permissions === 'admin')) {
+	if ((req.user.permissions === 'owner') | (req.user.permissions === 'admin')) {
 		next();
 		return;
-	} else if (req.permissions) {
-		req.flash('fail', 'You do not have access to this page');
+	} else if (req.user.permissions) {
+		req.flash('error', 'You do not have access to this page');
 		res.redirect(`/class/${req.params.id}`);
 	} else {
-		req.flash('fail', 'You are not in this class');
+		req.flash('error', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
 const isInClass = function (req, res, next) {
-	if (req.permissions) {
+	if (req.user.permissions) {
 		next();
 		return;
 	} else {
-		req.flash('fail', 'You are not in this class');
+		req.flash('error', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
@@ -127,7 +127,7 @@ const isLogedIn = function async(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
-		req.flash('fail', 'You must be logged in');
+		req.flash('error', 'You must be logged in');
 		res.redirect('/login');
 	}
 };
@@ -175,6 +175,7 @@ app.post(
 	isAdmin,
 	async (req, res) => {
 		const job = new JobListing(req.body);
+		job.interested = [];
 		await job.save();
 		await Classroom.findByIdAndUpdate(req.params.id, {
 			$push: { jobListings: job.id },
@@ -259,18 +260,23 @@ app.get('/register', (req, res) => {
 });
 
 app.post('/register', async (req, res) => {
-	const user = new User({
-		email: req.body.email,
-		username: req.body.username,
-		classes: [],
-	});
-	const newUser = await User.register(user, req.body.password);
-	req.login(user, (err) => {
-		if (!err) {
-			req.flash('success', `Welcome, ${req.user.username}`);
-			res.redirect('/');
-		}
-	});
+	try {
+		const user = new User({
+			email: req.body.email,
+			username: req.body.username,
+			classes: [],
+		});
+		const newUser = await User.register(user, req.body.password);
+		req.login(user, (err) => {
+			if (!err) {
+				req.flash('success', `Welcome, ${req.user.username}`);
+				res.redirect('/');
+			}
+		});
+	} catch (e) {
+		req.flash('error', e.message);
+		res.redirect('/register');
+	}
 });
 
 app.get('/logout', (req, res, next) => {

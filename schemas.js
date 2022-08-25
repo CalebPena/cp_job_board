@@ -41,6 +41,7 @@ const jobListingSchema = new Schema({
 			],
 		},
 	],
+	interested: [{ type: mongoose.ObjectId, ref: 'user' }],
 });
 
 const JobListing = mongoose.model('job_Listing', jobListingSchema);

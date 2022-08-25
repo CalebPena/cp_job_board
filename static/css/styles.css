@@ -1,0 +1,24 @@
+@font-face {
+	font-family: Social Gothic;
+	src: url('/fonts/Social-Gothic/Social Gothic Regular.otf');
+}
+
+body {
+	margin: 0px;
+	background-color: #eaeaea;
+}
+
+nav {
+	display: flex;
+	background-color: #2b2c2e;
+	height: 200px;
+	flex-direction: row;
+	justify-content: space-around;
+	align-items: center;
+}
+
+.nav-link {
+	color: #ffffff;
+	text-decoration: none;
+	font-family: 'Social Gothic', sans-serif;
+}
