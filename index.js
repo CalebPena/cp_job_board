@@ -9,6 +9,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const session = require('express-session');
 const flash = require('connect-flash');
+const MongoDBStore = require('connect-mongodb-session')(session);
 require('dotenv').config();
 
 const app = express();
@@ -28,6 +29,11 @@ app.use(
 			expires: Date.now() + 1000 * 60 * 60 * 24 * 7,
 			maxAge: 1000 * 60 * 60 * 24 * 7,
 		},
+		store: new MongoDBStore({
+			url: 'mongodb://localhost:27017/cp_job_listings',
+			collection: 'mySessions',
+			expires: 7 * 24 * 60 * 60,
+		}),
 	})
 );
 app.use(flash());
@@ -48,7 +54,7 @@ app.use(async (req, res, next) => {
 	if (req.user) {
 		res.locals.user = await User.findById(req.user.id).populate('classes');
 	} else {
-		res.locals.user = undefined;
+		res.locals.user = false;
 	}
 	next();
 });
@@ -182,6 +188,32 @@ app.post(
 		await Classroom.findByIdAndUpdate(req.params.id, {
 			$push: { admin: newAdmin.id },
 		});
+		res.redirect(`/class/${req.params.id}/admin`);
+	}
+);
+
+app.post(
+	'/class/:id/admin/add-leader',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	async (req, res) => {
+		if (!Array.isArray(req.body.usernames)) {
+			req.body.usernames = [req.body.usernames];
+		}
+		if (!Array.isArray(req.body.emails)) {
+			req.body.emails = [req.body.emails];
+		}
+		for (i = 0; i < req.body.usernames.length; i++) {
+			const user = new User({
+				email: req.body.emails[i],
+				username: req.body.usernames[i],
+				classes: [req.params.id],
+			});
+			const newUser = await User.register(user, req.body.password);
+			await res.locals.classroom.leaders.push(newUser.id);
+			res.locals.classroom.save();
+		}
 		res.redirect(`/class/${req.params.id}/admin`);
 	}
 );

@@ -80,7 +80,7 @@ multiInputButtonAdd.addEventListener('click', (e) => {
 const multiInputButtonremove = document.querySelector(
 	'#careerTrack-btn-remove'
 );
-console.log(multiInputButtonAdd);
+
 multiInputButtonremove.addEventListener('click', (e) => {
 	e.preventDefault();
 	removeMultiSelect();

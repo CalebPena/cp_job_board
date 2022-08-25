@@ -14,5 +14,19 @@
 			<input type="text" id="username" name="username" required />
 			<button type="submit">Submit</button>
 		</form>
+		<br />
+		<form action="/class/<%= id %>/admin/add-leader" method="post">
+			<div>
+				<label for="password">Global Leader Password</label
+				><input type="text" id="password" name="password" required />
+			</div>
+			<div id="leaders"></div>
+			<div>
+				<button id="leader-btn-add" name="Leader">Add</button>
+				<button id="leader-btn-remove">Remove</button>
+			</div>
+			<button type="submit">Submit</button>
+		</form>
+		<script src="/javascript/adminPanel.js"></script>
 	</body>
 </html>
