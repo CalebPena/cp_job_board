@@ -1,62 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>New Job Listing</title>
-		<link rel="stylesheet" href="/css/form.css" />
-	</head>
-	<body>
-		<h1>New Job Listing</h1>
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/form.css" />
+<h1>New Job Listing</h1>
+<div>
+	<form action="/class/<%= id %>/create" method="post">
 		<div>
-			<form action="/class/<%= id %>/create" method="post">
-				<div>
-					<label for="title">Job Title</label>
-					<input type="text" id="title" name="jobTitle" required />
-				</div>
-				<div>
-					<label for="company">Company</label>
-					<input type="text" id="company" name="company" required />
-				</div>
-				<div id="careerTracks"></div>
-				<div>
-					<button id="careerTrack-btn-add">Add</button>
-					<button id="careerTrack-btn-remove">Remove</button>
-				</div>
-				<div>
-					<label for="salary">Salary</label>
-					<input type="number" id="salary" name="salary" required />
-					<select name="salaryType" id="salaryType" required>
-						<option value="Hourly">Hourly</option>
-						<option value="Yearly">Yearly</option>
-					</select>
-				</div>
-				<div>
-					<label for="description">Description</label>
-					<textarea
-						name="description"
-						id="description"
-						cols="30"
-						rows="10"
-						required
-					></textarea>
-				</div>
-				<div>
-					<label for="tags">Tags</label>
-					<select multiple name="tags" id="tags" class="custom-select">
-						<option value="Core">Core</option>
-						<option value="Alumni">Alumni</option>
-						<option value="Temp">Temporary</option>
-						<option value="Part Time">Part Time</option>
-						<option value="Remote">Remote</option>
-						<option value="Background Check">Background Check</option>
-						<option value="Flexible Hours">Flexible Hours</option>
-					</select>
-				</div>
-				<div><button type="submit">Submit</button></div>
-			</form>
+			<label for="title">Job Title</label>
+			<input type="text" id="title" name="jobTitle" required />
 		</div>
-		<script src="/javascript/form.js"></script>
-	</body>
-</html>
+		<div>
+			<label for="company">Company</label>
+			<input type="text" id="company" name="company" required />
+		</div>
+		<div id="careerTracks"></div>
+		<div>
+			<button id="careerTrack-btn-add">Add</button>
+			<button id="careerTrack-btn-remove">Remove</button>
+		</div>
+		<div>
+			<label for="salary">Salary</label>
+			<input type="number" id="salary" name="salary" required />
+			<select name="salaryType" id="salaryType" required>
+				<option value="Hourly">Hourly</option>
+				<option value="Yearly">Yearly</option>
+			</select>
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<textarea
+				name="description"
+				id="description"
+				cols="30"
+				rows="10"
+				required
+			></textarea>
+		</div>
+		<div>
+			<label for="tags">Tags</label>
+			<select multiple name="tags" id="tags" class="custom-select">
+				<option value="Core">Core</option>
+				<option value="Alumni">Alumni</option>
+				<option value="Temp">Temporary</option>
+				<option value="Part Time">Part Time</option>
+				<option value="Remote">Remote</option>
+				<option value="Background Check">Background Check</option>
+				<option value="Flexible Hours">Flexible Hours</option>
+			</select>
+		</div>
+		<div><button type="submit">Submit</button></div>
+	</form>
+</div>
+<script src="/javascript/form.js"></script>

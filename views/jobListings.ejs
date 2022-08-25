@@ -1,29 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Job Listings</title>
-	</head>
-	<body>
-		<h1>Job Listings</h1>
-		<a href="/class/<%= id %>/create">New Job</a>
-		<a href="/class/<%= id %>/admin">Admin</a>
-		<a href="/class/<%= id %>/dashboard">Dashboard</a>
+<% layout('layouts/boilerplate') %>
+<h1>Job Listings</h1>
+<a href="/class/<%= id %>/create">New Job</a>
+<a href="/class/<%= id %>/admin">Admin</a>
+<a href="/class/<%= id %>/dashboard">Dashboard</a>
 
-		<% for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
-		<div class="job">
-			<h2><%= job.jobTitle %></h2>
-			<h3><%= job.company %></h3>
-			<% for (let j = 0; j < job.careerTracks.length; j++) {%>
-			<span><%= job.careerTracks[j] %> </span><% } %>
-			<div><%= job.salary %> <%=job.salaryType%></div>
-			<p><%=job.description%></p>
-			<% for (let j = 0; j < job.tags.length; j++) {%>
-			<span><%=job.tags[j]%> </span>
-			<% } %>
-		</div>
-		<% } %>
-	</body>
-</html>
+<% for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
+<div class="job">
+	<h2><%= job.jobTitle %></h2>
+	<h3><%= job.company %></h3>
+	<% for (let j = 0; j < job.careerTracks.length; j++) {%>
+	<span><%= job.careerTracks[j] %> </span><% } %>
+	<div><%= job.salary %> <%=job.salaryType%></div>
+	<p><%=job.description%></p>
+	<% for (let j = 0; j < job.tags.length; j++) {%>
+	<span><%=job.tags[j]%> </span>
+	<% } %>
+</div>
+<% } %>

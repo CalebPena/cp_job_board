@@ -1,19 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Create Class</title>
-	</head>
-	<body>
-		<h1>Create</h1>
-		<div>
-			<form action="/class/create" method="post">
-				<label for="name">Class Name</label>
-				<input type="text" id="name" name="className" />
-				<button>Submit</button>
-			</form>
-		</div>
-	</body>
-</html>
+<% layout('layouts/boilerplate') %>
+<h1>Create</h1>
+<div>
+	<form action="/class/create" method="post">
+		<label for="name">Class Name</label>
+		<input type="text" id="name" name="className" />
+		<button>Submit</button>
+	</form>
+</div>

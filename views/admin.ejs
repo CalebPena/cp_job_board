@@ -1,32 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Class Admin</title>
-	</head>
-	<body>
-		<h1>Admin</h1>
-		<a href="/class/<%= id %>">Class</a>
-		<form action="/class/<%= id %>/admin/add-admin" method="post">
-			<label for="username">Username</label>
-			<input type="text" id="username" name="username" required />
-			<button type="submit">Submit</button>
-		</form>
-		<br />
-		<form action="/class/<%= id %>/admin/add-leader" method="post">
-			<div>
-				<label for="password">Global Leader Password</label
-				><input type="text" id="password" name="password" required />
-			</div>
-			<div id="leaders"></div>
-			<div>
-				<button id="leader-btn-add" name="Leader">Add</button>
-				<button id="leader-btn-remove">Remove</button>
-			</div>
-			<button type="submit">Submit</button>
-		</form>
-		<script src="/javascript/adminPanel.js"></script>
-	</body>
-</html>
+<% layout('layouts/boilerplate') %>
+<h1>Admin</h1>
+<a href="/class/<%= id %>">Class</a>
+<form action="/class/<%= id %>/admin/add-admin" method="post">
+	<label for="username">Username</label>
+	<input type="text" id="username" name="username" required />
+	<button type="submit">Submit</button>
+</form>
+<br />
+<form action="/class/<%= id %>/admin/add-leader" method="post">
+	<div>
+		<label for="password">Global Leader Password</label
+		><input type="text" id="password" name="password" required />
+	</div>
+	<div id="leaders"></div>
+	<div>
+		<button id="leader-btn-add" name="Leader">Add</button>
+		<button id="leader-btn-remove">Remove</button>
+	</div>
+	<button type="submit">Submit</button>
+</form>
+<script src="/javascript/adminPanel.js"></script>

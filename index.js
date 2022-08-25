@@ -1,5 +1,6 @@
 const express = require('express');
 const ejs = require('ejs');
+const engine = require('ejs-mate');
 const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -14,6 +15,7 @@ require('dotenv').config();
 
 const app = express();
 
+app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
@@ -49,6 +51,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(upload.array());
 app.use(express.static('public'));
+
+app.use((req, res, next) => {
+	res.locals.success = req.flash('success');
+	res.locals.fail = req.flash('fail');
+	next();
+});
 
 app.use(async (req, res, next) => {
 	if (req.user) {
@@ -86,8 +94,10 @@ const isOwner = function (req, res, next) {
 		next();
 		return;
 	} else if (req.permissions) {
+		req.flash('fail', 'You do not have access to this page');
 		res.redirect(`/class/${req.params.id}`);
 	} else {
+		req.flash('fail', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
@@ -96,8 +106,10 @@ const isAdmin = function (req, res, next) {
 		next();
 		return;
 	} else if (req.permissions) {
+		req.flash('fail', 'You do not have access to this page');
 		res.redirect(`/class/${req.params.id}`);
 	} else {
+		req.flash('fail', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
@@ -106,6 +118,7 @@ const isInClass = function (req, res, next) {
 		next();
 		return;
 	} else {
+		req.flash('fail', 'You are not in this class');
 		res.redirect(`/`);
 	}
 };
@@ -114,6 +127,7 @@ const isLogedIn = function async(req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
+		req.flash('fail', 'You must be logged in');
 		res.redirect('/login');
 	}
 };
@@ -127,15 +141,18 @@ app.get('/class/create', isLogedIn, (req, res) => {
 });
 
 app.post('/class/create', isLogedIn, async (req, res) => {
+	const classCode = Math.random().toString(36).substring(2, 8);
 	const classroom = new Classroom({
 		className: req.body.className,
 		jobListings: [],
 		owner: req.user._id,
+		classCode: classCode,
 	});
 	await classroom.save();
 	await User.findByIdAndUpdate(req.user.id, {
 		$push: { classes: classroom.id },
 	});
+	req.flash('success', 'Created new classroom');
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
@@ -162,6 +179,7 @@ app.post(
 		await Classroom.findByIdAndUpdate(req.params.id, {
 			$push: { jobListings: job.id },
 		});
+		req.flash('success', 'Successfully added new job listing');
 		res.redirect(`/class/${req.params.id}`);
 	}
 );
@@ -188,6 +206,7 @@ app.post(
 		await Classroom.findByIdAndUpdate(req.params.id, {
 			$push: { admin: newAdmin.id },
 		});
+		req.flash('success', `Added new admin: ${username}`);
 		res.redirect(`/class/${req.params.id}/admin`);
 	}
 );
@@ -214,6 +233,7 @@ app.post(
 			await res.locals.classroom.leaders.push(newUser.id);
 			res.locals.classroom.save();
 		}
+		req.flash('success', 'Added new lesers');
 		res.redirect(`/class/${req.params.id}/admin`);
 	}
 );
@@ -229,6 +249,7 @@ app.post(
 		failureRedirect: '/login',
 	}),
 	(req, res) => {
+		req.flash('success', `Welcome, ${req.user.username}`);
 		res.redirect('/');
 	}
 );
@@ -246,6 +267,7 @@ app.post('/register', async (req, res) => {
 	const newUser = await User.register(user, req.body.password);
 	req.login(user, (err) => {
 		if (!err) {
+			req.flash('success', `Welcome, ${req.user.username}`);
 			res.redirect('/');
 		}
 	});
@@ -253,9 +275,12 @@ app.post('/register', async (req, res) => {
 
 app.get('/logout', (req, res, next) => {
 	req.logOut((e) => {
-		next(e);
+		if (e) {
+			return next(e);
+		}
+		req.flash('success', 'Logout complete');
+		res.redirect('/');
 	});
-	res.redirect('/');
 });
 
 app.listen(3000, () => {

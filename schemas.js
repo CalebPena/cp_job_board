@@ -14,6 +14,7 @@ const classroomSchema = new Schema({
 	admin: [{ type: mongoose.ObjectId, ref: 'user' }],
 	owner: { type: mongoose.ObjectId, ref: 'user', required: true },
 	jobListings: [{ type: mongoose.ObjectId, ref: 'job_Listing' }],
+	classCode: { type: String, unique: true, required: true },
 });
 
 const Classroom = mongoose.model('classroom', classroomSchema);
