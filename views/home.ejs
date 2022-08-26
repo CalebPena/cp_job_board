@@ -2,9 +2,6 @@
 <h1>Home</h1>
 
 <a href="/class/create">Create</a>
-<a href="/login">login</a>
-<a href="/register">register</a>
-<a href="/logout">Log Out</a>
 <% if (user) { %>
 <h2><%=user.username%></h2>
 <% for (i=0; i<Array.from(user.classes).length; i++) {%>

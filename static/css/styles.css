@@ -1,6 +1,6 @@
 @font-face {
-	font-family: Social Gothic;
-	src: url('/fonts/Social-Gothic/Social Gothic Regular.otf');
+	font-family: Social-Gothic;
+	src: url(/fonts/Social-Gothic/Social-Gothic-Regular.otf) format('opentype');
 }
 
 body {
@@ -11,7 +11,7 @@ body {
 nav {
 	display: flex;
 	background-color: #2b2c2e;
-	height: 200px;
+	height: 100px;
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
@@ -20,5 +20,45 @@ nav {
 .nav-link {
 	color: #ffffff;
 	text-decoration: none;
-	font-family: 'Social Gothic', sans-serif;
+	font-size: 30px;
+	font-family: Social-Gothic, sans-serif;
+}
+
+main {
+	margin: auto;
+	width: 50%;
+	border: 3px solid black;
+	padding: 10px;
+}
+
+.flash {
+	position: relative;
+	margin: auto;
+	width: 40%;
+	border-radius: 3px;
+	padding: 10px;
+	height: auto;
+	font-size: 30px;
+	text-align: center;
+}
+
+.fail {
+	border: 3px solid rgba(212, 36, 40, 1);
+	background-color: rgba(212, 36, 40, 0.5);
+}
+
+.success {
+	border: 3px solid rgba(63, 252, 0, 1);
+	background-color: rgba(63, 252, 0, 0.5);
+}
+
+.x {
+	background-color: transparent;
+	border: none;
+	font-weight: bold;
+	font-size: large;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	cursor: pointer;
 }

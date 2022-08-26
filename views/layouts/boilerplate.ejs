@@ -9,13 +9,28 @@
 	</head>
 	<body>
 		<nav>
-			<a href="/" class="nav-link">HOME</a
-			><a href="/login" class="nav-link">LOGIN</a
-			><a href="/register" class="nav-link">REGISTER</a
-			><a href="/logout" class="nav-link">LOG OUT</a>
+			<a href="/" class="nav-link">HOME</a>
+			<% if (classroom) {%>
+			<a href="/class/<%=classroom.id%>" class="nav-link">JOB PAGE</a>
+			<% if (user.permissions === 'admin' || user.permissions == 'owner') {%>
+			<a href="/class/<%=classroom.id%>/admin" class="nav-link">ADMIN</a>
+			<% } %> <% } %> <% if (!user) {%>
+			<a href="/login" class="nav-link">LOGIN</a
+			><a href="/register" class="nav-link">REGISTER</a>
+			<% } else { %>
+			<a href="/logout" class="nav-link">LOG OUT</a>
+			<% } %>
 		</nav>
-		<div><%= success %></div>
-		<div><%= error %></div>
-		<%- body %>
+		<% if (success && success.length) {%>
+		<div class="success flash" role="alert">
+			<%= success %><button class="x">&#x2715;</button>
+		</div>
+		<% } %> <% if (error && error.length) {%>
+		<div class="fail flash" role="alert">
+			<%= error %><button class="x">&#x2715;</button>
+		</div>
+		<% } %>
+		<main><%- body %></main>
+		<script src="/javascript/main.js"></script>
 	</body>
 </html>

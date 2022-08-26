@@ -1,0 +1,97 @@
+#newJob {
+	text-decoration: none;
+	font-size: 50px;
+	border: 1px solid black;
+	border-radius: 5px;
+	color: black;
+	padding: 5px;
+	background-color: #b5b6b9;
+	text-align: center;
+	margin: 20px 40%;
+	display: block;
+}
+
+#newJob:hover {
+	cursor: pointer;
+	color: #902428;
+}
+
+.job {
+	border: 1px solid black;
+	max-width: 500px;
+	background-color: #b5b6b9;
+	color: black;
+	margin: 7px;
+}
+
+.jobTitle {
+	border: 1px solid black;
+	margin: 0px;
+	padding: 3px;
+}
+
+.company {
+	border: 1px solid black;
+	font-weight: 400;
+	padding: 2px;
+	margin: 0px;
+}
+.careerTracks {
+	border: 1px solid black;
+	height: auto;
+	padding: 3px;
+	color: black;
+}
+
+.careerTracksIntro {
+	margin: 2px;
+}
+
+.careerPills {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.pill {
+	border: 1px solid black;
+	border-radius: 13px;
+	text-align: center;
+	padding: 3px;
+	margin: 4px 2px;
+	color: white;
+	background-color: #902428;
+}
+
+.jobPayment {
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	color: black;
+	font-size: large;
+}
+
+.descriptionIntro {
+	margin: 4px;
+}
+.description {
+	border: 1px solid black;
+	margin: 0px 10%;
+	margin-bottom: 10px;
+}
+
+.tags {
+	margin: 7px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.interestedBtn {
+	cursor: pointer;
+	font-size: medium;
+	margin: 3px;
+}
+
+.buttons {
+	display: flex;
+	justify-content: end;
+}

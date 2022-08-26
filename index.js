@@ -55,12 +55,14 @@ app.use(express.static('public'));
 app.use((req, res, next) => {
 	res.locals.success = req.flash('success');
 	res.locals.error = req.flash('error');
+	res.locals.classroom = false;
 	next();
 });
 
 app.use(async (req, res, next) => {
 	if (req.user) {
 		res.locals.user = await User.findById(req.user.id).populate('classes');
+		res.locals.user.permissions = false;
 	} else {
 		res.locals.user = false;
 	}
@@ -86,6 +88,7 @@ const permissions = async function (req, res, next) {
 	} else {
 		req.user.permissions = false;
 	}
+	res.locals.user.permissions = req.user.permissions;
 	next();
 };
 
@@ -185,9 +188,25 @@ app.post(
 	}
 );
 
-app.get('/class/:id/dashboard', isLogedIn, permissions, isAdmin, (req, res) => {
-	res.render('dashboard', { id: req.params.id });
-});
+app.post(
+	'/class/:id/:jobId/interested',
+	isLogedIn,
+	permissions,
+	isInClass,
+	async (req, res) => {
+		const classroom = await Classroom.findById(req.params.id).populate(
+			'jobListings'
+		);
+		const job = classroom.jobListings.find((e) => {
+			console.log(req.params.id);
+			console.log(e.id);
+			e.id === req.params.jobId;
+		});
+		job.interested.push(user.id);
+		await job.save();
+		console.log(job);
+	}
+);
 
 app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('admin', { id: req.params.id });

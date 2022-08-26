@@ -1,19 +1,41 @@
 <% layout('layouts/boilerplate') %>
-<h1>Job Listings</h1>
-<a href="/class/<%= id %>/create">New Job</a>
-<a href="/class/<%= id %>/admin">Admin</a>
-<a href="/class/<%= id %>/dashboard">Dashboard</a>
+<link rel="stylesheet" href="/css/jobs.css" />
+<h1>Job Listings:</h1>
+
+<a href="/class/<%= classroom.id %>/create" id="newJob">New Job</a>
 
 <% for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
 <div class="job">
-	<h2><%= job.jobTitle %></h2>
-	<h3><%= job.company %></h3>
-	<% for (let j = 0; j < job.careerTracks.length; j++) {%>
-	<span><%= job.careerTracks[j] %> </span><% } %>
-	<div><%= job.salary %> <%=job.salaryType%></div>
-	<p><%=job.description%></p>
-	<% for (let j = 0; j < job.tags.length; j++) {%>
-	<span><%=job.tags[j]%> </span>
-	<% } %>
+	<h2 class="jobTitle"><%= job.jobTitle %></h2>
+	<h3 class="company">Company: <%= job.company %></h3>
+	<div class="careerTracks">
+		<h4 class="careerTracksIntro">For:</h4>
+		<div class="careerPills">
+			<% for (let j = 0; j < job.careerTracks.length; j++) {%>
+			<span class="pill"><%= job.careerTracks[j] %> </span><% } %>
+		</div>
+	</div>
+	<div class="jobPayment">
+		<span class="amount">$<%= job.salary %></span
+		><span class="type"> <%=job.salaryType%></span>
+	</div>
+	<h4 class="descriptionIntro">Description:</h4>
+	<p class="description"><%=job.description%></p>
+	<div class="tags">
+		<% for (let j = 0; j < job.tags.length; j++) {%>
+		<span class="pill"><%=job.tags[j]%> </span>
+		<% } %>
+	</div>
+	<div class="buttons">
+		<button type="button" class="interestedBtn interested" jobId="<%=job.id%>">
+			Add to Interested
+		</button>
+	</div>
 </div>
 <% } %>
+<script>
+	const classId = '<%=classroom.id%>';
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+;
+<script src="/javascript/jobs.js"></script>
