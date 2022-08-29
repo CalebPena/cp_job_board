@@ -75,15 +75,17 @@ const permissions = async function (req, res, next) {
 	const hasId = (element) => {
 		return element.id === userId;
 	};
-	res.locals.classroom = await Classroom.findById(classId)
+	req.classroom = await Classroom.findById(classId)
 		.populate('leaders')
 		.populate('admin')
-		.populate('owner');
-	if (res.locals.classroom.owner.id === userId) {
+		.populate('owner')
+		.populate('jobListings');
+	res.locals.classroom = req.classroom;
+	if (req.classroom.owner.id === userId) {
 		req.user.permissions = 'owner';
-	} else if (Array.from(res.locals.classroom.admin).some(hasId)) {
+	} else if (Array.from(req.classroom.admin).some(hasId)) {
 		req.user.permissions = 'admin';
-	} else if (Array.from(res.locals.classroom.leaders).some(hasId)) {
+	} else if (Array.from(req.classroom.leaders).some(hasId)) {
 		req.user.permissions = 'leader';
 	} else {
 		req.user.permissions = false;
@@ -188,26 +190,6 @@ app.post(
 	}
 );
 
-app.post(
-	'/class/:id/:jobId/interested',
-	isLogedIn,
-	permissions,
-	isInClass,
-	async (req, res) => {
-		const classroom = await Classroom.findById(req.params.id).populate(
-			'jobListings'
-		);
-		const job = classroom.jobListings.find((e) => {
-			console.log(req.params.id);
-			console.log(e.id);
-			e.id === req.params.jobId;
-		});
-		job.interested.push(user.id);
-		await job.save();
-		console.log(job);
-	}
-);
-
 app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('admin', { id: req.params.id });
 });
@@ -221,7 +203,7 @@ app.post(
 		const username = req.body.username;
 		const newAdmin = await User.findOneAndUpdate(
 			{ username: username },
-			{ $push: { classes: res.locals.classroom.id } }
+			{ $push: { classes: req.classroom.id } }
 		);
 		await Classroom.findByIdAndUpdate(req.params.id, {
 			$push: { admin: newAdmin.id },
@@ -250,11 +232,62 @@ app.post(
 				classes: [req.params.id],
 			});
 			const newUser = await User.register(user, req.body.password);
-			await res.locals.classroom.leaders.push(newUser.id);
-			res.locals.classroom.save();
+			await req.classroom.leaders.push(newUser.id);
+			req.classroom.save();
 		}
 		req.flash('success', 'Added new lesers');
 		res.redirect(`/class/${req.params.id}/admin`);
+	}
+);
+
+app.post(
+	'/class/:id/:jobId/interested',
+	isLogedIn,
+	permissions,
+	isInClass,
+	async (req, res) => {
+		const jobListingIds = req.classroom.jobListings.map((j) => j.id);
+		if (!jobListingIds.includes(req.params.jobId)) {
+			res.json({ result: 'permition denied' });
+			return;
+		}
+
+		const job = await JobListing.findById(req.params.jobId);
+		if (job.interested.includes(req.user.id)) {
+			res.json({ result: 'already interested' });
+		} else {
+			job.interested.push(req.user.id);
+			let save = await job.save();
+			res.json({ result: 'added to interested' });
+		}
+	}
+);
+
+function arrayRemove(arr, value) {
+	return arr.filter(function (ele) {
+		return ele != value;
+	});
+}
+app.post(
+	'/class/:id/:jobId/not-interested',
+	isLogedIn,
+	permissions,
+	isInClass,
+	async (req, res) => {
+		const jobListingIds = req.classroom.jobListings.map((j) => j.id);
+		if (!jobListingIds.includes(req.params.jobId)) {
+			res.json({ result: 'permition denied' });
+			return;
+		}
+
+		const job = await JobListing.findById(req.params.jobId);
+		if (!job.interested.includes(req.user.id)) {
+			res.json({ result: 'already not interested' });
+		} else {
+			job.interested = arrayRemove(job.interested, req.user.id);
+			let save = await job.save();
+			res.json({ result: 'removed from interested' });
+		}
 	}
 );
 
