@@ -1,6 +1,7 @@
 const interestedBtns = document.querySelectorAll('.interestedBtn');
 
 const changeBtn = function (element, classId, jobId) {
+	console.log(jobId);
 	if (element.classList.contains('not-inter')) {
 		axios
 			.post(`/class/${classId}/${jobId}/interested`, {})

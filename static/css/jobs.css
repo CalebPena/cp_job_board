@@ -89,9 +89,23 @@
 	cursor: pointer;
 	font-size: medium;
 	margin: 3px;
+	padding: 4px;
+	border-radius: 5px;
+}
+.interestedBtn:hover {
+	background-color: #902428;
+	color: white;
 }
 
 .buttons {
 	display: flex;
 	justify-content: end;
+}
+
+.interestedIntro {
+	margin: 0px;
+}
+
+.interested {
+	margin: 0px 10px;
 }

@@ -1,15 +1,22 @@
 <% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/home.css" />
 <h1>Home</h1>
 
 <a href="/class/create">Create</a>
 <% if (user) { %>
 <h2><%=user.username%></h2>
-<% for (i=0; i<Array.from(user.classes).length; i++) {%>
-	<div>
-		<h3><%=user.classes[i].className%></h3>
-		<a href="/class/<%= user.classes[i].id %> "
-			>Go to <%= user.classes[i].className %></a
+<h2>Classes:</h2>
+<ul>
+	<% for (i = 0; i < Array.from(user.classes).length; i++) {%>
+	<li class="classroom">
+		<a href="/class/<%= user.classes[i].id %>" class="class-link"
+			><%=user.classes[i].className%> %></a
 		>
-	</div>
+	</li>
 	<% } %> <% } %>
-</Array.from(user.classes).length;>
+</ul>
+<form action="/join" method="post" class="join">
+	<label for="code">Join Class</label>
+	<input type="text" id="code" name="classCode" required />
+	<button type="submit">Join</button>
+</form>

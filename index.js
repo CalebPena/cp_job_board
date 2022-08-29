@@ -161,11 +161,40 @@ app.post('/class/create', isLogedIn, async (req, res) => {
 	res.redirect(`/class/${classroom.id}/admin`);
 });
 
+app.post('/join', isLogedIn, async (req, res) => {
+	const classroom = await Classroom.findOne({ classCode: req.body.classCode });
+	if (classroom) {
+		classroom.leaders.push(req.user.id);
+		await classroom.save();
+		const user = await User.findById(req.user.id);
+		user.classes.push(classroom.id);
+		await user.save();
+		req.flash('success', 'Joined classroom');
+		res.redirect(`/class/${classroom.id}`);
+	} else {
+		req.flash('error', 'Wrong code');
+		res.redirect('/');
+	}
+});
+
 app.get('/class/:id', isLogedIn, permissions, isInClass, async (req, res) => {
-	const classroom = await Classroom.findById(req.params.id).populate(
-		'jobListings'
-	);
-	const jobs = classroom.jobListings;
+	const classroom = await Classroom.findById(req.params.id)
+		.populate({
+			path: 'jobListings',
+			populate: {
+				path: 'interested',
+			},
+		})
+		.lean();
+	let jobs = classroom.jobListings;
+	for (i = 0; i < jobs.length; i++) {
+		if (jobs[i].interested.some((u) => u._id == req.user.id)) {
+			jobs[i].userIsInterested = true;
+		} else {
+			jobs[i].userIsInterested = false;
+		}
+		jobs[i].id = String(jobs[i]._id);
+	}
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });
 

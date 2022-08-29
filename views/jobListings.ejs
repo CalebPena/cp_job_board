@@ -27,15 +27,18 @@
 		<% } %>
 	</div>
 	<div class="buttons">
-		<button type="button" class="interestedBtn not-inter" jobId="<%=job.id%>">
-			Add to Interested
+		<button type="button" class="interestedBtn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
+			<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
 		</button>
 	</div>
+	<h4 class="interestedIntro">Interested:</h4>
+	<% for (j=0; j<job.interested.length; j++) {%> 
+		<div><span class="interested">Username: <%=job.interested[j].username%></span><span class="interested">Email: <%=job.interested[j].email%></span></div>
+		<% } %> 
 </div>
 <% } %>
 <script>
 	const classId = '<%=classroom.id%>';
 </script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-;
 <script src="/javascript/jobs.js"></script>
