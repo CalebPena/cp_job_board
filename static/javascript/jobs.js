@@ -6,7 +6,6 @@ const changeBtn = function (element, classId, jobId) {
 		axios
 			.post(`/class/${classId}/${jobId}/interested`, {})
 			.then((res) => {
-				console.log(res);
 				element.classList.remove('not-inter');
 				element.classList.add('inter');
 				element.innerHTML = 'Remove from Interested';
@@ -18,7 +17,6 @@ const changeBtn = function (element, classId, jobId) {
 		axios
 			.post(`/class/${classId}/${jobId}/not-interested`, {})
 			.then((res) => {
-				console.log(res);
 				element.classList.remove('inter');
 				element.classList.add('not-inter');
 				element.innerHTML = 'Add to Interested';

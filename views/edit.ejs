@@ -1,0 +1,73 @@
+<% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/form.css" />
+
+<h1>Edit Job</h1>
+<div>
+	<form action="/class/<%= classId %>/<%= id %>?_method=patch" method="post">
+		<div>
+			<label for="title">Job Title</label>
+			<input
+				type="text"
+				id="title"
+				name="jobTitle"
+				value="<%= jobTitle %>"
+				required
+			/>
+		</div>
+		<div>
+			<label for="company">Company</label>
+			<input
+				type="text"
+				id="company"
+				name="company"
+				value="<%= company %>"
+				required
+			/>
+		</div>
+		<div id="careerTracks"></div>
+		<div>
+			<button id="careerTrack-btn-add">Add</button>
+			<button id="careerTrack-btn-remove">Remove</button>
+		</div>
+		<div>
+			<label for="salary">Salary</label>
+			<input
+				type="number"
+				id="salary"
+				name="salary"
+				value="<%= salary %>"
+				required
+			/>
+			<select name="salaryType" id="salaryType" required>
+				<option value="Hourly" <%= salaryType === 'Hourly' ? selected="selected" : ''%> >Hourly</option>
+				<option value="Yearly" <%= salaryType === 'Yearly' ? selected="selected" : ''%>>Yearly</option>
+			</select>
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<textarea
+				name="description"
+				id="description"
+				cols="30"
+				rows="10"
+				required
+			><%= description %></textarea>
+		</div>
+		<div>
+			<label for="tags">Tags</label>
+			<select multiple name="tags" id="tags" class="custom-select">
+				<option value="Core" <%= tags.includes('Core') ? selected="selected" : ''%>>Core</option>
+				<option value="Alumni" <%= tags.includes('Alumni') ? selected="selected" : ''%>>Alumni</option>
+				<option value="Temp" <%= tags.includes('Temp') ? selected="selected" : ''%>>Temporary</option>
+				<option value="Part Time" <%= tags.includes('Part Time') ? selected="selected" : ''%>>Part Time</option>
+				<option value="Remote" <%= tags.includes('Remote') ? selected="selected" : ''%>>Remote</option>
+				<option value="Background Check" <%= tags.includes('Background Check') ? selected="selected" : ''%>>Background Check</option>
+				<option value="Flexible Hours" <%= tags.includes('Flexible Hours') ? selected="selected" : ''%>>Flexible Hours</option>
+			</select>
+		</div>
+		<div><button type="submit">Save</button></div>
+	</form>
+</div>
+<script>const classId= '<%= classId %>'; const jobId = '<%= id %>'</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="/javascript/form.js"></script>

@@ -5,6 +5,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
+const methodOverride = require('method-override');
 const { Classroom, JobListing, User } = require('./schemas.js');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
@@ -51,6 +52,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(upload.array());
 app.use(express.static('public'));
+
+app.use(methodOverride('_method'));
 
 app.use((req, res, next) => {
 	res.locals.success = req.flash('success');
@@ -269,18 +272,23 @@ app.post(
 	}
 );
 
+const jobInClass = function (req, res, next) {
+	const jobListingIds = req.classroom.jobListings.map((j) => j.id);
+	if (!jobListingIds.includes(req.params.jobId)) {
+		res.status = 403;
+		req.flash('error', 'This job is not in your class');
+		res.redirect(`/class/${req.params.id}`);
+		return;
+	}
+	next();
+};
 app.post(
 	'/class/:id/:jobId/interested',
 	isLogedIn,
 	permissions,
 	isInClass,
+	jobInClass,
 	async (req, res) => {
-		const jobListingIds = req.classroom.jobListings.map((j) => j.id);
-		if (!jobListingIds.includes(req.params.jobId)) {
-			res.json({ result: 'permition denied' });
-			return;
-		}
-
 		const job = await JobListing.findById(req.params.jobId);
 		if (job.interested.includes(req.user.id)) {
 			res.json({ result: 'already interested' });
@@ -302,13 +310,8 @@ app.post(
 	isLogedIn,
 	permissions,
 	isInClass,
+	jobInClass,
 	async (req, res) => {
-		const jobListingIds = req.classroom.jobListings.map((j) => j.id);
-		if (!jobListingIds.includes(req.params.jobId)) {
-			res.json({ result: 'permition denied' });
-			return;
-		}
-
 		const job = await JobListing.findById(req.params.jobId);
 		if (!job.interested.includes(req.user.id)) {
 			res.json({ result: 'already not interested' });
@@ -317,6 +320,59 @@ app.post(
 			let save = await job.save();
 			res.json({ result: 'removed from interested' });
 		}
+	}
+);
+app.get(
+	'/class/:id/:jobId',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	jobInClass,
+	async (req, res) => {
+		const job = await JobListing.findById(req.params.jobId).lean();
+		job.classId = req.classroom.id;
+		job.id = String(job._id);
+		res.render('edit', job);
+	}
+);
+
+app.get(
+	'/class/:id/:jobId/career-tracks',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	jobInClass,
+	async (req, res) => {
+		const job = await JobListing.findById(req.params.jobId).lean();
+		res.json([...job.careerTracks]);
+	}
+);
+
+app.patch(
+	'/class/:id/:jobId',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	jobInClass,
+	async (req, res) => {
+		const updatedJob = await JobListing.findByIdAndUpdate(req.params.jobId, {
+			...req.body,
+		});
+		req.flash('success', 'Successfully updated job');
+		res.redirect(`/class/${req.params.id}`);
+	}
+);
+
+app.delete(
+	'/class/:id/:jobId',
+	isLogedIn,
+	permissions,
+	isAdmin,
+	jobInClass,
+	async (req, res) => {
+		await JobListing.findByIdAndDelete(req.params.jobId);
+		req.flash('success', 'Successfully deleted job');
+		res.redirect(`/class/${req.params.id}`);
 	}
 );
 

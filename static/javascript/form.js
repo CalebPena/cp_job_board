@@ -61,12 +61,16 @@ const removeMultiSelect = function () {
 	multiTextInputs.removeChild(multiTextInputs.lastChild);
 };
 
-const addMultiSelect = function () {
+const addMultiSelect = function (innerText) {
+	let inText = innerText;
+	if (innerText == null) {
+		inText = '';
+	}
 	const multiTextInputs = document.querySelector('#careerTracks');
 	const template = document.createElement('template');
 	template.innerHTML = `<div class="careerTrack">
 						<label for="careerTrack">Career Track</label>
-						<input type="text" id="careerTrack" name="careerTracks" required/>
+						<input type="text" id="careerTrack" name="careerTracks" value="${inText}" required/>
 					</div>`;
 	multiTextInputs.appendChild(template.content.firstElementChild);
 };
@@ -86,4 +90,17 @@ multiInputButtonremove.addEventListener('click', (e) => {
 	removeMultiSelect();
 });
 
-addMultiSelect();
+if (jobId && classId) {
+	axios
+		.get(`/class/${classId}/${jobId}/career-tracks`)
+		.then((res) => {
+			for (i = 0; i < res.data.length; i++) {
+				addMultiSelect(res.data[i]);
+			}
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+} else {
+	addMultiSelect();
+}
