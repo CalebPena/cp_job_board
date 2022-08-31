@@ -4,11 +4,11 @@
 <div>
 	<form action="/class/<%= id %>/create" method="post">
 		<div>
-			<label for="title">Job Title</label>
+			<label for="title" minlength="2" maxlength="64">Job Title</label>
 			<input type="text" id="title" name="jobTitle" required />
 		</div>
 		<div>
-			<label for="company">Company</label>
+			<label for="company" minlength="2" maxlength="64">Company</label>
 			<input type="text" id="company" name="company" required />
 		</div>
 		<div id="careerTracks"></div>
@@ -18,7 +18,7 @@
 		</div>
 		<div>
 			<label for="salary">Salary</label>
-			<input type="number" id="salary" name="salary" required />
+			<input type="number" id="salary" name="salary" min="0" required />
 			<select name="salaryType" id="salaryType" required>
 				<option value="Hourly">Hourly</option>
 				<option value="Yearly">Yearly</option>

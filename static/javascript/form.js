@@ -70,7 +70,7 @@ const addMultiSelect = function (innerText) {
 	const template = document.createElement('template');
 	template.innerHTML = `<div class="careerTrack">
 						<label for="careerTrack">Career Track</label>
-						<input type="text" id="careerTrack" name="careerTracks" value="${inText}" required/>
+						<input type="text" id="careerTrack" name="careerTracks" value="${inText}" maxlength="64" required/>
 					</div>`;
 	multiTextInputs.appendChild(template.content.firstElementChild);
 };

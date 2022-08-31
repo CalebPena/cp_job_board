@@ -5,12 +5,13 @@
 <div>
 	<form action="/class/<%= classId %>/<%= id %>?_method=patch" method="post">
 		<div>
-			<label for="title">Job Title</label>
+			<label for="title" >Job Title</label>
 			<input
 				type="text"
 				id="title"
 				name="jobTitle"
 				value="<%= jobTitle %>"
+				maxlength="64"
 				required
 			/>
 		</div>
@@ -21,6 +22,7 @@
 				id="company"
 				name="company"
 				value="<%= company %>"
+				maxlength="64"
 				required
 			/>
 		</div>
@@ -36,6 +38,7 @@
 				id="salary"
 				name="salary"
 				value="<%= salary %>"
+				min="0"
 				required
 			/>
 			<select name="salaryType" id="salaryType" required>

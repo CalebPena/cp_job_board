@@ -15,7 +15,7 @@
 </ul>
 <form action="/class/<%= id %>/admin/add-admin" method="post">
 	<label for="username">Username</label>
-	<input type="text" id="username" name="username" required />
+	<input type="text" id="username" name="username" minlength="2" required />
 	<button type="submit">Submit</button>
 </form>
 <br />
@@ -35,7 +35,7 @@
 <form action="/class/<%= id %>/admin/add-leader" method="post">
 	<div>
 		<label for="password">Global Leader Password</label
-		><input type="text" id="password" name="password" required />
+		><input type="text" id="password" name="password" minlength="8" required />
 	</div>
 	<div id="leaders"></div>
 	<div>

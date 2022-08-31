@@ -12,7 +12,8 @@ const LocalStrategy = require('passport-local');
 const session = require('express-session');
 const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
-const mongoose = require('mongoose');
+const catchAsync = require('./utiles/catchAsync');
+const ExpressError = require('./utiles/expressError');
 require('dotenv').config();
 
 const app = express();
@@ -63,17 +64,19 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.use(async (req, res, next) => {
-	if (req.user) {
-		res.locals.user = await User.findById(req.user.id).populate('classes');
-		res.locals.user.permissions = false;
-	} else {
-		res.locals.user = false;
-	}
-	next();
-});
+app.use(
+	catchAsync(async (req, res, next) => {
+		if (req.user) {
+			res.locals.user = await User.findById(req.user.id).populate('classes');
+			res.locals.user.permissions = false;
+		} else {
+			res.locals.user = false;
+		}
+		next();
+	})
+);
 
-const permissions = async function (req, res, next) {
+const permissions = catchAsync(async function (req, res, next) {
 	const classId = req.params.id;
 	const userId = req.user.id;
 	const hasId = (element) => {
@@ -96,7 +99,7 @@ const permissions = async function (req, res, next) {
 	}
 	res.locals.user.permissions = req.user.permissions;
 	next();
-};
+});
 
 const isOwner = function (req, res, next) {
 	if (req.user.permissions === 'owner') {
@@ -132,7 +135,7 @@ const isInClass = function (req, res, next) {
 	}
 };
 
-const isLogedIn = function async(req, res, next) {
+const isLogedIn = function (req, res, next) {
 	if (req.isAuthenticated()) {
 		next();
 	} else {
@@ -149,68 +152,84 @@ app.get('/class/create', isLogedIn, (req, res) => {
 	res.render('create');
 });
 
-app.post('/class/create', isLogedIn, async (req, res) => {
-	const classCode = Math.random().toString(36).substring(2, 8);
-	const classroom = new Classroom({
-		className: req.body.className,
-		jobListings: [],
-		owner: req.user._id,
-		classCode: classCode,
-	});
-	await classroom.save();
-	await User.findByIdAndUpdate(req.user.id, {
-		$push: { classes: classroom.id },
-	});
-	req.flash('success', 'Created new classroom');
-	res.redirect(`/class/${classroom.id}/admin`);
-});
-
-app.post('/join', isLogedIn, async (req, res) => {
-	const classroom = await Classroom.findOne({ classCode: req.body.classCode });
-	if (classroom) {
-		if (
-			classroom.leaders.indexOf(req.user.id) === -1 &&
-			classroom.admin.indexOf(req.user.id) === -1 &&
-			classroom.owner != req.user.id
-		) {
-			classroom.leaders.push(req.user.id);
-		} else {
-			req.flash('error', 'You are already in this class');
-			res.redirect('/');
-			return;
-		}
+app.post(
+	'/class/create',
+	isLogedIn,
+	catchAsync(async (req, res) => {
+		const classCode = Math.random().toString(36).substring(2, 8);
+		const classroom = new Classroom({
+			className: req.body.className,
+			jobListings: [],
+			owner: req.user._id,
+			classCode: classCode,
+		});
 		await classroom.save();
-		const user = await User.findById(req.user.id);
-		user.classes.push(classroom.id);
-		await user.save();
-		req.flash('success', 'Joined classroom');
-		res.redirect(`/class/${classroom.id}`);
-	} else {
-		req.flash('error', 'Wrong code');
-		res.redirect('/');
-	}
-});
+		await User.findByIdAndUpdate(req.user.id, {
+			$push: { classes: classroom.id },
+		});
+		req.flash('success', 'Created new classroom');
+		res.redirect(`/class/${classroom.id}/admin`);
+	})
+);
 
-app.get('/class/:id', isLogedIn, permissions, isInClass, async (req, res) => {
-	const classroom = await Classroom.findById(req.params.id)
-		.populate({
-			path: 'jobListings',
-			populate: {
-				path: 'interested',
-			},
-		})
-		.lean();
-	let jobs = classroom.jobListings;
-	for (i = 0; i < jobs.length; i++) {
-		if (jobs[i].interested.some((u) => u._id == req.user.id)) {
-			jobs[i].userIsInterested = true;
+app.post(
+	'/join',
+	isLogedIn,
+	catchAsync(async (req, res) => {
+		const classroom = await Classroom.findOne({
+			classCode: req.body.classCode,
+		});
+		if (classroom) {
+			if (
+				classroom.leaders.indexOf(req.user.id) === -1 &&
+				classroom.admin.indexOf(req.user.id) === -1 &&
+				classroom.owner != req.user.id
+			) {
+				classroom.leaders.push(req.user.id);
+			} else {
+				req.flash('error', 'You are already in this class');
+				res.redirect('/');
+				return;
+			}
+			await classroom.save();
+			const user = await User.findById(req.user.id);
+			user.classes.push(classroom.id);
+			await user.save();
+			req.flash('success', 'Joined classroom');
+			res.redirect(`/class/${classroom.id}`);
 		} else {
-			jobs[i].userIsInterested = false;
+			req.flash('error', 'Wrong code');
+			res.redirect('/');
 		}
-		jobs[i].id = String(jobs[i]._id);
-	}
-	res.render('jobListings', { id: req.params.id, jobs: jobs });
-});
+	})
+);
+
+app.get(
+	'/class/:id',
+	isLogedIn,
+	permissions,
+	isInClass,
+	catchAsync(async (req, res) => {
+		const classroom = await Classroom.findById(req.params.id)
+			.populate({
+				path: 'jobListings',
+				populate: {
+					path: 'interested',
+				},
+			})
+			.lean();
+		let jobs = classroom.jobListings;
+		for (i = 0; i < jobs.length; i++) {
+			if (jobs[i].interested.some((u) => u._id == req.user.id)) {
+				jobs[i].userIsInterested = true;
+			} else {
+				jobs[i].userIsInterested = false;
+			}
+			jobs[i].id = String(jobs[i]._id);
+		}
+		res.render('jobListings', { id: req.params.id, jobs: jobs });
+	})
+);
 
 app.get('/class/:id/create', isLogedIn, permissions, isAdmin, (req, res) => {
 	res.render('createJob', { id: req.params.id });
@@ -221,7 +240,7 @@ app.post(
 	isLogedIn,
 	permissions,
 	isAdmin,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const job = new JobListing(req.body);
 		job.interested = [];
 		await job.save();
@@ -230,7 +249,7 @@ app.post(
 		});
 		req.flash('success', 'Successfully added new job listing');
 		res.redirect(`/class/${req.params.id}`);
-	}
+	})
 );
 
 app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
@@ -246,7 +265,7 @@ app.post(
 	isLogedIn,
 	permissions,
 	isOwner,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const username = req.body.username;
 		const newAdmin = await User.findOneAndUpdate(
 			{ username: username },
@@ -257,7 +276,7 @@ app.post(
 		});
 		req.flash('success', `Added new admin: ${username}`);
 		res.redirect(`/class/${req.params.id}/admin`);
-	}
+	})
 );
 
 app.delete(
@@ -265,7 +284,7 @@ app.delete(
 	isLogedIn,
 	permissions,
 	isOwner,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		req.classroom.admin = req.classroom.admin.filter(function (ele) {
 			return ele.id != req.params.adminId;
 		});
@@ -277,7 +296,7 @@ app.delete(
 		});
 		req.flash('success', 'Removed Admin');
 		res.redirect(`/class/${req.params.id}/admin`);
-	}
+	})
 );
 
 app.post(
@@ -285,7 +304,7 @@ app.post(
 	isLogedIn,
 	permissions,
 	isAdmin,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		if (!Array.isArray(req.body.usernames)) {
 			req.body.usernames = [req.body.usernames];
 		}
@@ -307,14 +326,14 @@ app.post(
 		await req.classroom.save();
 		req.flash('success', 'Added new leaders');
 		res.redirect(`/class/${req.params.id}/admin`);
-	}
+	})
 );
 app.delete(
 	'/class/:id/admin/leader/:leaderId',
 	isLogedIn,
 	permissions,
-	isOwner,
-	async (req, res) => {
+	isAdmin,
+	catchAsync(async (req, res) => {
 		req.classroom.leaders = req.classroom.leaders.filter(function (ele) {
 			return ele.id != req.params.leaderId;
 		});
@@ -326,7 +345,7 @@ app.delete(
 		});
 		req.flash('success', 'Removed leader');
 		res.redirect(`/class/${req.params.id}/admin`);
-	}
+	})
 );
 
 const jobInClass = function (req, res, next) {
@@ -345,7 +364,7 @@ app.post(
 	permissions,
 	isInClass,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const job = await JobListing.findById(req.params.jobId);
 		if (job.interested.includes(req.user.id)) {
 			res.json({ result: 'already interested' });
@@ -354,7 +373,7 @@ app.post(
 			let save = await job.save();
 			res.json({ result: 'added to interested' });
 		}
-	}
+	})
 );
 
 function arrayRemove(arr, value) {
@@ -368,7 +387,7 @@ app.post(
 	permissions,
 	isInClass,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const job = await JobListing.findById(req.params.jobId);
 		if (!job.interested.includes(req.user.id)) {
 			res.json({ result: 'already not interested' });
@@ -377,7 +396,7 @@ app.post(
 			let save = await job.save();
 			res.json({ result: 'removed from interested' });
 		}
-	}
+	})
 );
 app.get(
 	'/class/:id/:jobId',
@@ -385,12 +404,12 @@ app.get(
 	permissions,
 	isAdmin,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const job = await JobListing.findById(req.params.jobId).lean();
 		job.classId = req.classroom.id;
 		job.id = String(job._id);
 		res.render('edit', job);
-	}
+	})
 );
 
 app.get(
@@ -399,10 +418,10 @@ app.get(
 	permissions,
 	isAdmin,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const job = await JobListing.findById(req.params.jobId).lean();
 		res.json([...job.careerTracks]);
-	}
+	})
 );
 
 app.patch(
@@ -411,13 +430,13 @@ app.patch(
 	permissions,
 	isAdmin,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		const updatedJob = await JobListing.findByIdAndUpdate(req.params.jobId, {
 			...req.body,
 		});
 		req.flash('success', 'Successfully updated job');
 		res.redirect(`/class/${req.params.id}`);
-	}
+	})
 );
 
 app.delete(
@@ -426,11 +445,11 @@ app.delete(
 	permissions,
 	isAdmin,
 	jobInClass,
-	async (req, res) => {
+	catchAsync(async (req, res) => {
 		await JobListing.findByIdAndDelete(req.params.jobId);
 		req.flash('success', 'Successfully deleted job');
 		res.redirect(`/class/${req.params.id}`);
-	}
+	})
 );
 
 app.get('/login', (req, res) => {
@@ -481,6 +500,16 @@ app.get('/logout', (req, res, next) => {
 		req.flash('success', 'Logout complete');
 		res.redirect('/');
 	});
+});
+
+app.all('*', (req, res, next) => {
+	next(new ExpressError('Page not found', 404));
+});
+
+app.use((err, req, res, next) => {
+	const { statusCode = 500 } = err;
+	if (!err.message) err.message = 'Something went wrong';
+	res.status(statusCode).render('error', { err });
 });
 
 app.listen(3000, () => {

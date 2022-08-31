@@ -3,7 +3,13 @@
 <div>
 	<form action="/class/create" method="post">
 		<label for="name">Class Name</label>
-		<input type="text" id="name" name="className" />
+		<input
+			type="text"
+			id="name"
+			name="className"
+			minlength="2"
+			maxlength="64"
+		/>
 		<button>Submit</button>
 	</form>
 </div>
