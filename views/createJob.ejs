@@ -4,12 +4,26 @@
 <div>
 	<form action="/class/<%= id %>/create" method="post">
 		<div>
-			<label for="title" minlength="2" maxlength="64">Job Title</label>
-			<input type="text" id="title" name="jobTitle" required />
+			<label for="title">Job Title</label>
+			<input
+				type="text"
+				id="title"
+				name="jobTitle"
+				minlength="2"
+				maxlength="64"
+				required
+			/>
 		</div>
 		<div>
-			<label for="company" minlength="2" maxlength="64">Company</label>
-			<input type="text" id="company" name="company" required />
+			<label for="company">Company</label>
+			<input
+				type="text"
+				id="company"
+				name="company"
+				minlength="2"
+				maxlength="64"
+				required
+			/>
 		</div>
 		<div id="careerTracks"></div>
 		<div>

@@ -6,7 +6,8 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
 const methodOverride = require('method-override');
-const { Classroom, JobListing, User } = require('./schemas.js');
+const { Classroom, JobListing, User } = require('./schemas');
+const { jobValidation, classroomValidation } = require('./validations');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const session = require('express-session');
@@ -144,6 +145,26 @@ const isLogedIn = function (req, res, next) {
 	}
 };
 
+const validateClassroom = function (req, res, next) {
+	const { error } = classroomValidation.validate(req.body);
+	if (error) {
+		const msg = error.details.map((el) => el.message).join(',');
+		throw new ExpressError(msg, 400);
+	} else {
+		next();
+	}
+};
+
+const validateJob = function (req, res, next) {
+	const { error } = jobValidation.validate(req.body);
+	if (error) {
+		const msg = error.details.map((el) => el.message).join(',');
+		throw new ExpressError(msg, 400);
+	} else {
+		next();
+	}
+};
+
 app.get('/', (req, res) => {
 	res.render('home');
 });
@@ -155,6 +176,7 @@ app.get('/class/create', isLogedIn, (req, res) => {
 app.post(
 	'/class/create',
 	isLogedIn,
+	validateClassroom,
 	catchAsync(async (req, res) => {
 		const classCode = Math.random().toString(36).substring(2, 8);
 		const classroom = new Classroom({
@@ -240,6 +262,7 @@ app.post(
 	isLogedIn,
 	permissions,
 	isAdmin,
+	validateJob,
 	catchAsync(async (req, res) => {
 		const job = new JobListing(req.body);
 		job.interested = [];
@@ -430,6 +453,7 @@ app.patch(
 	permissions,
 	isAdmin,
 	jobInClass,
+	validateJob,
 	catchAsync(async (req, res) => {
 		const updatedJob = await JobListing.findByIdAndUpdate(req.params.jobId, {
 			...req.body,
