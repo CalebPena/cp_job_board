@@ -27,12 +27,12 @@
 		<% } %>
 	</div>
 	<div class="buttons">
-		<button type="button" class="interestedBtn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
+		<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
 			<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
 		</button>
-		<a href="/class/<%= classroom.id %>/<%=job.id%>">Edit</a>
+		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
 		<form action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
-			<button type="submit" class="delete">Delete</button>
+			<button type="submit" class="delete btn">Delete</button>
 		</form>
 	</div>
 	<h4 class="interestedIntro">Interested:</h4>

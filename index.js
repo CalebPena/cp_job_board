@@ -12,6 +12,7 @@ const LocalStrategy = require('passport-local');
 const session = require('express-session');
 const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
+const mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express();
@@ -167,7 +168,17 @@ app.post('/class/create', isLogedIn, async (req, res) => {
 app.post('/join', isLogedIn, async (req, res) => {
 	const classroom = await Classroom.findOne({ classCode: req.body.classCode });
 	if (classroom) {
-		classroom.leaders.push(req.user.id);
+		if (
+			classroom.leaders.indexOf(req.user.id) === -1 &&
+			classroom.admin.indexOf(req.user.id) === -1 &&
+			classroom.owner != req.user.id
+		) {
+			classroom.leaders.push(req.user.id);
+		} else {
+			req.flash('error', 'You are already in this class');
+			res.redirect('/');
+			return;
+		}
 		await classroom.save();
 		const user = await User.findById(req.user.id);
 		user.classes.push(classroom.id);
@@ -223,7 +234,11 @@ app.post(
 );
 
 app.get('/class/:id/admin', isLogedIn, permissions, isAdmin, (req, res) => {
-	res.render('admin', { id: req.params.id });
+	res.render('admin', {
+		id: req.params.id,
+		admin: req.classroom.admin,
+		leaders: req.classroom.leaders,
+	});
 });
 
 app.post(
@@ -238,9 +253,29 @@ app.post(
 			{ $push: { classes: req.classroom.id } }
 		);
 		await Classroom.findByIdAndUpdate(req.params.id, {
-			$push: { admin: newAdmin.id },
+			$addToSet: { admin: newAdmin.id },
 		});
 		req.flash('success', `Added new admin: ${username}`);
+		res.redirect(`/class/${req.params.id}/admin`);
+	}
+);
+
+app.delete(
+	'/class/:id/admin/admin/:adminId',
+	isLogedIn,
+	permissions,
+	isOwner,
+	async (req, res) => {
+		req.classroom.admin = req.classroom.admin.filter(function (ele) {
+			return ele.id != req.params.adminId;
+		});
+		await req.classroom.save();
+		const answer = await User.findByIdAndUpdate(req.params.adminId, {
+			$pullAll: {
+				classes: [{ _id: req.params.id }],
+			},
+		});
+		req.flash('success', 'Removed Admin');
 		res.redirect(`/class/${req.params.id}/admin`);
 	}
 );
@@ -264,10 +299,32 @@ app.post(
 				classes: [req.params.id],
 			});
 			const newUser = await User.register(user, req.body.password);
-			await req.classroom.leaders.push(newUser.id);
-			req.classroom.save();
+			req.classroom.leaders.push(newUser.id);
+			if (req.classroom.leaders.indexOf(newUser.id) === -1) {
+				req.classroom.leaders.push(newUser.id);
+			}
 		}
-		req.flash('success', 'Added new lesers');
+		await req.classroom.save();
+		req.flash('success', 'Added new leaders');
+		res.redirect(`/class/${req.params.id}/admin`);
+	}
+);
+app.delete(
+	'/class/:id/admin/leader/:leaderId',
+	isLogedIn,
+	permissions,
+	isOwner,
+	async (req, res) => {
+		req.classroom.leaders = req.classroom.leaders.filter(function (ele) {
+			return ele.id != req.params.leaderId;
+		});
+		await req.classroom.save();
+		await User.findByIdAndUpdate(req.params.leaderId, {
+			$pullAll: {
+				classes: [{ _id: req.params.id }],
+			},
+		});
+		req.flash('success', 'Removed leader');
 		res.redirect(`/class/${req.params.id}/admin`);
 	}
 );

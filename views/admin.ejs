@@ -1,12 +1,37 @@
 <% layout('layouts/boilerplate') %>
 <h1>Admin</h1>
-<a href="/class/<%= id %>">Class</a>
+<ul class="adminList">
+	<% for (i=0;i < admin.length; i++) {%>
+	<li>
+		<%= admin[i].username %>
+		<form
+			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
+			method="post"
+		>
+			<button type="submit">Remove From Class</button>
+		</form>
+	</li>
+	<% } %>
+</ul>
 <form action="/class/<%= id %>/admin/add-admin" method="post">
 	<label for="username">Username</label>
 	<input type="text" id="username" name="username" required />
 	<button type="submit">Submit</button>
 </form>
 <br />
+<ul class="leaderList">
+	<% for (i=0;i < leaders.length; i++) {%>
+	<li>
+		<%= leaders[i].username %>
+		<form
+			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
+			method="post"
+		>
+			<button type="submit">Remove From Class</button>
+		</form>
+	</li>
+	<% } %>
+</ul>
 <form action="/class/<%= id %>/admin/add-leader" method="post">
 	<div>
 		<label for="password">Global Leader Password</label
