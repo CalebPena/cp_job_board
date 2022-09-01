@@ -178,13 +178,18 @@ app.post(
 	isLogedIn,
 	validateClassroom,
 	catchAsync(async (req, res) => {
-		const classCode = Math.random().toString(36).substring(2, 8);
+		let classCode = Math.random().toString(36).substring(2, 8);
 		const classroom = new Classroom({
 			className: req.body.className,
 			jobListings: [],
 			owner: req.user._id,
-			classCode: classCode,
 		});
+		while (true) {
+			let classWithCode = await Classroom.find({ classCode: classCode });
+			if (classWithCode) break;
+			classCode = Math.random().toString(36).substring(2, 8);
+		}
+		classroom.classCode = classCode;
 		await classroom.save();
 		await User.findByIdAndUpdate(req.user.id, {
 			$push: { classes: classroom.id },
@@ -294,9 +299,15 @@ app.post(
 			{ username: username },
 			{ $push: { classes: req.classroom.id } }
 		);
-		await Classroom.findByIdAndUpdate(req.params.id, {
-			$addToSet: { admin: newAdmin.id },
-		});
+		try {
+			await Classroom.findByIdAndUpdate(req.params.id, {
+				$addToSet: { admin: newAdmin.id },
+			});
+		} catch (err) {
+			req.flash('error', `Failed to add Admin`);
+			res.redirect(`/class/${req.params.id}/admin`);
+			return;
+		}
 		req.flash('success', `Added new admin: ${username}`);
 		res.redirect(`/class/${req.params.id}/admin`);
 	})
@@ -334,20 +345,34 @@ app.post(
 		if (!Array.isArray(req.body.emails)) {
 			req.body.emails = [req.body.emails];
 		}
+		let usernamesRegistered = [];
 		for (i = 0; i < req.body.usernames.length; i++) {
-			const user = new User({
+			let user = new User({
 				email: req.body.emails[i],
 				username: req.body.usernames[i],
 				classes: [req.params.id],
 			});
-			const newUser = await User.register(user, req.body.password);
-			req.classroom.leaders.push(newUser.id);
-			if (req.classroom.leaders.indexOf(newUser.id) === -1) {
+			try {
+				let newUser = await User.register(user, req.body.password);
 				req.classroom.leaders.push(newUser.id);
+				if (req.classroom.leaders.indexOf(newUser.id) === -1) {
+					req.classroom.leaders.push(newUser.id);
+				}
+			} catch (err) {
+				usernamesRegistered.push(user.username);
 			}
 		}
 		await req.classroom.save();
-		req.flash('success', 'Added new leaders');
+		if (usernamesRegistered.length) {
+			console.log('here');
+			req.flash(
+				'error',
+				'Some of the usernames or emails already exist for:',
+				usernamesRegistered.join(', ')
+			);
+		} else {
+			req.flash('success', 'Added new leaders');
+		}
 		res.redirect(`/class/${req.params.id}/admin`);
 	})
 );
