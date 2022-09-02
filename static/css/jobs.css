@@ -1,3 +1,60 @@
+#filter-jobs {
+	display: flex;
+	flex-wrap: wrap;
+	border: 1px solid black;
+	width: 95%;
+	min-width: 500px;
+}
+
+.filter-option {
+	margin: 3px;
+}
+
+#salaryType {
+	font-size: 25px;
+}
+
+.tag-box {
+	flex-basis: 100%;
+	margin: 10px;
+}
+
+.pill {
+	border: 1px solid black;
+	border-radius: 13px;
+	text-align: center;
+	padding: 3px;
+	margin: 4px 2px;
+	color: white;
+	background-color: #902428;
+}
+
+.select {
+	border: black;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.select__item {
+	padding: 3px;
+	margin: 10px 5px;
+	cursor: pointer;
+	color: black;
+	background: white;
+	transition: background 0.1s;
+	font-size: 20px;
+}
+
+.select__item--selected {
+	background: #902428;
+	color: #ffffff;
+}
+
+#filter-btn {
+	font-size: 25px;
+	padding: 5px;
+}
+
 #newJob {
 	text-decoration: none;
 	font-size: 50px;
@@ -9,6 +66,8 @@
 	text-align: center;
 	margin: 20px 40%;
 	display: block;
+	min-width: 100px;
+	transition: background 0.1s;
 }
 
 #newJob:hover {
@@ -18,10 +77,10 @@
 
 .job {
 	border: 1px solid black;
-	max-width: 500px;
+	width: 500px;
 	background-color: #b5b6b9;
 	color: black;
-	margin: 7px;
+	margin: 15px;
 }
 
 .jobTitle {
@@ -52,16 +111,6 @@
 .careerPills {
 	display: flex;
 	flex-wrap: wrap;
-}
-
-.pill {
-	border: 1px solid black;
-	border-radius: 13px;
-	text-align: center;
-	padding: 3px;
-	margin: 4px 2px;
-	color: white;
-	background-color: #902428;
 }
 
 .jobPayment {

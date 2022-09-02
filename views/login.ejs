@@ -1,25 +1,29 @@
 <% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/login.css" />
 <h1>Login</h1>
-<div>
+<div class="login-box">
 	<form action="/login" method="post">
-		<label for="username">Username</label>
-		<input
-			type="text"
-			id="username"
-			name="username"
-			autocomplete="username"
-			required
-			autofocus
-		/>
-		<label for="password">Password</label>
-		<input
-			type="password"
-			id="password"
-			name="password"
-			autocomplete="current-password"
-			required
-		/>
-		<button>Login</button>
-		<a href="/">Home</a>
+		<div>
+			<label for="username">Username</label>
+			<input
+				type="text"
+				id="username"
+				name="username"
+				autocomplete="username"
+				required
+				autofocus
+			/>
+		</div>
+		<div>
+			<label for="password">Password</label>
+			<input
+				type="password"
+				id="password"
+				name="password"
+				autocomplete="current-password"
+				required
+			/>
+		</div>
+		<button class="btn">Login</button>
 	</form>
 </div>

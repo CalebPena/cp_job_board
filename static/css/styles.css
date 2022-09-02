@@ -15,6 +15,7 @@ nav {
 	flex-direction: row;
 	justify-content: space-around;
 	align-items: center;
+	width: 100%;
 }
 
 .nav-link {
@@ -22,6 +23,7 @@ nav {
 	text-decoration: none;
 	font-size: 30px;
 	font-family: Social-Gothic, sans-serif;
+	margin: 10px;
 }
 
 main {
@@ -29,6 +31,23 @@ main {
 	width: 50%;
 	border: 3px solid black;
 	padding: 10px;
+}
+
+@media (max-width: 1100px) {
+	main {
+		width: 80%;
+	}
+}
+
+@media (max-width: 700px) {
+	main {
+		width: 100%;
+		border: 0px;
+	}
+	nav {
+		flex-direction: column;
+		height: auto;
+	}
 }
 
 .flash {
@@ -61,4 +80,12 @@ main {
 	top: 0px;
 	right: 0px;
 	cursor: pointer;
+}
+
+input {
+	font-size: 25px;
+}
+
+label {
+	font-size: 30px;
 }

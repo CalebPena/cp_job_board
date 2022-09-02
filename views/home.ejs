@@ -2,21 +2,29 @@
 <link rel="stylesheet" href="/css/home.css" />
 <h1>Home</h1>
 
-<a href="/class/create">Create</a>
+<a href="/class/create" class="create big-btn">Create Classroom</a>
 <% if (user) { %>
-<h2><%=user.username%></h2>
-<h2>Classes:</h2>
-<ul>
-	<% for (i = 0; i < Array.from(user.classes).length; i++) {%>
-	<li class="classroom">
-		<a href="/class/<%= user.classes[i].id %>" class="class-link"
-			><%=user.classes[i].className%> %></a
-		>
-	</li>
-	<% } %> <% } %>
-</ul>
+<div class="classrooms">
+	<h2>CLASSROOMS</h2>
+	<ul>
+		<% for (i = 0; i < Array.from(user.classes).length; i++) {%>
+		<li class="classroom">
+			<a href="/class/<%= user.classes[i].id %>" class="class-link big-btn"
+				><%=user.classes[i].className%> %></a
+			>
+		</li>
+		<% } %>
+	</ul>
+</div>
+<% } %>
 <form action="/join" method="post" class="join">
 	<label for="code">Join Class</label>
-	<input type="text" id="code" name="classCode" required />
+	<input
+		type="text"
+		id="code"
+		name="classCode"
+		placeholder="Class Code"
+		required
+	/>
 	<button type="submit">Join</button>
 </form>

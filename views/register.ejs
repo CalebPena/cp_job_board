@@ -1,35 +1,52 @@
 <% layout('layouts/boilerplate') %>
-
+<link rel="stylesheet" href="/css/login.css" />
 <h1>Register</h1>
-<div>
+<div class="login-box">
 	<form action="/register" method="post">
-		<label for="email">Email</label>
-		<input
-			type="text"
-			id="email"
-			name="email"
-			autocomplete="email"
-			required
-			autofocus
-		/>
-		<label for="username">Username</label>
-		<input
-			type="text"
-			id="username"
-			name="username"
-			autocomplete="username"
-			minlength="2"
-			required
-			autofocus
-		/>
-		<label for="password">Password</label>
-		<input
-			type="password"
-			id="password"
-			name="password"
-			minlength="8"
-			required
-		/>
-		<button>Create Account</button>
+		<div>
+			<label for="email">Email</label>
+			<input
+				type="text"
+				id="email"
+				name="email"
+				autocomplete="email"
+				required
+				autofocus
+			/>
+		</div>
+		<div>
+			<label for="username">Username</label>
+			<input
+				type="text"
+				id="username"
+				name="username"
+				autocomplete="username"
+				minlength="2"
+				required
+			/>
+		</div>
+		<div>
+			<label for="status">Status</label>
+			<select name="status" id="status">
+				<option value="Leader" selected>Leader</option>
+				<option value="Alumni">Alumni</option>
+				<option value="Coach">Coach</option>
+			</select>
+		</div>
+		<div id="cpClassBox">
+			<label for="cpClass">Class</label>
+			<input type="text" id="cpClass" name="cpClass" />
+		</div>
+		<div>
+			<label for="password">Password</label>
+			<input
+				type="password"
+				id="password"
+				name="password"
+				minlength="8"
+				required
+			/>
+		</div>
+		<button class="btn">Create Account</button>
 	</form>
 </div>

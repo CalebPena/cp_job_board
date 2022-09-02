@@ -47,8 +47,10 @@ const jobListingSchema = new Schema({
 const JobListing = mongoose.model('job_Listing', jobListingSchema);
 
 const userScema = new Schema({
-	email: { type: String, reequired: true, unique: true },
+	email: { type: String, required: true, unique: true },
 	classes: [{ type: mongoose.ObjectId, ref: 'classroom' }],
+	status: { type: String, required: true, enum: ['Leader', 'Alumni', 'Coach'] },
+	cpClass: String,
 });
 userScema.plugin(passportLocalMongoose);
 

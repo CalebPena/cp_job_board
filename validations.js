@@ -53,3 +53,13 @@ const classroom = Joi.object({
 });
 
 module.exports.classroomValidation = classroom;
+
+const user = Joi.object({
+	username: Joi.string().required().trim().escapeHTML(),
+	status: Joi.string()
+		.required()
+		.trim()
+		.valid('Leader', 'Alumni', 'Coach')
+		.escapeHTML(),
+	cpClass: Joi.string().trim().escapeHTML(),
+});

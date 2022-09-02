@@ -1,29 +1,14 @@
 <% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/admin.css" />
 <h1>Admin</h1>
-<ul class="adminList">
-	<% for (i=0;i < admin.length; i++) {%>
-	<li>
-		<%= admin[i].username %>
-		<form
-			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
-			method="post"
-		>
-			<button type="submit">Remove From Class</button>
-		</form>
-	</li>
-	<% } %>
-</ul>
-<form action="/class/<%= id %>/admin/add-admin" method="post">
-	<label for="username">Username</label>
-	<input type="text" id="username" name="username" minlength="2" required />
-	<button type="submit">Submit</button>
-</form>
-<br />
+<h2>Class Code: <%= classroom.classCode %></h2>
+<h2>Leaders:</h2>
 <ul class="leaderList">
 	<% for (i=0;i < leaders.length; i++) {%>
 	<li>
 		<%= leaders[i].username %>
 		<form
+			class="delete"
 			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
 			method="post"
 		>
@@ -32,7 +17,8 @@
 	</li>
 	<% } %>
 </ul>
-<form action="/class/<%= id %>/admin/add-leader" method="post">
+<form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
+	<h3>Add Leader</h3>
 	<div>
 		<label for="password">Global Leader Password</label
 		><input type="text" id="password" name="password" minlength="8" required />
@@ -42,6 +28,27 @@
 		<button id="leader-btn-add" name="Leader">Add</button>
 		<button id="leader-btn-remove">Remove</button>
 	</div>
+	<button type="submit">Submit</button>
+</form>
+<h2>Admin:</h2>
+<ul class="adminList">
+	<% for (i=0;i < admin.length; i++) {%>
+	<li>
+		<%= admin[i].username %>
+		<form
+			class="delete"
+			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
+			method="post"
+		>
+			<button type="submit">Remove From Class</button>
+		</form>
+	</li>
+	<% } %>
+</ul>
+<form action="/class/<%= id %>/admin/add-admin" method="post" class="add">
+	<h3>Add Admin</h3>
+	<label for="username">Username</label>
+	<input type="text" id="username" name="username" minlength="2" required />
 	<button type="submit">Submit</button>
 </form>
 <script src="/javascript/adminPanel.js"></script>
