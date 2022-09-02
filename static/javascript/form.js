@@ -90,7 +90,7 @@ multiInputButtonremove.addEventListener('click', (e) => {
 	removeMultiSelect();
 });
 
-if (jobId && classId) {
+try {
 	axios
 		.get(`/class/${classId}/${jobId}/career-tracks`)
 		.then((res) => {
@@ -101,6 +101,6 @@ if (jobId && classId) {
 		.catch((err) => {
 			console.log(err);
 		});
-} else {
+} catch (e) {
 	addMultiSelect();
 }

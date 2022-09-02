@@ -4,8 +4,34 @@
 
 <a href="/class/<%= classroom.id %>/create" id="newJob">New Job</a>
 
+<form id="filter-jobs">
+			<label for="title">Job Title</label>
+			<input type="text" id="title" class="filter"/>
+			<label for="careerTrack">careerTrack</label>
+			<input type="text" id="careerTrack" class="filter"/>
+			<label for="salary">Minimum pay</label>
+			<input type="number" id="salary" min="0" class="filter"/>
+			<label for="salaryType">salaryType</label>
+			<select class="filter" id="salaryType">
+				<option value="" selected></option>
+				<option value="Hourly">Hourly</option>
+				<option value="Yearly">Yearly</option>
+			</select>
+			<div>
+			<label for="filter-tags">Tags</label>
+			<select multiple class="tags" id="filter-tags" class="custom-select">
+				<option value="Core">Core</option>
+				<option value="Alumni">Alumni</option>
+				<option value="Temp">Temporary</option>
+				<option value="Part Time">Part Time</option>
+				<option value="Remote">Remote</option>
+				<option value="Background Check">Background Check</option>
+				<option value="Flexible Hours">Flexible Hours</option>
+			</select>
+			</div>
+		<Button type="submit">Filter</Button></form>
 <% for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
-<div class="job">
+<div class="job" id="<%= job.id %>">
 	<h2 class="jobTitle"><%= job.jobTitle %></h2>
 	<h3 class="company">Company: <%= job.company %></h3>
 	<div class="careerTracks">

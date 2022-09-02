@@ -15,6 +15,8 @@ const flash = require('connect-flash');
 const MongoDBStore = require('connect-mongodb-session')(session);
 const catchAsync = require('./utiles/catchAsync');
 const ExpressError = require('./utiles/expressError');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
@@ -27,6 +29,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 
 app.use(
 	session({
+		name: 'session',
 		secret: process.env.SESSION_SECRET,
 		resave: false,
 		saveUninitialized: true,
@@ -55,6 +58,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(upload.array());
 app.use(express.static('public'));
+app.use(mongoSanitize());
+app.use(helmet());
+
+const scriptSrcUrls = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'];
+app.use(
+	helmet.contentSecurityPolicy({
+		directives: {
+			defaultSrc: [],
+			connectSrc: ["'self'"],
+			scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
+			styleSrc: ["'self'", "'unsafe-inline'"],
+			workerSrc: ["'self'", 'blob:'],
+			childSrc: ['blob:'],
+			objectSrc: [],
+			imgSrc: ["'self'", 'blob:', 'data:'],
+			fontSrc: ["'self'"],
+		},
+	})
+);
 
 app.use(methodOverride('_method'));
 
@@ -156,6 +178,9 @@ const validateClassroom = function (req, res, next) {
 };
 
 const validateJob = function (req, res, next) {
+	if (!Array.isArray(req.body.careerTracks))
+		req.body.careerTracks = [req.body.careerTracks];
+	if (!Array.isArray(req.body.tags)) req.body.tags = [req.body.tags];
 	const { error } = jobValidation.validate(req.body);
 	if (error) {
 		const msg = error.details.map((el) => el.message).join(',');
@@ -255,6 +280,22 @@ app.get(
 			jobs[i].id = String(jobs[i]._id);
 		}
 		res.render('jobListings', { id: req.params.id, jobs: jobs });
+	})
+);
+
+app.get(
+	'/class/:id/jobs',
+	isLogedIn,
+	permissions,
+	isInClass,
+	catchAsync(async (req, res) => {
+		let classroom = await Classroom.findById(req.params.id)
+			.populate('jobListings')
+			.lean();
+		classroom.jobListings.forEach((job) => {
+			delete job.interested;
+		});
+		res.json(classroom.jobListings);
 	})
 );
 
