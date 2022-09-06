@@ -1,10 +1,10 @@
 const s = document.querySelector('#status');
-const cpCLass = document.querySelector('#cpClassBox');
+const cpCLass = document.querySelector('#cpClass-box');
 
-s.onChange = () => {
+s.addEventListener('click', (e) => {
 	if (s.value === 'Leader') {
-		cpCLass.styles.display = 'block';
+		cpCLass.style.display = 'block';
 	} else {
-		cpCLass.styles.display = 'none';
+		cpCLass.style.display = 'none';
 	}
-};
+});

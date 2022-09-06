@@ -7,7 +7,11 @@ const multer = require('multer');
 const upload = multer();
 const methodOverride = require('method-override');
 const { Classroom, JobListing, User } = require('./schemas');
-const { jobValidation, classroomValidation } = require('./validations');
+const {
+	jobValidation,
+	classroomValidation,
+	userValidation,
+} = require('./validations');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const session = require('express-session');
@@ -167,14 +171,17 @@ const isLogedIn = function (req, res, next) {
 	}
 };
 
-const validateClassroom = function (req, res, next) {
-	const { error } = classroomValidation.validate(req.body);
+const validInput = function (error, next) {
 	if (error) {
 		const msg = error.details.map((el) => el.message).join(',');
 		throw new ExpressError(msg, 400);
 	} else {
-		next();
+		if (next) next();
 	}
+};
+const validateClassroom = function (req, res, next) {
+	const { error } = classroomValidation.validate(req.body);
+	validInput(error, next);
 };
 
 const validateJob = function (req, res, next) {
@@ -182,12 +189,12 @@ const validateJob = function (req, res, next) {
 		req.body.careerTracks = [req.body.careerTracks];
 	if (!Array.isArray(req.body.tags)) req.body.tags = [req.body.tags];
 	const { error } = jobValidation.validate(req.body);
-	if (error) {
-		const msg = error.details.map((el) => el.message).join(',');
-		throw new ExpressError(msg, 400);
-	} else {
-		next();
-	}
+	validInput(error, next);
+};
+
+const validateUser = function (obj) {
+	const { error } = userValidation.validate(obj);
+	validInput(error);
 };
 
 app.get('/', (req, res) => {
@@ -388,14 +395,18 @@ app.post(
 		}
 		let usernamesRegistered = [];
 		for (i = 0; i < req.body.usernames.length; i++) {
-			let user = new User({
+			let userData = {
 				email: req.body.emails[i],
 				username: req.body.usernames[i],
+				status: 'Leader',
+				cpClass: req.body.cpClass,
 				classes: [req.params.id],
-			});
+				password: req.body.password,
+			};
+			validateUser(userData);
+			let user = new User(userData);
 			try {
 				let newUser = await User.register(user, req.body.password);
-				req.classroom.leaders.push(newUser.id);
 				if (req.classroom.leaders.indexOf(newUser.id) === -1) {
 					req.classroom.leaders.push(newUser.id);
 				}
@@ -408,7 +419,7 @@ app.post(
 			console.log('here');
 			req.flash(
 				'error',
-				'Some of the usernames or emails already exist for:',
+				'Registration failed for: ',
 				usernamesRegistered.join(', ')
 			);
 		} else {
@@ -564,11 +575,10 @@ app.get('/register', (req, res) => {
 
 app.post('/register', async (req, res) => {
 	try {
-		const user = new User({
-			email: req.body.email,
-			username: req.body.username,
-			classes: [],
-		});
+		if (req.body.cpClass === '') delete req.body.cpClass;
+		validateUser(req.body);
+		const user = new User(req.body);
+		user.classes = [];
 		const newUser = await User.register(user, req.body.password);
 		req.login(user, (err) => {
 			if (!err) {

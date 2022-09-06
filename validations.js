@@ -56,10 +56,15 @@ module.exports.classroomValidation = classroom;
 
 const user = Joi.object({
 	username: Joi.string().required().trim().escapeHTML(),
+	email: Joi.string().required().trim().email().escapeHTML(),
 	status: Joi.string()
 		.required()
 		.trim()
 		.valid('Leader', 'Alumni', 'Coach')
 		.escapeHTML(),
 	cpClass: Joi.string().trim().escapeHTML(),
+	password: Joi.string().trim().min(8).required().escapeHTML(),
+	classes: Joi.array(),
 });
+
+module.exports.userValidation = user;

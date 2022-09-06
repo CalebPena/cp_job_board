@@ -20,8 +20,10 @@
 <form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
 	<h3>Add Leader</h3>
 	<div>
-		<label for="password">Global Leader Password</label
+		<label for="password">Password</label
 		><input type="text" id="password" name="password" minlength="8" required />
+		<label for="class">Class</label>
+		<input type="text" id="class" name="cpClass" required />
 	</div>
 	<div id="leaders"></div>
 	<div>
