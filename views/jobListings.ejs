@@ -1,8 +1,9 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/css/jobs.css" />
 <h1>Job Listings:</h1>
-
+	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 <a href="/class/<%= classroom.id %>/create" id="newJob">New Job</a>
+<% } %> 
 
 <form id="filter-jobs">
 	<span class="filter-option">
@@ -59,18 +60,22 @@
 		<% } %>
 	</div>
 	<div class="buttons">
-		<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
+		<% if (user.permissions === 'leader') {%>
+			<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
 			<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
 		</button>
+		<% } %> <% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
 		<form action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
 			<button type="submit" class="delete btn">Delete</button>
 		</form>
-	</div>
+		<% } %> 
+</div>	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 	<h4 class="interestedIntro">Interested:</h4>
 	<% for (j=0; j<job.interested.length; j++) {%> 
 		<div><span class="interested">Username: <%=job.interested[j].username%></span><span class="interested">Email: <%=job.interested[j].email%></span></div>
 		<% } %> 
+	<% } %> 
 </div>
 <% } %>
 <script>

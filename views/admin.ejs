@@ -36,7 +36,7 @@
 <ul class="adminList">
 	<% for (i=0;i < admin.length; i++) {%>
 	<li>
-		<%= admin[i].username %>
+		<%= admin[i].username %> <% if (user.permissions === 'owner') {%>
 		<form
 			class="delete"
 			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
@@ -44,13 +44,16 @@
 		>
 			<button type="submit">Remove From Class</button>
 		</form>
+		<% } %>
 	</li>
 	<% } %>
 </ul>
+<% if (user.permissions === 'owner') {%>
 <form action="/class/<%= id %>/admin/add-admin" method="post" class="add">
 	<h3>Add Admin</h3>
 	<label for="username">Username</label>
 	<input type="text" id="username" name="username" minlength="2" required />
 	<button type="submit">Submit</button>
 </form>
+<% } %>
 <script src="/javascript/adminPanel.js"></script>
