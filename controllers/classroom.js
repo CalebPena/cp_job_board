@@ -1,5 +1,6 @@
 const catchAsync = require('../utiles/catchAsync');
 const { Classroom, JobListing } = require('../schemas');
+const moment = require('moment');
 
 module.exports.jobListings = catchAsync(async (req, res) => {
 	const classroom = await Classroom.findById(req.params.id)
@@ -7,17 +8,27 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 			path: 'jobListings',
 			populate: {
 				path: 'interested',
+				populate: {
+					path: 'user',
+				},
 			},
 		})
 		.lean();
 	let jobs = classroom.jobListings;
 	for (i = 0; i < jobs.length; i++) {
-		if (jobs[i].interested.some((u) => u._id == req.user.id)) {
-			jobs[i].userIsInterested = true;
+		let job = jobs[i];
+		if (job.interested.some((u) => u.user == req.user.id)) {
+			job.userIsInterested = true;
 		} else {
-			jobs[i].userIsInterested = false;
+			job.userIsInterested = false;
 		}
-		jobs[i].id = String(jobs[i]._id);
+		job.interested = job.interested.map((lead) => {
+			return {
+				...lead,
+				timeSince: parseInt(moment.duration(moment() - lead.date).asDays()),
+			};
+		});
+		job.id = String(job._id);
 	}
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });

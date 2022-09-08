@@ -103,7 +103,7 @@ app.use(
 	})
 );
 
-app.get('/', (req, res) => {
+app.get('/', isLogedIn, (req, res) => {
 	res.render('home');
 });
 

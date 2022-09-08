@@ -1,3 +1,5 @@
+const ExpressError = require('./expressError');
+
 module.exports = function (error, next) {
 	if (error) {
 		const msg = error.details.map((el) => el.message).join(',');

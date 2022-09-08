@@ -19,6 +19,11 @@ const classroomSchema = new Schema({
 
 const Classroom = mongoose.model('classroom', classroomSchema);
 
+const interestedScema = new Schema({
+	user: { type: mongoose.ObjectId, ref: 'user', required: true },
+	date: { type: Date, required: true },
+});
+
 const jobListingSchema = new Schema({
 	jobTitle: { type: String, required: true },
 	company: { type: String, required: true },
@@ -42,7 +47,7 @@ const jobListingSchema = new Schema({
 		},
 	],
 	dateAdded: { type: Date, required: true },
-	interested: [{ type: mongoose.ObjectId, ref: 'user' }],
+	interested: [interestedScema],
 });
 
 const JobListing = mongoose.model('job_Listing', jobListingSchema);

@@ -3,10 +3,25 @@ const { Classroom, User } = require('../schemas');
 const { validateUser } = require('../utiles/joiValidation');
 
 module.exports.adminPage = (req, res) => {
+	const isLeaderInterested = (leader) => {
+		return (job) =>
+			job.interested.some((inter) => {
+				return inter.user == leader.id;
+			});
+	};
+	const interested = req.classroom.leaders.reduce((acc, leader) => {
+		return (acc = {
+			...acc,
+			[leader.id]: req.classroom.jobListings
+				.filter(isLeaderInterested(leader))
+				.map((job) => job.jobTitle),
+		});
+	}, {});
 	res.render('admin', {
 		id: req.params.id,
 		admin: req.classroom.admin,
 		leaders: req.classroom.leaders,
+		interested: interested,
 	});
 };
 

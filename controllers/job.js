@@ -1,18 +1,12 @@
 const { JobListing } = require('../schemas');
 const catchAsync = require('../utiles/catchAsync');
 
-function arrayRemove(arr, value) {
-	return arr.filter(function (ele) {
-		return ele != value;
-	});
-}
-
 module.exports.interested = catchAsync(async (req, res) => {
 	const job = await JobListing.findById(req.params.jobId);
-	if (job.interested.includes(req.user.id)) {
+	if (job.interested.some((u) => u.user == req.user.id)) {
 		res.json({ result: 'already interested' });
 	} else {
-		job.interested.push(req.user.id);
+		job.interested.push({ user: req.user.id, date: Date() });
 		let save = await job.save();
 		res.json({ result: 'added to interested' });
 	}
@@ -20,10 +14,12 @@ module.exports.interested = catchAsync(async (req, res) => {
 
 module.exports.notInterested = catchAsync(async (req, res) => {
 	const job = await JobListing.findById(req.params.jobId);
-	if (!job.interested.includes(req.user.id)) {
+	if (!job.interested.some((u) => u.user == req.user.id)) {
 		res.json({ result: 'already not interested' });
 	} else {
-		job.interested = arrayRemove(job.interested, req.user.id);
+		job.interested = job.interested.filter(
+			(inter) => inter.user != req.user.id
+		);
 		let save = await job.save();
 		res.json({ result: 'removed from interested' });
 	}

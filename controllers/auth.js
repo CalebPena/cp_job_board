@@ -47,6 +47,6 @@ module.exports.logout = (req, res, next) => {
 			return next(e);
 		}
 		req.flash('success', 'Logout complete');
-		res.redirect('/');
+		res.redirect('/login');
 	});
 };

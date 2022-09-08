@@ -14,16 +14,25 @@
 		>
 			<button type="submit">Remove From Class</button>
 		</form>
+		<ul>
+			<% for (job in interested[leaders[i].id]) {%>
+			<li><%= interested[leaders[i].id][job] %></li>
+			<% } %>
+		</ul>
 	</li>
 	<% } %>
 </ul>
 <form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
 	<h3>Add Leader</h3>
 	<div>
-		<label for="password">Password</label
-		><input type="text" id="password" name="password" minlength="8" required />
-		<label for="class">Class</label>
-		<input type="text" id="class" name="cpClass" required />
+		<span
+			><label for="password">Password</label
+			><input type="text" id="password" name="password" minlength="8" required
+		/></span>
+		<span
+			><label for="class">Class</label>
+			<input type="text" id="class" name="cpClass" required
+		/></span>
 	</div>
 	<div id="leaders"></div>
 	<div>

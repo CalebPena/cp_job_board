@@ -86,7 +86,10 @@ class Filter {
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
 			}
-			if (that.careerTrack && !that._in(job.careerTracks, that.careerTrack)) {
+			if (
+				that.careerTrack &&
+				!job.careerTracks.some((cTrack) => that._in(cTrack, that.careerTrack))
+			) {
 				return false;
 			}
 			if (that.salary > job.salary) return false;
@@ -106,7 +109,7 @@ class Filter {
 		};
 	}
 	_in(str, sub) {
-		return str.indexOf(sub) !== -1;
+		return str.toLowerCase().indexOf(sub.toLowerCase()) !== -1;
 	}
 }
 

@@ -41,7 +41,7 @@
 			</select>
 			</div>
 		<Button type="submit" class="btn" id="filter-btn">Filter</Button></form>
-<% for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
+<%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
 <div class="job" id="<%= job.id %>">
 	<h2 class="jobTitle"><%= job.jobTitle %></h2>
 	<h3 class="company">Company: <%= job.company %></h3>
@@ -77,8 +77,9 @@
 		<% } %> 
 </div>	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 	<h4 class="interestedIntro">Interested:</h4>
-	<% for (j=0; j<job.interested.length; j++) {%> 
-		<div><span class="interested">Username: <%=job.interested[j].username%> <%=job.interested[j].cpClass?job.interested[j].cpClass:''%></span><span class="interested">Email: <%=job.interested[j].email%></span></div>
+	<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
+		<div><span class="interested">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested">Email: <%=inter.user.email%></span>
+			<%if (inter.timeSince <= 3){ %><span class="pill">New</span><% } %>  </div>
 		<% } %> 
 	<% } %> 
 </div>
