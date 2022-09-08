@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="/css/form.css" />
+<link rel="stylesheet" href="/css/jobs.css" />
 
 <h1>Edit Job</h1>
 <div>
@@ -46,8 +46,8 @@
 				<option value="Yearly" <%= salaryType === 'Yearly' ? selected="selected" : ''%>>Yearly</option>
 			</select>
 		</div>
-		<div>
-			<label for="description">Description</label>
+		
+			<label for="description">Description:</label><div>
 			<textarea
 				name="description"
 				id="description"

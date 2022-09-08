@@ -1,5 +1,5 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="/css/form.css" />
+<link rel="stylesheet" href="/css/jobs.css" />
 <h1>New Job Listing</h1>
 <div>
 	<form action="/class/<%= id %>/create" method="post">
@@ -38,8 +38,8 @@
 				<option value="Yearly">Yearly</option>
 			</select>
 		</div>
+		<label for="description">Description:</label>
 		<div>
-			<label for="description">Description</label>
 			<textarea
 				name="description"
 				id="description"

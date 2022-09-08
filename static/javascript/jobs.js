@@ -42,6 +42,7 @@ class Filter {
 		this.careerTrack = undefined;
 		this.salary = 0;
 		this.salaryType = undefined;
+		this.new = false;
 		this.tags = [
 			'Core',
 			'Alumni',
@@ -76,9 +77,11 @@ class Filter {
 			? (this.salaryType = formData.salaryType)
 			: (this.salaryType = undefined);
 		this.tags = formData.tags;
+		this.new = formData.new;
 	}
 	_conditions() {
 		const that = this;
+		const threeDaysAgo = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 		return function (job) {
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
@@ -88,6 +91,9 @@ class Filter {
 			}
 			if (that.salary > job.salary) return false;
 			if (that.salaryType && that.salaryType !== job.salaryType) {
+				return false;
+			}
+			if (that.new && new Date(job.dateAdded).getTime() <= threeDaysAgo) {
 				return false;
 			}
 			if (job.tags.length !== 0) {
@@ -122,6 +128,7 @@ axios
 			formData.tags = Array.from(tags.options)
 				.filter((option) => option.selected)
 				.map((option) => option.value);
+			formData.new = document.querySelector('#new').checked;
 			filter.filter(formData);
 		});
 	})

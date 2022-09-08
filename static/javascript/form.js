@@ -7,7 +7,7 @@ class CustomSelect {
 		this.originalSelect.querySelectorAll('option').forEach((optionElement) => {
 			const itemElement = document.createElement('span');
 
-			itemElement.classList.add('select__item');
+			itemElement.classList.add('select__item', 'pill');
 			itemElement.textContent = optionElement.textContent;
 			this.customSelect.appendChild(itemElement);
 

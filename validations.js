@@ -27,23 +27,27 @@ const Joi = BaseJoi.extend(extension);
 const job = Joi.object({
 	jobTitle: Joi.string().required().max(64).trim().escapeHTML(),
 	company: Joi.string().required().max(64).trim().escapeHTML(),
-	careerTracks: Joi.array().items(Joi.string().max(64).trim().escapeHTML()),
-	salary: Joi.number().required().positive(),
+	careerTracks: Joi.array()
+		.items(Joi.string().max(64).trim().escapeHTML())
+		.single(),
+	salary: Joi.number().required().min(0),
 	salaryType: Joi.string().required().valid('Hourly', 'Yearly').escapeHTML(),
 	description: Joi.string().required().trim().escapeHTML(),
-	tags: Joi.array().items(
-		Joi.string()
-			.valid(
-				'Core',
-				'Alumni',
-				'Temp',
-				'Part Time',
-				'Remote',
-				'Background Check',
-				'Flexible Hours'
-			)
-			.escapeHTML()
-	),
+	tags: Joi.array()
+		.items(
+			Joi.string()
+				.valid(
+					'Core',
+					'Alumni',
+					'Temp',
+					'Part Time',
+					'Remote',
+					'Background Check',
+					'Flexible Hours'
+				)
+				.escapeHTML()
+		)
+		.single(),
 });
 
 module.exports.jobValidation = job;

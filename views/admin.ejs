@@ -6,7 +6,7 @@
 <ul class="leaderList">
 	<% for (i=0;i < leaders.length; i++) {%>
 	<li>
-		<%= leaders[i].username %>
+		<%= leaders[i].username %> <%= leaders[i].cpClass?leaders[i].cpClass:'' %>
 		<form
 			class="delete"
 			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"

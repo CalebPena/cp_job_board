@@ -22,7 +22,7 @@ const Classroom = mongoose.model('classroom', classroomSchema);
 const jobListingSchema = new Schema({
 	jobTitle: { type: String, required: true },
 	company: { type: String, required: true },
-	careerTracks: [{ type: String, required: true }],
+	careerTracks: [{ type: String }],
 	salary: { type: Number, required: true },
 	salaryType: { type: String, required: true, enum: ['Hourly', 'Yearly'] },
 	description: { type: String, required: true },
@@ -41,6 +41,7 @@ const jobListingSchema = new Schema({
 			],
 		},
 	],
+	dateAdded: { type: Date, required: true },
 	interested: [{ type: mongoose.ObjectId, ref: 'user' }],
 });
 
