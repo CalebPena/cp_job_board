@@ -8,7 +8,7 @@
 	<li>
 		<%= leaders[i].username %> <%= leaders[i].cpClass?leaders[i].cpClass:'' %>
 		<form
-			class="delete"
+			class="delete confirm"
 			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
 			method="post"
 		>
@@ -16,7 +16,12 @@
 		</form>
 		<ul>
 			<% for (job in interested[leaders[i].id]) {%>
-			<li><%= interested[leaders[i].id][job] %></li>
+			<li>
+				<%= interested[leaders[i].id][job].title %><%if
+				(interested[leaders[i].id][job].date <= 3){ %><span class="pill"
+					>New</span
+				><% } %>
+			</li>
 			<% } %>
 		</ul>
 	</li>
@@ -47,7 +52,7 @@
 	<li>
 		<%= admin[i].username %> <% if (user.permissions === 'owner') {%>
 		<form
-			class="delete"
+			class="delete confirm"
 			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
 			method="post"
 		>

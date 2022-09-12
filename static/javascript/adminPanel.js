@@ -27,3 +27,14 @@ multiInputButtonremove.addEventListener('click', (e) => {
 });
 
 addMultiSelect();
+
+document.querySelectorAll('.confirm').forEach((form) => {
+	form.addEventListener('submit', (e) => {
+		const result = confirm(
+			'Are you sure that you want to remove this user from the class'
+		);
+		if (result === false) {
+			e.preventDefault();
+		}
+	});
+});

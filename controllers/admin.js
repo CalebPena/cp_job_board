@@ -1,6 +1,7 @@
 const catchAsync = require('../utiles/catchAsync');
 const { Classroom, User } = require('../schemas');
 const { validateUser } = require('../utiles/joiValidation');
+const moment = require('moment');
 
 module.exports.adminPage = (req, res) => {
 	const isLeaderInterested = (leader) => {
@@ -14,7 +15,19 @@ module.exports.adminPage = (req, res) => {
 			...acc,
 			[leader.id]: req.classroom.jobListings
 				.filter(isLeaderInterested(leader))
-				.map((job) => job.jobTitle),
+				.map((job) => {
+					return {
+						title: job.jobTitle,
+						date: parseInt(
+							moment.duration(
+								moment() -
+									job.interested
+										.filter((l) => l.user == leader.id)[0]
+										.date.getTime()
+							).asDays
+						),
+					};
+				}),
 		});
 	}, {});
 	res.render('admin', {

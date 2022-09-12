@@ -17,7 +17,8 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 	let jobs = classroom.jobListings;
 	for (i = 0; i < jobs.length; i++) {
 		let job = jobs[i];
-		if (job.interested.some((u) => u.user == req.user.id)) {
+		job.id = String(job._id);
+		if (job.interested.some((u) => u.user._id == req.user.id)) {
 			job.userIsInterested = true;
 		} else {
 			job.userIsInterested = false;
@@ -28,7 +29,6 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 				timeSince: parseInt(moment.duration(moment() - lead.date).asDays()),
 			};
 		});
-		job.id = String(job._id);
 	}
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
 });

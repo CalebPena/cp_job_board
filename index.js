@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const multer = require('multer');
 const upload = multer();
 const methodOverride = require('method-override');
-const { Classroom, User } = require('./schemas');
+const { User } = require('./schemas');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const session = require('express-session');
@@ -19,6 +19,7 @@ const helmet = require('helmet');
 require('dotenv').config();
 const isLogedIn = require('./utiles/loggedIn');
 const { validateClassroom } = require('./utiles/joiValidation');
+const main = require('./controllers/main');
 
 const app = express();
 
@@ -103,71 +104,13 @@ app.use(
 	})
 );
 
-app.get('/', isLogedIn, (req, res) => {
-	res.render('home');
-});
+app.get('/', isLogedIn, main.renderHome);
 
-app.get('/class/create', isLogedIn, (req, res) => {
-	res.render('create');
-});
+app.get('/class/create', isLogedIn, main.renderCreate);
 
-app.post(
-	'/class/create',
-	isLogedIn,
-	validateClassroom,
-	catchAsync(async (req, res) => {
-		let classCode = Math.random().toString(36).substring(2, 8);
-		const classroom = new Classroom({
-			className: req.body.className,
-			jobListings: [],
-			owner: req.user._id,
-		});
-		while (true) {
-			let classWithCode = await Classroom.find({ classCode: classCode });
-			if (classWithCode) break;
-			classCode = Math.random().toString(36).substring(2, 8);
-		}
-		classroom.classCode = classCode;
-		await classroom.save();
-		await User.findByIdAndUpdate(req.user.id, {
-			$push: { classes: classroom.id },
-		});
-		req.flash('success', 'Created new classroom');
-		res.redirect(`/class/${classroom.id}/admin`);
-	})
-);
+app.post('/class/create', isLogedIn, validateClassroom, main.create);
 
-app.post(
-	'/join',
-	isLogedIn,
-	catchAsync(async (req, res) => {
-		const classroom = await Classroom.findOne({
-			classCode: req.body.classCode,
-		});
-		if (classroom) {
-			if (
-				classroom.leaders.indexOf(req.user.id) === -1 &&
-				classroom.admin.indexOf(req.user.id) === -1 &&
-				classroom.owner != req.user.id
-			) {
-				classroom.leaders.push(req.user.id);
-			} else {
-				req.flash('error', 'You are already in this class');
-				res.redirect('/');
-				return;
-			}
-			await classroom.save();
-			const user = await User.findById(req.user.id);
-			user.classes.push(classroom.id);
-			await user.save();
-			req.flash('success', 'Joined classroom');
-			res.redirect(`/class/${classroom.id}`);
-		} else {
-			req.flash('error', 'Wrong code');
-			res.redirect('/');
-		}
-	})
-);
+app.post('/join', isLogedIn, main.join);
 
 app.use('/class/:id', classRoutes);
 
