@@ -43,8 +43,17 @@
 		<Button type="submit" class="btn" id="filter-btn">Filter</Button></form>
 <%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
 <div class="job" id="<%= job.id %>">
-	<h2 class="jobTitle"><%= job.jobTitle %></h2>
+	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo <= 3){ %>
+				<span class="pill new">New</span>
+				<% } %></h2>
 	<h3 class="company">Company: <%= job.company %></h3>
+	<div class="jobPayment">
+		<span class="amount">$<%= job.salary %></span
+		><span class="type"> <%=job.salaryType%></span>
+	</div>
+	<h4 class="descriptionIntro">Description:</h4>
+	<p class="description"><%=job.description%></p>
+	<% if (job.careerTracks.length) {%> 
 	<div class="careerTracks">
 		<h4 class="careerTracksIntro">For:</h4>
 		<div class="careerPills">
@@ -52,18 +61,15 @@
 			<span class="pill"><%= job.careerTracks[j] %> </span><% } %>
 		</div>
 	</div>
-	<div class="jobPayment">
-		<span class="amount">$<%= job.salary %></span
-		><span class="type"> <%=job.salaryType%></span>
-	</div>
-	<h4 class="descriptionIntro">Description:</h4>
-	<p class="description"><%=job.description%></p>
+	<% } %> 
+	<% if (job.tags.length) {%> 
+	<h4 class="careerTracksIntro">Tags:</h4>
 	<div class="tags">
 		<% for (let j = 0; j < job.tags.length; j++) {%>
 		<span class="pill"><%=job.tags[j]%> </span>
 		<% } %>
 	</div>
-	<span>Date Added: <time><%= job.dateAdded.toLocaleString().split(',')[0] %> </time></span>
+	<% } %> 
 	<div class="buttons">
 		<% if (user.permissions === 'leader') {%>
 			<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
@@ -71,15 +77,15 @@
 		</button>
 		<% } %> <% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
-		<form action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
+		<form class="confirm"action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
 			<button type="submit" class="delete btn">Delete</button>
 		</form>
 		<% } %> 
 </div>	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 	<h4 class="interestedIntro">Interested:</h4>
 	<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
-		<div><span class="interested">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested">Email: <%=inter.user.email%></span>
-			<%if (inter.timeSince <= 3){ %><span class="pill">New</span><% } %>  </div>
+		<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
+			<%if (inter.timeSince <= 3){ %><span class="pill new">New</span><% } %>  </div>
 		<% } %> 
 	<% } %> 
 </div>

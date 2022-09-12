@@ -27,3 +27,14 @@ h3 {
 span {
 	white-space: nowrap;
 }
+
+.pill {
+	border: 1px solid black;
+	border-radius: 13px;
+	text-align: center;
+	padding: 3px;
+	margin: 4px 2px;
+	color: white;
+	background-color: #d42428;
+	font-size: 20px;
+}

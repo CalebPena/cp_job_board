@@ -17,10 +17,10 @@
 		<ul>
 			<% for (job in interested[leaders[i].id]) {%>
 			<li>
-				<%= interested[leaders[i].id][job].title %><%if
-				(interested[leaders[i].id][job].date <= 3){ %><span class="pill"
-					>New</span
-				><% } %>
+				<%= interested[leaders[i].id][job].title %>
+				<%if(interested[leaders[i].id][job].date <= 3){ %>
+				<span class="pill">New</span>
+				<% } %>
 			</li>
 			<% } %>
 		</ul>

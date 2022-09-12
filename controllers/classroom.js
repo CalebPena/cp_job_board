@@ -23,10 +23,13 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 		} else {
 			job.userIsInterested = false;
 		}
-		job.interested = job.interested.map((lead) => {
+		job.createdDaysAgo = parseInt(
+			moment.duration(moment() - job.dateAdded).asDays()
+		);
+		job.interested = job.interested.map((leader) => {
 			return {
-				...lead,
-				timeSince: parseInt(moment.duration(moment() - lead.date).asDays()),
+				...leader,
+				timeSince: parseInt(moment.duration(moment() - leader.date).asDays()),
 			};
 		});
 	}

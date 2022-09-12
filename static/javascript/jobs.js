@@ -196,3 +196,12 @@ class CustomSelect {
 document.querySelectorAll('.custom-select').forEach((selectElement) => {
 	new CustomSelect(selectElement);
 });
+
+document.querySelectorAll('.confirm').forEach((form) => {
+	form.addEventListener('submit', (e) => {
+		const result = confirm('Are you sure that you want to archive this class');
+		if (result === false) {
+			e.preventDefault();
+		}
+	});
+});

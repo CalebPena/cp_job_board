@@ -19,12 +19,14 @@ module.exports.adminPage = (req, res) => {
 					return {
 						title: job.jobTitle,
 						date: parseInt(
-							moment.duration(
-								moment() -
-									job.interested
-										.filter((l) => l.user == leader.id)[0]
-										.date.getTime()
-							).asDays
+							moment
+								.duration(
+									moment() -
+										job.interested
+											.filter((l) => l.user == leader.id)[0]
+											.date.getTime()
+								)
+								.asDays()
 						),
 					};
 				}),
