@@ -1,0 +1,45 @@
+h1 {
+	text-align: center;
+}
+h2 {
+	text-align: center;
+}
+
+h3 {
+	text-align: center;
+	font-size: 30px;
+}
+
+.borderBottom {
+	border-bottom: 1px solid #999;
+	padding-bottom: 15px;
+}
+
+ul {
+	list-style: none;
+	padding: 0px;
+	text-align: center;
+}
+
+li {
+	font-size: 30px;
+	font-weight: bold;
+	margin: 15px;
+}
+
+label {
+	font-size: 26px;
+}
+
+select {
+	font-size: 20px;
+}
+
+.leave {
+	display: inline;
+}
+
+.save-or-reset {
+	margin-left: auto;
+	width: fit-content;
+}

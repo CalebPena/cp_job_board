@@ -17,6 +17,8 @@ router.use(permissions);
 
 router.get('/', isInClass, classroom.jobListings);
 
+router.delete('/', isInClass, classroom.leave);
+
 router.get('/jobs', isInClass, classroom.jobs);
 
 router.get('/create', isAdmin, classroom.createForm);

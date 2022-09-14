@@ -1,5 +1,5 @@
 const catchAsync = require('../utiles/catchAsync');
-const { Classroom, JobListing } = require('../schemas');
+const { Classroom, JobListing, User } = require('../schemas');
 const moment = require('moment');
 
 module.exports.jobListings = catchAsync(async (req, res) => {
@@ -14,7 +14,7 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 			},
 		})
 		.lean();
-	let jobs = classroom.jobListings;
+	let jobs = classroom.jobListings.reverse();
 	for (i = 0; i < jobs.length; i++) {
 		let job = jobs[i];
 		job.id = String(job._id);
@@ -34,6 +34,43 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 		});
 	}
 	res.render('jobListings', { id: req.params.id, jobs: jobs });
+});
+
+module.exports.leave = catchAsync(async (req, res) => {
+	const removeUser = function (user) {
+		return req.user.id != user.id;
+	};
+	if (req.user.permissions === 'owner') {
+		req.flash(
+			'error',
+			'You can not leave this class because you are the owner'
+		);
+	} else if (req.user.permissions === 'admin') {
+		const initialAdmin = req.classroom.admin.length;
+		req.classroom.admin = req.classroom.admin.filter(removeUser);
+		if (initialAdmin === req.classroom.admin.length) {
+			req.flash('error', 'You are not in this class');
+		} else {
+			await req.classroom.save();
+			await User.findByIdAndUpdate(req.params.leaderId, {
+				$pullAll: { classes: [{ _id: req.params.id }] },
+			});
+			req.flash('success', 'You have left the class');
+		}
+	} else if (req.user.permissions === 'leader') {
+		const initialLeaders = req.classroom.leaders.length;
+		req.classroom.leaders = req.classroom.leaders.filter(removeUser);
+		if (initialLeaders === req.classroom.leaders.length) {
+			req.flash('error', 'You are not in this class');
+		} else {
+			await req.classroom.save();
+			await User.findByIdAndUpdate(req.user.id, {
+				$pullAll: { classes: [{ _id: req.params.id }] },
+			});
+			req.flash('success', 'You have left the class');
+		}
+	}
+	res.redirect('/profile');
 });
 
 module.exports.jobs = catchAsync(async (req, res) => {

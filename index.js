@@ -25,6 +25,7 @@ const app = express();
 
 const classRoutes = require('./routes/classroom');
 const authentecation = require('./routes/auth');
+const profile = require('./routes/profile');
 
 app.engine('ejs', engine);
 app.set('views', path.join(__dirname, 'views'));
@@ -111,6 +112,8 @@ app.get('/class/create', isLogedIn, main.renderCreate);
 app.post('/class/create', isLogedIn, validateClassroom, main.create);
 
 app.post('/join', isLogedIn, main.join);
+
+app.use('/profile', profile);
 
 app.use('/class/:id', classRoutes);
 
