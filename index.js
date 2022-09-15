@@ -34,6 +34,9 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'static')));
 
+const mongoConnection = config.isValidPlatform()
+	? (mongoConnection = config.formattedCredentials('mongodatabase', 'mongodb'))
+	: 'mongodb://localhost:27017/cp_job_listings';
 app.use(
 	session({
 		name: 'session',
@@ -46,7 +49,7 @@ app.use(
 			maxAge: 1000 * 60 * 60 * 24 * 7,
 		},
 		store: new MongoDBStore({
-			url: 'mongodb://localhost:27017/cp_job_listings',
+			url: mongoConnection,
 			collection: 'mySessions',
 			expires: 7 * 24 * 60 * 60,
 		}),
