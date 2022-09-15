@@ -54,7 +54,8 @@ const sessionConfig = {
 		expires: 7 * 24 * 60 * 60,
 	}),
 };
-app.use(session(sessionConfig));
+const useSession = session(sessionConfig);
+app.use(useSession);
 app.use(flash());
 
 app.use(passport.initialize());
