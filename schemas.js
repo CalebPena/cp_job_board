@@ -6,10 +6,7 @@ main().catch((err) => console.log(err));
 
 async function main() {
 	const mongoConnection = config.isValidPlatform()
-		? (mongoConnection = config.formattedCredentials(
-				'mongodatabase',
-				'mongodb'
-		  ))
+		? config.formattedCredentials('mongodatabase', 'mongodb')
 		: 'mongodb://localhost:27017/cp_job_listings';
 	await mongoose.connect(mongoConnection);
 }

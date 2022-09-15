@@ -35,7 +35,7 @@ app.set('view engine', 'ejs');
 app.use(express.static(path.join(__dirname, 'static')));
 
 const mongoConnection = config.isValidPlatform()
-	? (mongoConnection = config.formattedCredentials('mongodatabase', 'mongodb'))
+	? config.formattedCredentials('mongodatabase', 'mongodb')
 	: 'mongodb://localhost:27017/cp_job_listings';
 
 const sessionConfig = {
