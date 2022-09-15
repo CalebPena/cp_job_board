@@ -27,6 +27,13 @@ router.post('/create', isAdmin, validateJob, classroom.addJob);
 
 router.use('/admin', admin);
 
+router.patch(
+	'/interested/:selectId/status',
+	isInClass,
+	isAdmin,
+	classroom.changeStatus
+);
+
 router.use('/:jobId', job);
 
 module.exports = router;

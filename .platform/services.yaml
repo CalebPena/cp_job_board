@@ -1,0 +1,7 @@
+# The services of the project.
+#
+# Each service listed will be deployed
+# to power your Platform.sh project.
+dbmongo:
+  type: mongodb:3.6
+  disk: 1024

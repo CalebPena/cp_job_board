@@ -17,6 +17,7 @@ module.exports.adminPage = (req, res) => {
 				.filter(isLeaderInterested(leader))
 				.map((job) => {
 					return {
+						JobId: job.id,
 						title: job.jobTitle,
 						date: parseInt(
 							moment
@@ -28,6 +29,8 @@ module.exports.adminPage = (req, res) => {
 								)
 								.asDays()
 						),
+						interestedId: job.interested.filter((l) => l.user == leader.id)[0]
+							.id,
 					};
 				}),
 		});

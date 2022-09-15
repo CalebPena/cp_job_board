@@ -15,10 +15,17 @@
 			<button type="submit">Remove From Class</button>
 		</form>
 		<ul>
-			<% for (job in interested[leaders[i].id]) {%>
+			<% for (job in interested[leaders[i].id]) { let inter =
+			interested[leaders[i].id][job];%>
 			<li>
-				<%= interested[leaders[i].id][job].title %>
-				<%if(interested[leaders[i].id][job].date <= 3){ %>
+				<%= inter.title %>
+				<select class="interested-status" id="<%= inter.interestedId %>">
+					<option value="new">New</option>
+					<option value="followUp">Followed Up</option>
+					<option value="nextSteps">Next Steps</option>
+					<option value="badFit">Bad Fit</option>
+				</select>
+				<%if(inter.date <= 3){ %>
 				<span class="pill">New</span>
 				<% } %>
 			</li>
@@ -70,4 +77,8 @@
 	<button type="submit">Submit</button>
 </form>
 <% } %>
+<script>
+	const classId = '<%=classroom.id%>';
+</script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/javascript/adminPanel.js"></script>

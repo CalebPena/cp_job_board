@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
+const config = require('platformsh-config').config();
 const passportLocalMongoose = require('passport-local-mongoose');
 
 main().catch((err) => console.log(err));
 
 async function main() {
-	await mongoose.connect('mongodb://localhost:27017/cp_job_listings');
+	const mongoConnection = config.isValidPlatform()
+		? (mongoConnection = config.formattedCredentials('mongodb', 'mongodb'))
+		: 'mongodb://localhost:27017/cp_job_listings';
+	await mongoose.connect(mongoConnection);
 }
 const Schema = mongoose.Schema;
 
@@ -22,6 +26,11 @@ const Classroom = mongoose.model('classroom', classroomSchema);
 const interestedScema = new Schema({
 	user: { type: mongoose.ObjectId, ref: 'user', required: true },
 	date: { type: Date, required: true },
+	status: {
+		type: String,
+		default: 'new',
+		enum: ['new', 'followUp', 'nextSteps', 'badFit'],
+	},
 });
 
 const jobListingSchema = new Schema({

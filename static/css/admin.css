@@ -28,6 +28,10 @@ span {
 	white-space: nowrap;
 }
 
+select {
+	font-size: 25px;
+}
+
 .pill {
 	border: 1px solid black;
 	border-radius: 13px;

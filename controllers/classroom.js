@@ -98,3 +98,12 @@ module.exports.addJob = catchAsync(async (req, res) => {
 	req.flash('success', 'Successfully added new job listing');
 	res.redirect(`/class/${req.params.id}`);
 });
+
+module.exports.changeStatus = catchAsync(async (req, res) => {
+	console.log(req.params.selectId);
+	const job = await JobListing.find({
+		'interested.id': req.params.selectId,
+	});
+	console.log(job.map((e) => e.interested.map((el) => el.id)));
+	res.status(200);
+});

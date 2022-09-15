@@ -1,4 +1,5 @@
 const express = require('express');
+const config = require('platformsh-config').config();
 const ejs = require('ejs');
 const engine = require('ejs-mate');
 const path = require('path');
@@ -129,6 +130,8 @@ app.use((err, req, res, next) => {
 	res.status(statusCode).render('error', { err });
 });
 
-app.listen(3000, () => {
+const port = config.isValidPlatform() ? config.port : 3000;
+
+app.listen(port, () => {
 	console.log('Listening on port 3000');
 });
