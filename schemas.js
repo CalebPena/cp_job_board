@@ -8,7 +8,10 @@ async function main() {
 	const mongoConnection = config.isValidPlatform()
 		? config.formattedCredentials('mongodatabase', 'mongodb')
 		: 'mongodb://localhost:27017/cp_job_listings';
-	await mongoose.connect(mongoConnection);
+	await mongoose.connect(mongoConnection, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	});
 }
 const Schema = mongoose.Schema;
 
