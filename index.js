@@ -49,7 +49,7 @@ const sessionConfig = {
 		maxAge: 1000 * 60 * 60 * 24 * 7,
 	},
 	store: new MongoDBStore({
-		url: mongoConnection,
+		uri: mongoConnection,
 		collection: 'mySessions',
 		expires: 7 * 24 * 60 * 60,
 	}),
