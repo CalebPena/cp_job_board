@@ -37,7 +37,7 @@ app.use(express.static(path.join(__dirname, 'static')));
 const mongoConnection = config.isValidPlatform()
 	? config.formattedCredentials('mongodatabase', 'mongodb')
 	: 'mongodb://localhost:27017/cp_job_listings';
-
+console.log(mongoConnection);
 const sessionConfig = {
 	name: 'session',
 	secret: process.env.SESSION_SECRET,
@@ -137,5 +137,5 @@ app.use((err, req, res, next) => {
 const port = config.isValidPlatform() ? config.port : 3000;
 
 app.listen(port, () => {
-	console.log('Listening on port 3000');
+	console.log(`Listening on port ${port}`);
 });
