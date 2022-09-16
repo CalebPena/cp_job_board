@@ -11,6 +11,7 @@ async function main() {
 	await mongoose.connect(mongoConnection, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
+		useCreateIndex: true,
 	});
 }
 const Schema = mongoose.Schema;

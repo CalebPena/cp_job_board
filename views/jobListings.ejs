@@ -85,7 +85,12 @@
 	<h4 class="interestedIntro">Interested:</h4>
 	<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
 		<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
-			<%if (inter.timeSince <= 3){ %><span class="pill new">New</span><% } %>  </div>
+				<select class="interested-status" id="<%= String(inter._id) %>">
+					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
+					<option value="followUp"<%=inter.status==='followUp'?'selected':''%>>Followed Up</option>
+					<option value="nextSteps"<%=inter.status==='nextSteps'?'selected':''%>>Next Steps</option>
+					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
+				</select></div>
 		<% } %> 
 	<% } %> 
 </div>

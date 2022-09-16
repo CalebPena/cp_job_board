@@ -43,7 +43,6 @@ const interestedStatus = document
 	.querySelectorAll('.interested-status')
 	.forEach((select) => {
 		select.addEventListener('change', (e) => {
-			console.log(select.id);
 			axios
 				.patch(`/class/${classId}/interested/${select.id}/status`, {
 					status: select.value,

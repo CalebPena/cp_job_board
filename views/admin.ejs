@@ -20,10 +20,10 @@
 			<li>
 				<%= inter.title %>
 				<select class="interested-status" id="<%= inter.interestedId %>">
-					<option value="new">New</option>
-					<option value="followUp">Followed Up</option>
-					<option value="nextSteps">Next Steps</option>
-					<option value="badFit">Bad Fit</option>
+					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
+					<option value="followUp"<%=inter.status==='followUp'?'selected':''%>>Followed Up</option>
+					<option value="nextSteps"<%=inter.status==='nextSteps'?'selected':''%>>Next Steps</option>
+					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
 				</select>
 				<%if(inter.date <= 3){ %>
 				<span class="pill">New</span>

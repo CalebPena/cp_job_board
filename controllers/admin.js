@@ -31,6 +31,7 @@ module.exports.adminPage = (req, res) => {
 						),
 						interestedId: job.interested.filter((l) => l.user == leader.id)[0]
 							.id,
+						status: job.interested.filter((l) => l.user == leader.id)[0].status,
 					};
 				}),
 		});
