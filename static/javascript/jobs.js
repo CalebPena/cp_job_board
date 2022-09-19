@@ -52,6 +52,7 @@ class Filter {
 			'Background Check',
 			'Flexable Hours',
 		];
+		this.archived = false;
 	}
 	filter(formData) {
 		this._update(formData);
@@ -78,11 +79,13 @@ class Filter {
 			: (this.salaryType = undefined);
 		this.tags = formData.tags;
 		this.new = formData.new;
+		this.archived = formData.showArchive;
 	}
 	_conditions() {
 		const that = this;
 		const threeDaysAgo = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 		return function (job) {
+			if (!that.archived && job.archive === true) return false;
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
 			}
@@ -96,7 +99,7 @@ class Filter {
 			if (that.salaryType && that.salaryType !== job.salaryType) {
 				return false;
 			}
-			if (that.new && new Date(job.dateAdded).getTime() <= threeDaysAgo) {
+			if (that.new && new Date(job.dateAdded).getTime() < threeDaysAgo) {
 				return false;
 			}
 			if (job.tags.length !== 0) {
@@ -113,26 +116,32 @@ class Filter {
 	}
 }
 
+const useFilter = function (filter) {
+	const formData = Array.from(document.querySelectorAll('.filter')).reduce(
+		(acc, input) => {
+			return { ...acc, [input.id]: input.value };
+		},
+		{}
+	);
+	const tags = document.querySelector('#filter-tags');
+	formData.tags = Array.from(tags.options)
+		.filter((option) => option.selected)
+		.map((option) => option.value);
+	formData.new = document.querySelector('#new').checked;
+	formData.showArchive = document.querySelector('#show-archive').checked;
+	filter.filter(formData);
+};
+
 axios
 	.get(`/class/${classId}/jobs`)
 	.then((res) => {
+		console.log(res.data[0]);
 		const filter = new Filter(res.data);
-
+		useFilter(filter);
 		const filterForm = document.querySelector('#filter-jobs');
 		filterForm.addEventListener('submit', (ev) => {
 			ev.preventDefault();
-			const formData = Array.from(document.querySelectorAll('.filter')).reduce(
-				(acc, input) => {
-					return { ...acc, [input.id]: input.value };
-				},
-				{}
-			);
-			const tags = document.querySelector('#filter-tags');
-			formData.tags = Array.from(tags.options)
-				.filter((option) => option.selected)
-				.map((option) => option.value);
-			formData.new = document.querySelector('#new').checked;
-			filter.filter(formData);
+			useFilter(filter);
 		});
 	})
 	.catch(function (error) {
@@ -197,14 +206,24 @@ document.querySelectorAll('.custom-select').forEach((selectElement) => {
 	new CustomSelect(selectElement);
 });
 
-document.querySelectorAll('.confirm').forEach((form) => {
-	form.addEventListener('submit', (e) => {
-		const result = confirm('Are you sure that you want to archive this class');
-		if (result === false) {
-			e.preventDefault();
-		}
-	});
-});
+const confirmMsg = function (msg) {
+	return (form) => {
+		form.addEventListener('submit', (e) => {
+			const result = confirm(msg);
+			if (result === false) {
+				e.preventDefault();
+			}
+		});
+	};
+};
+
+document
+	.querySelectorAll('.confirm-archive')
+	.forEach(confirmMsg('Are you sure that you want to archive this class'));
+
+document
+	.querySelectorAll('.confirm-bring-back')
+	.forEach(confirmMsg('Are you sure that you want to bring back this class'));
 
 const interestedStatus = document
 	.querySelectorAll('.interested-status')
@@ -213,6 +232,9 @@ const interestedStatus = document
 			axios
 				.patch(`/class/${classId}/interested/${select.id}/status`, {
 					status: select.value,
+				})
+				.then((res) => {
+					console.log('good');
 				})
 				.catch((err) => console.error(err));
 		});

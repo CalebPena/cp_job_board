@@ -61,6 +61,7 @@ const jobListingSchema = new Schema({
 	],
 	dateAdded: { type: Date, required: true },
 	interested: [interestedScema],
+	archive: { type: Boolean, default: false },
 });
 
 const JobListing = mongoose.model('job_Listing', jobListingSchema);

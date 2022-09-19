@@ -25,7 +25,11 @@
 			</select>
 			<span class="filter-option">
 				<label for="new">New</label>
-				<input type="checkbox" id="new" name="new">
+				<input type="checkbox" id="new" name="new" class="check">
+			</span>
+			<span class="filter-option">
+				<label for="show-archive">Show Archive</label>
+				<input type="checkbox" id="show-archive" name="show-archive" class="check">
 			</span>
 			</span class="filter-option">
 			<div class="tag-box">
@@ -43,7 +47,7 @@
 		<Button type="submit" class="btn" id="filter-btn">Filter</Button></form>
 <%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
 <div class="job" id="<%= job.id %>">
-	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo <= 3){ %>
+	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo < 3){ %>
 				<span class="pill new">New</span>
 				<% } %></h2>
 	<h3 class="company">Company: <%= job.company %></h3>
@@ -77,9 +81,15 @@
 		</button>
 		<% } %> <% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
-		<form class="confirm"action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
-			<button type="submit" class="delete btn">Delete</button>
+		<% if (job.archive !== true) {%> 
+		<form class="confirm-archive"action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
+			<button type="submit" class="btn">Archive</button>
 		</form>
+		<% } else {%>
+		<form class="confirm-bring-back"action="/class/<%=classroom.id%>/<%= job.id %>/archive?_method=patch" method="post">
+			<button type="submit" class="btn">Bring Back</button>
+		</form>
+		<% } %>  
 		<% } %> 
 </div>	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 	<h4 class="interestedIntro">Interested:</h4>

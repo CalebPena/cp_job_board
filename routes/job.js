@@ -19,6 +19,8 @@ router.get('/career-tracks', isAdmin, job.careerTracks);
 
 router.patch('/', isAdmin, validateJob, job.edit);
 
-router.delete('/', isAdmin, job.delete);
+router.delete('/', isAdmin, job.archive);
+
+router.patch('/archive', isAdmin, job.unarchive);
 
 module.exports = router;

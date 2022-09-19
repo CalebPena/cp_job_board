@@ -16,6 +16,9 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 		})
 		.lean();
 	let jobs = classroom.jobListings.reverse();
+	if (req.user.permissions === 'leader') {
+		jobs = jobs.filter((job) => job.archive !== true);
+	}
 	for (i = 0; i < jobs.length; i++) {
 		let job = jobs[i];
 		job.id = String(job._id);
@@ -78,10 +81,17 @@ module.exports.jobs = catchAsync(async (req, res) => {
 	let classroom = await Classroom.findById(req.params.id)
 		.populate('jobListings')
 		.lean();
-	classroom.jobListings.forEach((job) => {
-		delete job.interested;
-	});
-	res.json(classroom.jobListings);
+	if (req.user.permissions === 'leader') {
+		classroom.jobListings = classroom.jobListings.filter(
+			(job) => job.archive !== true
+		);
+	}
+	if (req.user.permissions === 'leader') {
+		classroom.jobListings.forEach((job) => {
+			delete job.interested;
+		});
+	}
+	res.status(200).json(classroom.jobListings);
 });
 
 module.exports.createForm = (req, res) => {
@@ -101,14 +111,18 @@ module.exports.addJob = catchAsync(async (req, res) => {
 });
 
 module.exports.changeStatus = catchAsync(async (req, res) => {
-	const job = await JobListing.findOne({
-		'interested._id': ObjectId(req.params.selectId),
-	});
-	job.interested.forEach((inter) => {
-		if (inter.id === req.params.selectId) {
-			inter.status = req.body.status;
-		}
-	});
-	await job.save();
-	res.status(200);
+	try {
+		const job = await JobListing.findOne({
+			'interested._id': ObjectId(req.params.selectId),
+		});
+		job.interested.forEach((inter) => {
+			if (inter.id === req.params.selectId) {
+				inter.status = req.body.status;
+			}
+		});
+		await job.save();
+		res.status(200).json({});
+	} catch (err) {
+		res.status(500);
+	}
 });

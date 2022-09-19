@@ -45,8 +45,18 @@ module.exports.edit = catchAsync(async (req, res) => {
 	res.redirect(`/class/${req.params.id}`);
 });
 
-module.exports.delete = catchAsync(async (req, res) => {
-	await JobListing.findByIdAndDelete(req.params.jobId);
-	req.flash('success', 'Successfully deleted job');
+module.exports.archive = catchAsync(async (req, res) => {
+	const job = await JobListing.findById(req.params.jobId);
+	job.archive = true;
+	await job.save();
+	req.flash('success', 'Successfully archived job');
+	res.redirect(`/class/${req.params.id}`);
+});
+
+module.exports.unarchive = catchAsync(async (req, res) => {
+	const job = await JobListing.findById(req.params.jobId);
+	job.archive = false;
+	await job.save();
+	req.flash('success', 'Successfully brought back job');
 	res.redirect(`/class/${req.params.id}`);
 });
