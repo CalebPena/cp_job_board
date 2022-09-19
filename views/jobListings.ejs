@@ -9,9 +9,6 @@
 	<span class="filter-option">
 			<label for="title">Job Title</label>
 			<input type="text" id="title" class="filter"/>
-			</span><span class="filter-option">
-			<label for="careerTrack">Career Track</label>
-			<input type="text" id="careerTrack" class="filter"/>
 			</span>
 			<span class="filter-option">
 			<label for="salary">Minimum Pay</label>
@@ -33,15 +30,19 @@
 			</span>
 			</span class="filter-option">
 			<div class="tag-box">
+			<label for="filter-career-track">Career Tracks</label>
+			<select multiple class="tags custom-select" id="filter-career-track" class="custom-select">
+				<% for (let ct of classroom.validCareerTracks){%>
+				<option value="<%= ct %>"><%= ct %></option>
+				<% } %>
+			</select>
+			</div>
+			<div class="tag-box">
 			<label for="filter-tags">Tags</label>
 			<select multiple class="tags custom-select" id="filter-tags" class="custom-select">
-				<option value="Core">Core</option>
-				<option value="Alumni">Alumni</option>
-				<option value="Temp">Temporary</option>
-				<option value="Part Time">Part Time</option>
-				<option value="Remote">Remote</option>
-				<option value="Background Check">Background Check</option>
-				<option value="Flexible Hours">Flexible Hours</option>
+				<% for (let tag of classroom.validTags){%>
+				<option value="<%= tag %>"><%= tag %></option>
+				<% } %>
 			</select>
 			</div>
 		<Button type="submit" class="btn" id="filter-btn">Filter</Button></form>

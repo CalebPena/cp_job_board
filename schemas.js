@@ -1,3 +1,4 @@
+const { valid } = require('joi');
 const mongoose = require('mongoose');
 const config = require('platformsh-config').config();
 const passportLocalMongoose = require('passport-local-mongoose');
@@ -23,6 +24,8 @@ const classroomSchema = new Schema({
 	owner: { type: mongoose.ObjectId, ref: 'user', required: true },
 	jobListings: [{ type: mongoose.ObjectId, ref: 'job_Listing' }],
 	classCode: { type: String, unique: true, required: true },
+	validTags: [String],
+	validCareerTracks: [String],
 });
 
 const Classroom = mongoose.model('classroom', classroomSchema);
@@ -48,15 +51,6 @@ const jobListingSchema = new Schema({
 		{
 			type: String,
 			required: true,
-			enum: [
-				'Core',
-				'Alumni',
-				'Temp',
-				'Part Time',
-				'Remote',
-				'Background Check',
-				'Flexible Hours',
-			],
 		},
 	],
 	dateAdded: { type: Date, required: true },

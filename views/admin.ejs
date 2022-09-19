@@ -8,7 +8,7 @@
 	<li>
 		<%= leaders[i].username %> <%= leaders[i].cpClass?leaders[i].cpClass:'' %>
 		<form
-			class="delete confirm"
+			class="delete confirm-remove-user"
 			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
 			method="post"
 		>
@@ -59,7 +59,7 @@
 	<li>
 		<%= admin[i].username %> <% if (user.permissions === 'owner') {%>
 		<form
-			class="delete confirm"
+			class="delete confirm-remove-user"
 			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
 			method="post"
 		>
@@ -77,6 +77,46 @@
 	<button type="submit">Submit</button>
 </form>
 <% } %>
+<h2>Tags:</h2>
+<ul>
+	<% for (let tag of classroom.validTags){%>
+		<li><%= tag %>
+		<form
+			class="delete confirm-remove-tag"
+			action="/class/<%= id %>/admin/tag/<%= tag %>?_method=delete"
+			method="post"
+		>
+			<button type="submit">Remove Tag</button>
+		</form></li>
+	<% } %>
+</ul>
+<form action="/class/<%= id %>/admin/tag" method="post" class="add">
+	<h3>Add Tag</h3>
+	<label for="tag">Tag</label>
+	<input type="text" id="tag" name="tag" required>
+	<button type="submit">Add Tag</button>
+</form>
+
+<h2>Career Tracks:</h2>
+<ul>
+	<% for (let ct of classroom.validCareerTracks){%>
+		<li><%= ct %>
+		<form
+			class="delete confirm-remove-tag"
+			action="/class/<%= id %>/admin/career-track/<%= ct %>?_method=delete"
+			method="post"
+		>
+			<button type="submit">Remove Career</button>
+		</form></li>
+	<% } %>
+</ul>
+<form action="/class/<%= id %>/admin/career-track" method="post" class="add">
+	<h3>Add Career</h3>
+	<label for="career">Career Track</label>
+	<input type="text" id="career" name="career" required>
+	<button type="submit">Add Career Track</button>
+</form>
+
 <script>
 	const classId = '<%=classroom.id%>';
 </script>

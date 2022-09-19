@@ -39,19 +39,11 @@ class Filter {
 	constructor(jobs) {
 		this.jobs = jobs;
 		this.title = undefined;
-		this.careerTrack = undefined;
+		this.careerTracks = [];
 		this.salary = 0;
 		this.salaryType = undefined;
 		this.new = false;
-		this.tags = [
-			'Core',
-			'Alumni',
-			'Temp',
-			'Part Time',
-			'Remote',
-			'Background Check',
-			'Flexable Hours',
-		];
+		this.tags = [];
 		this.archived = false;
 	}
 	filter(formData) {
@@ -68,15 +60,13 @@ class Filter {
 	}
 	_update(formData) {
 		formData.title ? (this.title = formData.title) : (this.title = undefined);
-		formData.careerTrack
-			? (this.careerTrack = formData.careerTrack)
-			: (this.careerTrack = undefined);
 		formData.salary !== ''
 			? (this.salary = parseFloat(formData.salary))
 			: (this.salary = 0);
 		formData.salaryType
 			? (this.salaryType = formData.salaryType)
 			: (this.salaryType = undefined);
+		this.careerTracks = formData.careerTracks;
 		this.tags = formData.tags;
 		this.new = formData.new;
 		this.archived = formData.showArchive;
@@ -89,12 +79,6 @@ class Filter {
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
 			}
-			if (
-				that.careerTrack &&
-				!job.careerTracks.some((cTrack) => that._in(cTrack, that.careerTrack))
-			) {
-				return false;
-			}
 			if (that.salary > job.salary) return false;
 			if (that.salaryType && that.salaryType !== job.salaryType) {
 				return false;
@@ -103,12 +87,20 @@ class Filter {
 				return false;
 			}
 			if (job.tags.length !== 0) {
-				return that.tags.every((tag) => job.tags.includes(tag));
-			} else if (that.tags.length === 0) {
-				return true;
-			} else {
+				if (!that.tags.every((tag) => job.tags.includes(tag))) {
+					return false;
+				}
+			} else if (that.tags.length !== 0) {
 				return false;
 			}
+			if (job.careerTracks.length !== 0) {
+				if (!that.careerTracks.every((tag) => job.careerTracks.includes(tag))) {
+					return false;
+				}
+			} else if (that.careerTracks.length !== 0) {
+				return false;
+			}
+			return true;
 		};
 	}
 	_in(str, sub) {
@@ -127,6 +119,10 @@ const useFilter = function (filter) {
 	formData.tags = Array.from(tags.options)
 		.filter((option) => option.selected)
 		.map((option) => option.value);
+	const careerTracks = document.querySelector('#filter-career-track');
+	formData.careerTracks = Array.from(careerTracks.options)
+		.filter((option) => option.selected)
+		.map((option) => option.value);
 	formData.new = document.querySelector('#new').checked;
 	formData.showArchive = document.querySelector('#show-archive').checked;
 	filter.filter(formData);
@@ -135,7 +131,6 @@ const useFilter = function (filter) {
 axios
 	.get(`/class/${classId}/jobs`)
 	.then((res) => {
-		console.log(res.data[0]);
 		const filter = new Filter(res.data);
 		useFilter(filter);
 		const filterForm = document.querySelector('#filter-jobs');
@@ -233,9 +228,7 @@ const interestedStatus = document
 				.patch(`/class/${classId}/interested/${select.id}/status`, {
 					status: select.value,
 				})
-				.then((res) => {
-					console.log('good');
-				})
+				.then()
 				.catch((err) => console.error(err));
 		});
 	});

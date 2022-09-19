@@ -25,11 +25,6 @@
 				required
 			/>
 		</div>
-		<div id="careerTracks"></div>
-		<div>
-			<button id="careerTrack-btn-add">Add</button>
-			<button id="careerTrack-btn-remove">Remove</button>
-		</div>
 		<div>
 			<label for="salary">Salary</label>
 			<input type="number" id="salary" name="salary" min="0" required />
@@ -49,15 +44,19 @@
 			></textarea>
 		</div>
 		<div>
+			<label for="career">Tags</label>
+			<select multiple name="careerTracks" id="career" class="custom-select">
+				<% for (let ct of classroom.validCareerTracks){%>
+				<option value="<%= ct %>"><%= ct %></option>
+				<% } %>
+			</select>
+		</div>
+		<div>
 			<label for="tags">Tags</label>
 			<select multiple name="tags" id="tags" class="custom-select">
-				<option value="Core">Core</option>
-				<option value="Alumni">Alumni</option>
-				<option value="Temp">Temporary</option>
-				<option value="Part Time">Part Time</option>
-				<option value="Remote">Remote</option>
-				<option value="Background Check">Background Check</option>
-				<option value="Flexible Hours">Flexible Hours</option>
+				<% for (let tag of classroom.validTags){%>
+				<option value="<%= tag %>"><%= tag %></option>
+				<% } %>
 			</select>
 		</div>
 		<div><button type="submit">Submit</button></div>

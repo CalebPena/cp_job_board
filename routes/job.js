@@ -15,8 +15,6 @@ router.post('/not-interested', isInClass, job.notInterested);
 
 router.get('/', isAdmin, job.editForm);
 
-router.get('/career-tracks', isAdmin, job.careerTracks);
-
 router.patch('/', isAdmin, validateJob, job.edit);
 
 router.delete('/', isAdmin, job.archive);

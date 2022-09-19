@@ -32,15 +32,22 @@ module.exports.editForm = catchAsync(async (req, res) => {
 	res.render('edit', job);
 });
 
-module.exports.careerTracks = catchAsync(async (req, res) => {
-	const job = await JobListing.findById(req.params.jobId).lean();
-	res.json([...job.careerTracks]);
-});
+const ensureArray = function (obj) {
+	for (let i = 0; i < arguments.length; i++) {
+		if (obj[arguments[i]] === undefined) obj[arguments[i]] = [];
+	}
+	return obj;
+};
 
 module.exports.edit = catchAsync(async (req, res) => {
-	const updatedJob = await JobListing.findByIdAndUpdate(req.params.jobId, {
-		...req.body,
-	});
+	req.body = ensureArray(req.body, 'tags', 'careerTracks');
+	const updatedJob = await JobListing.findByIdAndUpdate(
+		req.params.jobId,
+		{
+			...req.body,
+		},
+		{ useFindAndModify: false }
+	);
 	req.flash('success', 'Successfully updated job');
 	res.redirect(`/class/${req.params.id}`);
 });

@@ -3,6 +3,8 @@ const {
 	jobValidation,
 	classroomValidation,
 	userValidation,
+	careerTrackDropdownValidation,
+	tagDropdownValidation,
 } = require('../validations');
 
 module.exports.validateClassroom = function (req, res, next) {
@@ -17,5 +19,15 @@ module.exports.validateUser = function (obj) {
 
 module.exports.validateJob = function (req, res, next) {
 	const { error } = jobValidation.validate(req.body);
+	validInput(error, next);
+};
+
+module.exports.validateTagDropdown = function (req, res, next) {
+	const { error } = tagDropdownValidation.validate(req.body);
+	validInput(error, next);
+};
+
+module.exports.validateCareerDropdown = function (req, res, next) {
+	const { error } = careerTrackDropdownValidation.validate(req.body);
 	validInput(error, next);
 };

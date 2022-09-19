@@ -28,16 +28,26 @@ multiInputButtonremove.addEventListener('click', (e) => {
 
 addMultiSelect();
 
-document.querySelectorAll('.confirm').forEach((form) => {
-	form.addEventListener('submit', (e) => {
-		const result = confirm(
-			'Are you sure that you want to remove this user from the class'
-		);
-		if (result === false) {
-			e.preventDefault();
-		}
-	});
-});
+const confirmMsg = function (msg) {
+	return (form) => {
+		form.addEventListener('submit', (e) => {
+			const result = confirm(msg);
+			if (result === false) {
+				e.preventDefault();
+			}
+		});
+	};
+};
+
+document
+	.querySelectorAll('.confirm-remove-user')
+	.forEach(
+		confirmMsg('Are you sure that you want to remove this user from the class')
+	);
+
+document
+	.querySelectorAll('.confirm-remove-tag')
+	.forEach(confirmMsg('Are you sure that you want to remove this tag'));
 
 const interestedStatus = document
 	.querySelectorAll('.interested-status')

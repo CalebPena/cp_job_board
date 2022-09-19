@@ -146,3 +146,35 @@ module.exports.deleteLeader = catchAsync(async (req, res) => {
 	req.flash('success', 'Removed leader');
 	res.redirect(`/class/${req.params.id}/admin`);
 });
+
+module.exports.addTag = catchAsync(async (req, res) => {
+	req.classroom.validTags.push(req.body.tag);
+	await req.classroom.save();
+	req.flash('success', 'Added tag');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.removeTag = catchAsync(async (req, res) => {
+	req.classroom.validTags = req.classroom.validTags.filter(
+		(tag) => tag !== req.params.tag
+	);
+	req.classroom.save();
+	req.flash('success', 'Removed tag');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.addCareer = catchAsync(async (req, res) => {
+	req.classroom.validCareerTracks.push(req.body.career);
+	await req.classroom.save();
+	req.flash('success', 'Added career track');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.removeCareer = catchAsync(async (req, res) => {
+	req.classroom.validCareerTracks = req.classroom.validCareerTracks.filter(
+		(ct) => ct !== req.params.careerTrack
+	);
+	req.classroom.save();
+	req.flash('success', 'Removed career track');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
