@@ -49,6 +49,10 @@ document
 	.querySelectorAll('.confirm-remove-tag')
 	.forEach(confirmMsg('Are you sure that you want to remove this tag'));
 
+document
+	.querySelectorAll('.confirm-leader-join')
+	.forEach(confirmMsg('Are you sure that you want to accept/deny this leader'));
+
 const interestedStatus = document
 	.querySelectorAll('.interested-status')
 	.forEach((select) => {

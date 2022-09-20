@@ -39,20 +39,22 @@ module.exports.join = catchAsync(async (req, res) => {
 		if (
 			classroom.leaders.indexOf(req.user.id) === -1 &&
 			classroom.admin.indexOf(req.user.id) === -1 &&
-			classroom.owner != req.user.id
+			classroom.owner != req.user.id &&
+			classroom.pendingLeaders.indexOf(req.user.id) === -1
 		) {
-			classroom.leaders.push(req.user.id);
+			classroom.pendingLeaders.push(req.user.id);
+			await classroom.save();
 		} else {
-			req.flash('error', 'You are already in this class');
+			if (classroom.pendingLeaders.indexOf(req.user.id) === -1) {
+				req.flash('error', 'You you have already requested to join this class');
+			} else {
+				req.flash('error', 'You are already in this class');
+			}
 			res.redirect('/');
 			return;
 		}
-		await classroom.save();
-		const user = await User.findById(req.user.id);
-		user.classes.push(classroom.id);
-		await user.save();
-		req.flash('success', 'Joined classroom');
-		res.redirect(`/class/${classroom.id}`);
+		req.flash('success', 'Your request to join this class has been sent');
+		res.redirect(`/`);
 	} else {
 		req.flash('error', 'Wrong code');
 		res.redirect('/');

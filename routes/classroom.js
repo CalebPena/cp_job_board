@@ -19,6 +19,10 @@ router.get('/', isInClass, classroom.jobListings);
 
 router.delete('/', isInClass, classroom.leave);
 
+router.post('/admin-join', classroom.adminJoin);
+
+router.post('/admin-deny', classroom.adminDeny);
+
 router.get('/jobs', isInClass, classroom.jobs);
 
 router.get('/create', isAdmin, classroom.createForm);

@@ -1,9 +1,9 @@
 <% layout('layouts/boilerplate') %>
 <link rel="stylesheet" href="/css/home.css" />
 <h1>Home</h1>
-
+<% if (user.status === 'Coach') { %>
 <a href="/class/create" class="create big-btn">Create Classroom</a>
-<% if (user) { %>
+<% } %>
 <div class="classrooms">
 	<h2>CLASSROOMS</h2>
 	<ul>
@@ -16,7 +16,7 @@
 		<% } %>
 	</ul>
 </div>
-<% } %>
+
 <form action="/join" method="post" class="join">
 	<label for="code">Join Class</label>
 	<input

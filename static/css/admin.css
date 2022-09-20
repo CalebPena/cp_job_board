@@ -28,10 +28,6 @@ span {
 	white-space: nowrap;
 }
 
-select {
-	font-size: 25px;
-}
-
 .pill {
 	border: 1px solid black;
 	border-radius: 13px;
@@ -41,4 +37,16 @@ select {
 	color: white;
 	background-color: #d42428;
 	font-size: 20px;
+}
+
+.inline-form {
+	display: inline;
+}
+
+.deny {
+	background-color: rgba(212, 36, 40, 0.5);
+}
+
+.accept {
+	background-color: rgba(63, 252, 0, 0.5);
 }

@@ -56,9 +56,10 @@ module.exports.leave = catchAsync(async (req, res) => {
 			req.flash('error', 'You are not in this class');
 		} else {
 			await req.classroom.save();
-			await User.findByIdAndUpdate(req.params.leaderId, {
-				$pullAll: { classes: [{ _id: req.params.id }] },
-			});
+			res.locals.user.classes = res.locals.user.classes.filter(
+				(cl) => cl.id !== req.params.id
+			);
+			await res.locals.user.save();
 			req.flash('success', 'You have left the class');
 		}
 	} else if (req.user.permissions === 'leader') {
@@ -68,19 +69,58 @@ module.exports.leave = catchAsync(async (req, res) => {
 			req.flash('error', 'You are not in this class');
 		} else {
 			await req.classroom.save();
-			await User.findByIdAndUpdate(req.user.id, {
-				$pullAll: { classes: [{ _id: req.params.id }] },
-			});
+			res.locals.user.classes = res.locals.user.classes.filter(
+				(cl) => cl.id !== req.params.id
+			);
+			await res.locals.user.save();
 			req.flash('success', 'You have left the class');
 		}
 	}
 	res.redirect('/profile');
 });
 
+module.exports.adminJoin = catchAsync(async (req, res) => {
+	try {
+		if (!req.user.adminReq.includes(req.params.id)) {
+			throw 'not invited to join';
+		}
+		res.locals.user.adminReq = res.locals.user.adminReq.filter(
+			(cl) => cl.id !== req.params.id
+		);
+		await Classroom.findByIdAndUpdate(
+			req.params.id,
+			{
+				$addToSet: { admin: req.user.id },
+			},
+			{ useFindAndModify: false }
+		);
+		res.locals.user.classes.push(req.classroom.id);
+		await res.locals.user.save();
+	} catch (err) {
+		req.flash('error', `Failed to join`);
+		res.redirect(`/profile`);
+		return;
+	}
+	req.flash('success', 'Joined class as admin');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.adminDeny = catchAsync(async (req, res) => {
+	if (!req.user.adminReq.includes(req.params.id)) {
+		req.flash('error', 'You were not invited to join this class');
+		res.redirect('/profile');
+		return;
+	}
+	res.locals.user.adminReq = res.locals.user.adminReq.filter(
+		(cl) => cl.id !== req.params.id
+	);
+	await res.locals.user.save();
+	req.flash('success', 'Rejected admin request');
+	res.redirect(`/profile`);
+});
+
 module.exports.jobs = catchAsync(async (req, res) => {
-	let classroom = await Classroom.findById(req.params.id)
-		.populate('jobListings')
-		.lean();
+	let classroom = req.classroom;
 	if (req.user.permissions === 'leader') {
 		classroom.jobListings = classroom.jobListings.filter(
 			(job) => job.archive !== true

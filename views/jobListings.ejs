@@ -24,10 +24,12 @@
 				<label for="new">New</label>
 				<input type="checkbox" id="new" name="new" class="check">
 			</span>
+			<% if (user.permissions !== 'leader') {%> 
 			<span class="filter-option">
 				<label for="show-archive">Show Archive</label>
 				<input type="checkbox" id="show-archive" name="show-archive" class="check">
 			</span>
+			<% } %> 
 			</span class="filter-option">
 			<div class="tag-box">
 			<label for="filter-career-track">Career Tracks</label>

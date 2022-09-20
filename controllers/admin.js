@@ -1,9 +1,9 @@
 const catchAsync = require('../utiles/catchAsync');
-const { Classroom, User } = require('../schemas');
+const { User } = require('../schemas');
 const { validateUser } = require('../utiles/joiValidation');
 const moment = require('moment');
 
-module.exports.adminPage = (req, res) => {
+module.exports.adminPage = async (req, res) => {
 	const isLeaderInterested = (leader) => {
 		return (job) =>
 			job.interested.some((inter) => {
@@ -55,18 +55,10 @@ module.exports.addAdmin = catchAsync(async (req, res) => {
 		res.redirect(`/class/${req.params.id}/admin`);
 		return;
 	}
-	try {
-		await Classroom.findByIdAndUpdate(req.params.id, {
-			$addToSet: { admin: newAdmin.id },
-		});
-		newAdmin.classes.push(req.classroom.id);
-		await newAdmin.save();
-	} catch (err) {
-		req.flash('error', `Failed to add Admin`);
-		res.redirect(`/class/${req.params.id}/admin`);
-		return;
-	}
-	req.flash('success', `Added new admin: ${username}`);
+	newAdmin.adminReq.push(req.params.id);
+	await newAdmin.save();
+
+	req.flash('success', `Requested ${username} to become a new admin`);
 	res.redirect(`/class/${req.params.id}/admin`);
 });
 
@@ -138,13 +130,55 @@ module.exports.deleteLeader = catchAsync(async (req, res) => {
 		return ele.id != req.params.leaderId;
 	});
 	await req.classroom.save();
-	await User.findByIdAndUpdate(req.params.leaderId, {
-		$pullAll: {
-			classes: [{ _id: req.params.id }],
+	await User.findByIdAndUpdate(
+		req.params.leaderId,
+		{
+			$pullAll: {
+				classes: [{ _id: req.params.id }],
+			},
 		},
-	});
+		{ useFindAndModify: false }
+	);
 	req.flash('success', 'Removed leader');
 	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.accept = catchAsync(async (req, res) => {
+	if (
+		!req.classroom.pendingLeaders.some(
+			(leader) => leader.id === req.params.leaderId
+		)
+	) {
+		req.flash('error', 'Leader is not asking to join this class');
+		res.redirect(`/class/${req.classroom.id}/admin`);
+		return;
+	}
+
+	req.classroom.leaders.push(req.params.leaderId);
+	req.classroom.pendingLeaders = req.classroom.pendingLeaders.filter(
+		(leader) => leader.id !== req.params.leaderId
+	);
+	await req.classroom.save();
+	const user = await User.findByIdAndUpdate(
+		req.params.leaderId,
+		{
+			$push: { classes: req.classroom.id },
+		},
+		{
+			useFindAndModify: false,
+		}
+	);
+	req.flash('success', 'Leader has joined the class');
+	res.redirect(`/class/${req.classroom.id}/admin`);
+});
+
+module.exports.deny = catchAsync(async (req, res) => {
+	req.classroom.pendingLeaders = req.classroom.pendingLeaders.filter(
+		(leader) => leader.id !== req.params.leaderId
+	);
+	await req.classroom.save();
+	req.flash('success', 'Leader denyed from class');
+	res.redirect(`/class/${req.classroom.id}/admin`);
 });
 
 module.exports.addTag = catchAsync(async (req, res) => {

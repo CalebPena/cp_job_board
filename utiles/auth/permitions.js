@@ -11,7 +11,8 @@ module.exports = catchAsync(async function (req, res, next) {
 		.populate('leaders')
 		.populate('admin')
 		.populate('owner')
-		.populate('jobListings');
+		.populate('jobListings')
+		.populate('pendingLeaders');
 	res.locals.classroom = req.classroom;
 	if (req.classroom.owner.id === userId) {
 		req.user.permissions = 'owner';

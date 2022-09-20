@@ -34,6 +34,14 @@
 	</li>
 	<% } %>
 </ul>
+<h2>Pending Join Requests:</h2>
+<ul>
+	<% for (const leader of classroom.pendingLeaders) {%>
+		<li><%= leader.username %>
+			<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/accept" method="post" class="inline-form confirm-leader-join"><button type="submit" class="accept accept-deny">Accept</button></form>
+			<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/deny" method="post" class="inline-form confirm-leader-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
+	<%}%>
+</ul>
 <form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
 	<h3>Add Leader</h3>
 	<div>
@@ -111,7 +119,7 @@
 	<% } %>
 </ul>
 <form action="/class/<%= id %>/admin/career-track" method="post" class="add">
-	<h3>Add Career</h3>
+	<h3>Add Career Track</h3>
 	<label for="career">Career Track</label>
 	<input type="text" id="career" name="career" required>
 	<button type="submit">Add Career Track</button>

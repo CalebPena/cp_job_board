@@ -100,7 +100,9 @@ app.use((req, res, next) => {
 app.use(
 	catchAsync(async (req, res, next) => {
 		if (req.user) {
-			res.locals.user = await User.findById(req.user.id).populate('classes');
+			res.locals.user = await User.findById(req.user.id)
+				.populate('classes')
+				.populate('adminReq');
 			res.locals.user.permissions = false;
 		} else {
 			res.locals.user = false;

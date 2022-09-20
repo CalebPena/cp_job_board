@@ -124,7 +124,11 @@ const useFilter = function (filter) {
 		.filter((option) => option.selected)
 		.map((option) => option.value);
 	formData.new = document.querySelector('#new').checked;
-	formData.showArchive = document.querySelector('#show-archive').checked;
+	try {
+		formData.showArchive = document.querySelector('#show-archive').checked;
+	} catch (err) {
+		formData.showArchive = false;
+	}
 	filter.filter(formData);
 };
 

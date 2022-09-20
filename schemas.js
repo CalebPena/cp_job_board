@@ -26,6 +26,7 @@ const classroomSchema = new Schema({
 	classCode: { type: String, unique: true, required: true },
 	validTags: [String],
 	validCareerTracks: [String],
+	pendingLeaders: [{ type: mongoose.ObjectId, ref: 'user' }],
 });
 
 const Classroom = mongoose.model('classroom', classroomSchema);
@@ -65,6 +66,7 @@ const userScema = new Schema({
 	classes: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	status: { type: String, required: true, enum: ['Leader', 'Alumni', 'Coach'] },
 	cpClass: String,
+	adminReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 });
 userScema.plugin(passportLocalMongoose);
 

@@ -92,4 +92,9 @@ label {
 
 button {
 	font-size: 25px;
+	cursor: pointer;
+}
+select {
+	font-size: 25px;
+	cursor: pointer;
 }

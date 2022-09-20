@@ -16,3 +16,9 @@ document
 document
 	.querySelectorAll('.confirm-leave')
 	.forEach(confirmMsg('Are you sure that you want to leave this class.'));
+
+document
+	.querySelectorAll('.confirm-admin-join')
+	.forEach(
+		confirmMsg('Are you sure that you want to accept/deny this admin request')
+	);

@@ -30,5 +30,15 @@
 <% } %> 
 </ul>
 </div>
+<% if (user.adminReq.length) {%> 
+<h2>Pending Admin Requests:</h2>
+<ul>
+	<% for (let classroom of user.adminReq) {%>
+		<li><%= classroom.className %>
+			<form action="/class/<%= classroom.id %>/admin-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
+			<form action="/class/<%= classroom.id %>/admin-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
+	<%}%>
+</ul>
+<% } %> 
 <script src="/javascript/cpCLass.js"></script>
 <script src="/javascript/profile.js"></script>

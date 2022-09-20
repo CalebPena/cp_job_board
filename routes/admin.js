@@ -21,6 +21,10 @@ router.post('/add-leader', admin.addLeader);
 
 router.delete('/leader/:leaderId', admin.deleteLeader);
 
+router.post('/leader/:leaderId/accept', admin.accept);
+
+router.post('/leader/:leaderId/deny', admin.deny);
+
 router.post('/tag', validateTagDropdown, admin.addTag);
 
 router.delete('/tag/:tag', admin.removeTag);

@@ -43,3 +43,15 @@ select {
 	margin-left: auto;
 	width: fit-content;
 }
+
+.inline-form {
+	display: inline;
+}
+
+.deny {
+	background-color: rgba(212, 36, 40, 0.5);
+}
+
+.accept {
+	background-color: rgba(63, 252, 0, 0.5);
+}
