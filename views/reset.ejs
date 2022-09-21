@@ -1,0 +1,30 @@
+<% layout('layouts/boilerplate') %>
+<h1>Reset your password</h1>
+<div>
+	<form method="post">
+		<div>
+			<label for="old-password">Old Password</label>
+			<input
+				type="password"
+				id="old-password"
+				name="oldPassword"
+				autocomplete="current-password"
+				minlength="8"
+				required
+			/>
+		</div>
+		<div>
+			<label for="password">New Password</label>
+			<input
+				type="password"
+				id="password"
+				name="newPassword"
+				minlength="8"
+				required
+			/>
+		</div>
+		<div>
+			<button>Submit</button>
+		</div>
+	</form>
+</div>

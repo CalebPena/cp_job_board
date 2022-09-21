@@ -9,8 +9,9 @@
 	</head>
 	<body>
 		<nav>
+			<% if (user) {%>
 			<a href="/" class="nav-link">HOME</a>
-			<% if (classroom) { %>
+			<% } %> <% if (classroom) { %>
 			<a href="/class/<%=classroom.id%>" class="nav-link">JOB PAGE</a>
 			<% if (user.permissions === 'admin' || user.permissions == 'owner') {%>
 			<a href="/class/<%=classroom.id%>/admin" class="nav-link">ADMIN</a>

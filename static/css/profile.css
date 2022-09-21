@@ -55,3 +55,7 @@ select {
 .accept {
 	background-color: rgba(63, 252, 0, 0.5);
 }
+
+#cpClass-class {
+	font-size: 28px;
+}

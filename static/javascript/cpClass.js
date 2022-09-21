@@ -9,10 +9,11 @@ const showIfLeader = function () {
 		cpCLass.style.display = 'none';
 	}
 };
-
-reset.addEventListener('click', (e) => {
-	setTimeout(showIfLeader);
-});
+if (reset) {
+	reset.addEventListener('click', (e) => {
+		setTimeout(showIfLeader);
+	});
+}
 
 s.addEventListener('click', (e) => {
 	showIfLeader();

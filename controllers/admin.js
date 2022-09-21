@@ -2,6 +2,7 @@ const catchAsync = require('../utiles/catchAsync');
 const { User } = require('../schemas');
 const { validateUser } = require('../utiles/joiValidation');
 const moment = require('moment');
+const ExpressError = require('../utiles/expressError');
 
 module.exports.adminPage = async (req, res) => {
 	const isLeaderInterested = (leader) => {
@@ -100,12 +101,14 @@ module.exports.addLeader = catchAsync(async (req, res) => {
 			classes: [req.params.id],
 			password: req.body.password,
 		};
-		validateUser(userData);
 		let user = new User(userData);
 		try {
+			validateUser(userData);
 			let newUser = await User.register(user, req.body.password);
 			if (req.classroom.leaders.indexOf(newUser.id) === -1) {
 				req.classroom.leaders.push(newUser.id);
+			} else {
+				throw new ExpressError('User already in class', 400);
 			}
 		} catch (err) {
 			usernamesRegistered.push(user.username);
@@ -113,7 +116,6 @@ module.exports.addLeader = catchAsync(async (req, res) => {
 	}
 	await req.classroom.save();
 	if (usernamesRegistered.length) {
-		console.log('here');
 		req.flash(
 			'error',
 			'Registration failed for: ',

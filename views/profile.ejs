@@ -11,8 +11,32 @@
 		<option value="Coach" <%= user.status==='Coach'? 'selected':'' %>>Coach</option>
     </select>
 </h2>
-<h2><div id="cpClass-box"><label for="cpClass">Class: </label><input type="text" id="cpClass" name="cpClass" value="<%= user.cpClass %>"></div></h2>    
-<div>
+<h2><div id="cpClass-box"><span>
+				<label for="cpClass-year">Class</label>
+				<input
+					type="number"
+					id="cpClass-year"
+					name="cpClass[year]"
+					min="2010"
+					placeholder="Year"
+                    value="<%= user.cpClass.year %>"
+				/>
+				<select type="text" id="cpClass-class" name="cpClass[class]">
+					<option value="C1"<%= user.cpClass.class==='C1'? 'selected':'' %>>C1</option>
+					<option value="C2"<%= user.cpClass.class==='C2'? 'selected':'' %>>C2</option>
+					<option value="C3"<%= user.cpClass.class==='C3'? 'selected':'' %>>C3</option>
+					<option value="C4"<%= user.cpClass.class==='C4'? 'selected':'' %>>C4</option>
+				</select>
+				<input
+					type="text"
+					id="cpClass-location"
+					name="cpClass[location]"
+					maxlength="3"
+					placeholder="DEN"
+                    value="<%= user.cpClass.location %>"
+				/>
+			</span></div></h2>    
+<a href="/change-password">Change Password</a>
 <div class="save-or-reset">
 <button type="submit">Save</button><button type="reset" id="reset">Reset</button>
 </div>
@@ -29,7 +53,7 @@
     </li>
 <% } %> 
 </ul>
-</div>
+
 <% if (user.adminReq.length) {%> 
 <h2>Pending Admin Requests:</h2>
 <ul>

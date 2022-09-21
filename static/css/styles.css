@@ -98,3 +98,17 @@ select {
 	font-size: 25px;
 	cursor: pointer;
 }
+
+#cpClass-year {
+	width: 70px;
+}
+
+#cpClass-year::-webkit-inner-spin-button,
+#cpClass-year::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+#cpClass-location {
+	width: 70px;
+}

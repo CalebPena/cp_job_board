@@ -45,6 +45,14 @@ const classroom = Joi.object({
 
 module.exports.classroomValidation = classroom;
 
+const cpClass = Joi.object({
+	year: Joi.number().integer().min(2010).max(2100),
+	class: Joi.string().trim().escapeHTML().valid('C1', 'C2', 'C3', 'C4'),
+	location: Joi.string().trim().escapeHTML().max(3),
+}).and('year', 'class', 'location');
+
+module.exports.cpClassValidation = cpClass;
+
 const user = Joi.object({
 	username: Joi.string().required().trim().escapeHTML(),
 	email: Joi.string().required().trim().email().escapeHTML(),
@@ -53,7 +61,7 @@ const user = Joi.object({
 		.trim()
 		.valid('Leader', 'Alumni', 'Coach')
 		.escapeHTML(),
-	cpClass: Joi.string().trim().escapeHTML(),
+	cpClass: cpClass,
 	password: Joi.string().trim().min(8).required().escapeHTML(),
 	classes: Joi.array(),
 });

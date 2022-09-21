@@ -27,7 +27,14 @@
 		</div>
 		<div>
 			<label for="salary">Salary</label>
-			<input type="number" id="salary" name="salary" min="0" required />
+			<input
+				type="number"
+				id="salary"
+				name="salary"
+				min="0"
+				step=".01"
+				required
+			/>
 			<select name="salaryType" id="salaryType" required>
 				<option value="Hourly">Hourly</option>
 				<option value="Yearly">Yearly</option>

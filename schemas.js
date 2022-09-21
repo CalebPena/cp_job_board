@@ -1,4 +1,3 @@
-const { valid } = require('joi');
 const mongoose = require('mongoose');
 const config = require('platformsh-config').config();
 const passportLocalMongoose = require('passport-local-mongoose');
@@ -65,8 +64,13 @@ const userScema = new Schema({
 	email: { type: String, required: true, unique: true },
 	classes: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	status: { type: String, required: true, enum: ['Leader', 'Alumni', 'Coach'] },
-	cpClass: String,
+	cpClass: new Schema({
+		year: Number,
+		class: { type: String, enum: ['C1', 'C2', 'C3', 'C4'] },
+		location: { type: String },
+	}),
 	adminReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
+	resetCode: new Schema({ code: String, created: Date }),
 });
 userScema.plugin(passportLocalMongoose);
 

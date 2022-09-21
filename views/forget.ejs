@@ -1,0 +1,9 @@
+<% layout('layouts/boilerplate') %>
+<h1>What is the email of your account?</h1>
+<div>
+	<form action="/forget-password" method="post">
+		<label for="name">Email</label>
+		<input type="email" id="email" name="email" required />
+		<button>Submit</button>
+	</form>
+</div>

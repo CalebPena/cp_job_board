@@ -30,6 +30,7 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 		job.createdDaysAgo = parseInt(
 			moment.duration(moment() - job.dateAdded).asDays()
 		);
+		job.salary = job.salary.toFixed(2);
 		job.interested = job.interested.map((leader) => {
 			return {
 				...leader,
@@ -143,9 +144,13 @@ module.exports.addJob = catchAsync(async (req, res) => {
 	job.interested = [];
 	job.dateAdded = Date();
 	await job.save();
-	await Classroom.findByIdAndUpdate(req.params.id, {
-		$push: { jobListings: job.id },
-	});
+	await Classroom.findByIdAndUpdate(
+		req.params.id,
+		{
+			$push: { jobListings: job.id },
+		},
+		{ useFindAndModify: false }
+	);
 	req.flash('success', 'Successfully added new job listing');
 	res.redirect(`/class/${req.params.id}`);
 });
