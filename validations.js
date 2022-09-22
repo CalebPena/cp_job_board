@@ -31,7 +31,10 @@ const job = Joi.object({
 	careerTracks: Joi.array()
 		.items(Joi.string().max(64).trim().escapeHTML())
 		.single(),
-	salary: Joi.number().required().min(0),
+	salary: Joi.object({
+		min: Joi.number().required().min(0),
+		max: Joi.number().min(0),
+	}),
 	salaryType: Joi.string().required().valid('Hourly', 'Yearly').escapeHTML(),
 	description: Joi.string().required().trim().escapeHTML(),
 	tags: Joi.array().items(Joi.string().valid().escapeHTML()).single(),

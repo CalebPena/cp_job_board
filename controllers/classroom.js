@@ -30,7 +30,13 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 		job.createdDaysAgo = parseInt(
 			moment.duration(moment() - job.dateAdded).asDays()
 		);
-		job.salary = job.salary.toFixed(2);
+		if (typeof job.salary === 'number') {
+			job.salary = job.salary.toFixed(2);
+		} else if (job.salary.max) {
+			job.salary = `${job.salary.min.toFixed(2)}-${job.salary.max.toFixed(2)}`;
+		} else {
+			job.salary = job.salary.min.toFixed(2);
+		}
 		job.interested = job.interested.map((leader) => {
 			return {
 				...leader,
@@ -166,8 +172,8 @@ module.exports.changeStatus = catchAsync(async (req, res) => {
 			}
 		});
 		await job.save();
-		res.status(200).json({});
+		res.status(200).json(job);
 	} catch (err) {
-		res.status(500);
+		res.status(400);
 	}
 });

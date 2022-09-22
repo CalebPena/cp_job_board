@@ -19,6 +19,7 @@ module.exports.validateUser = function (obj) {
 };
 
 module.exports.validateJob = function (req, res, next) {
+	if (req.body.salary.max === '') delete req.body.salary.max;
 	const { error } = jobValidation.validate(req.body);
 	validInput(error, next);
 };

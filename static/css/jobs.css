@@ -2,6 +2,10 @@ select {
 	font-size: 15px;
 }
 
+span {
+	white-space: nowrap;
+}
+
 #filter-jobs {
 	display: flex;
 	flex-wrap: wrap;
@@ -12,6 +16,22 @@ select {
 
 .filter-option {
 	margin: 3px;
+}
+
+#salary::-webkit-inner-spin-button,
+#salary::-webkit-outer-spin-button,
+#min::-webkit-inner-spin-button,
+#min::-webkit-outer-spin-button,
+#max::-webkit-inner-spin-button,
+#max::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+#salary,
+#min,
+#max {
+	width: 140px;
 }
 
 #salaryType {
@@ -180,4 +200,10 @@ select {
 
 .interested-field {
 	margin: 0px 10px;
+}
+
+.salary-title {
+	margin: 4px;
+	font-weight: 200;
+	font-size: 30px;
 }

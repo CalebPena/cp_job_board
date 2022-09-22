@@ -45,6 +45,7 @@ class Filter {
 		this.new = false;
 		this.tags = [];
 		this.archived = false;
+		this.newInterested = false;
 	}
 	filter(formData) {
 		this._update(formData);
@@ -58,6 +59,9 @@ class Filter {
 			}
 		});
 	}
+	updateJobs(jobs) {
+		this.jobs = jobs;
+	}
 	_update(formData) {
 		formData.title ? (this.title = formData.title) : (this.title = undefined);
 		formData.salary !== ''
@@ -70,16 +74,25 @@ class Filter {
 		this.tags = formData.tags;
 		this.new = formData.new;
 		this.archived = formData.showArchive;
+		this.newInterested = formData.newInterested;
 	}
 	_conditions() {
 		const that = this;
 		const threeDaysAgo = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 		return function (job) {
 			if (!that.archived && job.archive === true) return false;
+
+			if (
+				that.newInterested &&
+				!job.interested.some((leader) => leader.status === 'new')
+			) {
+				return false;
+			}
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
 			}
 			if (that.salary > job.salary) return false;
+
 			if (that.salaryType && that.salaryType !== job.salaryType) {
 				return false;
 			}
@@ -93,6 +106,7 @@ class Filter {
 			} else if (that.tags.length !== 0) {
 				return false;
 			}
+
 			if (job.careerTracks.length !== 0) {
 				if (!that.careerTracks.every((tag) => job.careerTracks.includes(tag))) {
 					return false;
@@ -126,9 +140,12 @@ const useFilter = function (filter) {
 	formData.new = document.querySelector('#new').checked;
 	try {
 		formData.showArchive = document.querySelector('#show-archive').checked;
+		formData.newInterested = document.querySelector('#new-interested').checked;
 	} catch (err) {
 		formData.showArchive = false;
+		formData.newInterested = false;
 	}
+	console.log(formData);
 	filter.filter(formData);
 };
 
@@ -137,6 +154,28 @@ axios
 	.then((res) => {
 		const filter = new Filter(res.data);
 		useFilter(filter);
+		document.querySelectorAll('.interested-status').forEach((select) => {
+			select.addEventListener('change', async (e) => {
+				try {
+					await axios.patch(
+						`/class/${classId}/interested/${select.id}/status`,
+						{
+							status: select.value,
+						}
+					);
+					axios
+						.get(`/class/${classId}/jobs`)
+						.then((res) => {
+							filter.updateJobs(res.data);
+						})
+						.catch(function (error) {
+							console.error(error);
+						});
+				} catch (err) {
+					console.error(err);
+				}
+			});
+		});
 		const filterForm = document.querySelector('#filter-jobs');
 		filterForm.addEventListener('submit', (ev) => {
 			ev.preventDefault();
@@ -223,16 +262,3 @@ document
 document
 	.querySelectorAll('.confirm-bring-back')
 	.forEach(confirmMsg('Are you sure that you want to bring back this class'));
-
-const interestedStatus = document
-	.querySelectorAll('.interested-status')
-	.forEach((select) => {
-		select.addEventListener('change', (e) => {
-			axios
-				.patch(`/class/${classId}/interested/${select.id}/status`, {
-					status: select.value,
-				})
-				.then()
-				.catch((err) => console.error(err));
-		});
-	});

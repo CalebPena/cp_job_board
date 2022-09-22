@@ -4,37 +4,48 @@
 <div>
 	<form action="/class/<%= id %>/create" method="post">
 		<div>
-			<label for="title">Job Title</label>
-			<input
-				type="text"
-				id="title"
-				name="jobTitle"
-				minlength="2"
-				maxlength="64"
-				required
-			/>
+			<span>
+				<label for="title">Job Title</label>
+				<input
+					type="text"
+					id="title"
+					name="jobTitle"
+					minlength="2"
+					maxlength="64"
+					required
+				/>
+			</span>
 		</div>
 		<div>
-			<label for="company">Company</label>
-			<input
-				type="text"
-				id="company"
-				name="company"
-				minlength="2"
-				maxlength="64"
-				required
-			/>
+			<span>
+				<label for="company">Company</label>
+				<input
+					type="text"
+					id="company"
+					name="company"
+					minlength="2"
+					maxlength="64"
+					required
+				/>
+			</span>
 		</div>
 		<div>
-			<label for="salary">Salary</label>
-			<input
-				type="number"
-				id="salary"
-				name="salary"
-				min="0"
-				step=".01"
-				required
-			/>
+			<h2 class="salary-title">Salary:</h2>
+			<span>
+				<label for="min">Min</label>
+				<input
+					type="number"
+					id="min"
+					name="salary[min]"
+					min="0"
+					step=".01"
+					required
+				/>
+			</span>
+			<span>
+				<label for="max">Max</label>
+				<input type="number" id="max" name="salary[max]" min="0" step=".01" />
+			</span>
 			<select name="salaryType" id="salaryType" required>
 				<option value="Hourly">Hourly</option>
 				<option value="Yearly">Yearly</option>
@@ -51,7 +62,7 @@
 			></textarea>
 		</div>
 		<div>
-			<label for="career">Tags</label>
+			<label for="career">Career Tracks:</label>
 			<select multiple name="careerTracks" id="career" class="custom-select">
 				<% for (let ct of classroom.validCareerTracks){%>
 				<option value="<%= ct %>"><%= ct %></option>
@@ -59,7 +70,7 @@
 			</select>
 		</div>
 		<div>
-			<label for="tags">Tags</label>
+			<label for="tags">Tags:</label>
 			<select multiple name="tags" id="tags" class="custom-select">
 				<% for (let tag of classroom.validTags){%>
 				<option value="<%= tag %>"><%= tag %></option>
