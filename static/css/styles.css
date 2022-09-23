@@ -8,35 +8,11 @@ body {
 	background-color: #eaeaea;
 }
 
-nav {
-	display: flex;
-	background-color: #2b2c2e;
-	height: 100px;
-	flex-direction: row;
-	justify-content: space-around;
-	align-items: center;
-	width: 100%;
-}
-
-.nav-link {
-	color: #ffffff;
-	text-decoration: none;
-	font-size: 30px;
-	font-family: Social-Gothic, sans-serif;
-	margin: 10px;
-}
-
 main {
 	margin: auto;
 	width: 50%;
 	border: 3px solid black;
 	padding: 10px;
-}
-
-@media (max-width: 1100px) {
-	main {
-		width: 80%;
-	}
 }
 
 @media (max-width: 700px) {
@@ -111,4 +87,110 @@ select {
 
 #cpClass-location {
 	width: 70px;
+}
+
+nav {
+	display: flex;
+	background-color: #2b2c2e;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	position: relative;
+}
+
+.nav-link {
+	color: #ffffff;
+	text-decoration: none;
+	font-size: 30px;
+	font-family: Social-Gothic, sans-serif;
+	margin: 10px;
+}
+
+.home {
+	font-size: 1.5rem;
+	margin: 0.5rem;
+}
+
+.nav-links {
+	height: 100%;
+}
+
+.nav-links ul {
+	display: flex;
+	margin: 0;
+	padding: 0;
+}
+
+.nav-links li {
+	list-style: none;
+}
+
+.nav-links li a {
+	display: block;
+	text-decoration: none;
+	color: white;
+	padding: 1rem;
+}
+
+.nav-links li:hover {
+	background-color: #555;
+}
+
+.toggle-button {
+	position: absolute;
+	top: 0.75rem;
+	right: 1rem;
+	display: none;
+	flex-direction: column;
+	justify-content: space-between;
+	width: 30px;
+	height: 21px;
+}
+
+.toggle-button .bar {
+	height: 3px;
+	width: 100%;
+	background-color: white;
+	border-radius: 10px;
+}
+
+@media (max-width: 1100px) {
+	main {
+		width: 80%;
+	}
+
+	nav {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.toggle-button {
+		display: flex;
+	}
+
+	.nav-links {
+		display: flex;
+		width: 100%;
+		overflow: hidden;
+		transition: max-height 300ms linear;
+		height: auto;
+		max-height: 0px;
+	}
+
+	.nav-links ul {
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.nav-links ul li {
+		text-align: center;
+	}
+
+	.nav-links ul li a {
+		padding: 0.5rem 1rem;
+	}
+
+	.nav-links.active {
+		max-height: 300px;
+	}
 }

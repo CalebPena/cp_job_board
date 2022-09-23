@@ -105,6 +105,7 @@ span {
 
 .job {
 	border: 1px solid black;
+	border-radius: 10px;
 	width: 500px;
 	background-color: #e0e0e0;
 	color: black;
@@ -124,7 +125,7 @@ span {
 	font-weight: normal;
 }
 
-.company {
+.sub-header {
 	font-weight: 400;
 	padding: 2px;
 	margin: 0px;
@@ -153,9 +154,6 @@ span {
 	font-size: large;
 }
 
-.descriptionIntro {
-	margin: 4px;
-}
 .description {
 	font-weight: 200;
 	margin: 0px 10%;
@@ -192,10 +190,45 @@ span {
 
 .interestedIntro {
 	margin: 0px;
+	position: relative;
 }
 
 .interested {
+	height: 0px;
+	transition: height 300ms linear;
+	overflow: hidden;
+}
+
+.interested-box {
+	border-top: 1px solid black;
+	padding: 3px;
+}
+
+.all-interested {
+	height: auto;
+	overflow: hidden;
+}
+
+.interested.active {
 	height: 30px;
+}
+
+.interested-arrow {
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	width: 20px;
+	height: 20px;
+	text-align: center;
+}
+
+.interested-toggle {
+	display: block;
+	cursor: pointer;
+}
+
+.interested-arrow.active {
+	transform: rotate(90deg);
 }
 
 .interested-field {

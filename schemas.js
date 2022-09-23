@@ -43,6 +43,7 @@ const interestedScema = new Schema({
 const jobListingSchema = new Schema({
 	jobTitle: { type: String, required: true },
 	company: { type: String, required: true },
+	location: { type: String, default: 'Denver' },
 	careerTracks: [{ type: String }],
 	salary: new Schema({
 		min: { type: Number, required: true },

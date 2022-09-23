@@ -20,6 +20,7 @@
 				<option value="Hourly">Hourly</option>
 				<option value="Yearly">Yearly</option>
 			</select>
+			</span>
 			<span class="filter-option">
 				<label for="new">New</label>
 				<input type="checkbox" id="new" name="new" class="check">
@@ -57,16 +58,14 @@
 	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo < 3){ %>
 				<span class="pill new">New</span>
 				<% } %></h2>
-	<h3 class="company">Company: <%= job.company %></h3>
-	<div class="jobPayment">
-		<span class="amount">$<%= job.salary %></span
-		><span class="type"> <%=job.salaryType%></span>
-	</div>
-	<h4 class="descriptionIntro">Description:</h4>
+	<h3 class="sub-header">Company: <%= job.company %></h3>
+	<h3 class="sub-header">Location: <%= job.location %></h3>
+	<h3 class="sub-header">Salary: $<%= job.salary %> <%=job.salaryType%></h3>
+	<h3 class="sub-header">Description:</h4>
 	<p class="description"><%=job.description%></p>
 	<% if (job.careerTracks.length) {%> 
 	<div class="careerTracks">
-		<h4 class="careerTracksIntro">For:</h4>
+		<h3 class="sub-header">For:</h3>
 		<div class="careerPills">
 			<% for (let j = 0; j < job.careerTracks.length; j++) {%>
 			<span class="pill"><%= job.careerTracks[j] %> </span><% } %>
@@ -74,7 +73,7 @@
 	</div>
 	<% } %> 
 	<% if (job.tags.length) {%> 
-	<h4 class="careerTracksIntro">Tags:</h4>
+	<h3 class="sub-header">Tags:</h3>
 	<div class="tags">
 		<% for (let j = 0; j < job.tags.length; j++) {%>
 		<span class="pill"><%=job.tags[j]%> </span>
@@ -98,10 +97,17 @@
 		</form>
 		<% } %>  
 		<% } %> 
-</div>	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
-	<h4 class="interestedIntro">Interested:</h4>
-	<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
-		<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
+	</div>	
+	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
+		<div class="interested-box">
+			<span class="interested-toggle">
+			<h4 class="interestedIntro">Interested:
+			<span class="arrow-closed interested-arrow">▶</span>
+			</h4>
+		</span>
+		<div class="all-interested">
+		<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
+			<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
 				<select class="interested-status" id="<%= String(inter._id) %>">
 					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
 					<option value="followUp"<%=inter.status==='followUp'?'selected':''%>>Followed Up</option>
@@ -109,7 +115,9 @@
 					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
 				</select></div>
 		<% } %> 
+	</div>
 	<% } %> 
+	</div>
 </div>
 <% } %>
 <script>

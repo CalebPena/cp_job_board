@@ -10,7 +10,7 @@ const changeBtn = function (element, classId, jobId) {
 				element.innerHTML = 'Remove from Interested';
 			})
 			.catch(function (error) {
-				console.log(error);
+				console.error(error);
 			});
 	} else if (element.classList.contains('inter')) {
 		axios
@@ -21,7 +21,7 @@ const changeBtn = function (element, classId, jobId) {
 				element.innerHTML = 'Add to Interested';
 			})
 			.catch(function (error) {
-				console.log(error);
+				console.error(error);
 			});
 	}
 };
@@ -91,7 +91,7 @@ class Filter {
 			if (that.title && !that._in(job.jobTitle, that.title)) {
 				return false;
 			}
-			if (that.salary > job.salary) return false;
+			if (that.salary > job.salary.min) return false;
 
 			if (that.salaryType && that.salaryType !== job.salaryType) {
 				return false;
@@ -145,7 +145,6 @@ const useFilter = function (filter) {
 		formData.showArchive = false;
 		formData.newInterested = false;
 	}
-	console.log(formData);
 	filter.filter(formData);
 };
 
@@ -262,3 +261,15 @@ document
 document
 	.querySelectorAll('.confirm-bring-back')
 	.forEach(confirmMsg('Are you sure that you want to bring back this class'));
+
+document.querySelectorAll('.interested-box').forEach((inter) => {
+	const toggle = inter.querySelector('.interested-toggle');
+	const interestedList = inter.querySelectorAll('.interested');
+	const interestedToggle = inter.querySelector('.interested-arrow');
+	toggle.addEventListener('click', (e) => {
+		interestedToggle.classList.toggle('active');
+		interestedList.forEach((interestedLeader) =>
+			interestedLeader.classList.toggle('active')
+		);
+	});
+});

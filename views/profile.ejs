@@ -45,7 +45,7 @@
 <h3>Classrooms:</h3>
 <ul>
 <% for (i=0; i<user.classes.length; i++) {let classroom = user.classes[i]%>
-    <li>
+    <li class="list-classes">
         <%= classroom.className %> 
         <form class="confirm-leave leave" action="/class/<%= classroom.id %>?_method=delete" method="post">
 			<button type="submit">Leave</button>

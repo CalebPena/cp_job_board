@@ -9,19 +9,36 @@
 	</head>
 	<body>
 		<nav>
-			<% if (user) {%>
-			<a href="/" class="nav-link">HOME</a>
-			<% } %> <% if (classroom) { %>
-			<a href="/class/<%=classroom.id%>" class="nav-link">JOB PAGE</a>
-			<% if (user.permissions === 'admin' || user.permissions == 'owner') {%>
-			<a href="/class/<%=classroom.id%>/admin" class="nav-link">ADMIN</a>
-			<% } %> <% } %> <% if (!user) {%>
-			<a href="/login" class="nav-link">LOGIN</a
-			><a href="/register" class="nav-link">REGISTER</a>
-			<% } else { %>
-			<a href="/profile" class="nav-link">PROFILE</a>
-			<a href="/logout" class="nav-link">LOG OUT</a>
-			<% } %>
+			<div class="home">
+				<% if (user) {%>
+				<a href="/" class="nav-link">HOME</a>
+				<% } %>
+			</div>
+			<a href="#" class="toggle-button">
+				<span class="bar"></span>
+				<span class="bar"></span>
+				<span class="bar"></span>
+			</a>
+			<div class="nav-links">
+				<ul>
+					<% if (classroom) { %>
+					<li>
+						<a href="/class/<%=classroom.id%>" class="nav-link">JOB PAGE</a>
+					</li>
+					<% if (user.permissions === 'admin' || user.permissions == 'owner')
+					{%>
+					<li>
+						<a href="/class/<%=classroom.id%>/admin" class="nav-link">ADMIN</a>
+					</li>
+					<% } %> <% } %> <% if (!user) {%>
+					<li><a href="/login" class="nav-link">LOGIN</a></li>
+					<li><a href="/register" class="nav-link">REGISTER</a></li>
+					<% } else { %>
+					<li><a href="/profile" class="nav-link">PROFILE</a></li>
+					<li><a href="/logout" class="nav-link">LOG OUT</a></li>
+					<% } %>
+				</ul>
+			</div>
 		</nav>
 		<% if (success && success.length) {%>
 		<div class="success flash" role="alert">

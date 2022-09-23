@@ -28,6 +28,7 @@ const Joi = BaseJoi.extend(extension);
 const job = Joi.object({
 	jobTitle: Joi.string().required().max(64).trim().escapeHTML(),
 	company: Joi.string().required().max(64).trim().escapeHTML(),
+	location: Joi.string().required().max(32).trim().escapeHTML(),
 	careerTracks: Joi.array()
 		.items(Joi.string().max(64).trim().escapeHTML())
 		.single(),

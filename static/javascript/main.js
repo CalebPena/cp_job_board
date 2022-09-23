@@ -7,3 +7,10 @@ for (i = 0; i < dismissBtns.length; i++) {
 		btn.parentElement.remove();
 	});
 }
+
+const toggleButton = document.getElementsByClassName('toggle-button')[0];
+const navbarLinks = document.getElementsByClassName('nav-links')[0];
+
+toggleButton.addEventListener('click', () => {
+	navbarLinks.classList.toggle('active');
+});
