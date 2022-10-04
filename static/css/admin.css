@@ -50,3 +50,8 @@ span {
 .accept {
 	background-color: rgba(63, 252, 0, 0.5);
 }
+
+button:hover {
+	background-color: #902428;
+	color: white;
+}

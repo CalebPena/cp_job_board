@@ -155,7 +155,7 @@ span {
 }
 
 .description {
-	font-weight: 200;
+	font-weight: 400;
 	margin: 0px 10%;
 	margin-bottom: 10px;
 	overflow-wrap: break-word;
@@ -236,7 +236,7 @@ span {
 }
 
 .salary-title {
-	margin: 4px;
-	font-weight: 200;
+	margin: 4px 0px;
+	font-weight: 500;
 	font-size: 30px;
 }

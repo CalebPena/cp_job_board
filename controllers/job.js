@@ -26,9 +26,8 @@ module.exports.notInterested = catchAsync(async (req, res) => {
 });
 
 module.exports.editForm = catchAsync(async (req, res) => {
-	const job = await JobListing.findById(req.params.jobId).lean();
+	const job = await JobListing.findById(req.params.jobId);
 	job.classId = req.classroom.id;
-	job.id = String(job._id);
 	res.render('edit', job);
 });
 

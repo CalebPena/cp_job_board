@@ -1,0 +1,55 @@
+@font-face {
+	font-family: 'Social Gothic Soft';
+	src: url('SocialGothicSoft.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic';
+	src: url('SocialGothic-Medium.woff') format('woff');
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic Stencil';
+	src: url('SocialGothicStencil.woff') format('woff');
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic';
+	src: url('SocialGothic-Demibold.woff') format('woff');
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic Rough';
+	src: url('SocialGothicRough.woff') format('woff');
+	font-weight: 800;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic';
+	src: url('SocialGothic.woff') format('woff');
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Social Gothic';
+	src: url('SocialGothic-Bold.woff') format('woff');
+	font-weight: bold;
+	font-style: normal;
+	font-display: swap;
+}
