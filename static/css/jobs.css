@@ -4,6 +4,11 @@ select {
 
 span {
 	white-space: nowrap;
+	max-width: 95%;
+}
+
+input {
+	max-width: 90%;
 }
 
 #filter-jobs {
@@ -11,7 +16,6 @@ span {
 	flex-wrap: wrap;
 	border: 1px solid black;
 	width: 95%;
-	min-width: 500px;
 }
 
 .filter-option {
@@ -31,7 +35,7 @@ span {
 #salary,
 #min,
 #max {
-	width: 140px;
+	max-width: 140px;
 }
 
 #salaryType {
@@ -106,7 +110,7 @@ span {
 .job {
 	border: 1px solid black;
 	border-radius: 10px;
-	width: 500px;
+	max-width: 500px;
 	background-color: #e0e0e0;
 	color: black;
 	margin: 15px;
@@ -239,4 +243,27 @@ span {
 	margin: 4px 0px;
 	font-weight: 500;
 	font-size: 30px;
+}
+
+.job-field {
+	margin: 0px;
+	padding: 0px;
+	display: inline;
+	max-width: 90%;
+}
+
+@media (max-width: 400px) {
+	.job-field {
+		display: block;
+		text-align: center;
+	}
+}
+
+@media (max-width: 600px) {
+	.multi-if-small {
+		display: block;
+	}
+	#filter-jobs {
+		flex-direction: column;
+	}
 }

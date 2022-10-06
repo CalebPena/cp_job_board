@@ -7,60 +7,61 @@
 
 <form id="filter-jobs">
 	<span class="filter-option">
-			<label for="title">Job Title</label>
-			<input type="text" id="title" class="filter"/>
-			</span>
-			<span class="filter-option">
-			<label for="salary">Minimum Pay</label>
-			<input type="number" id="salary" min="0" class="filter" step=".01"/>
-			</span><span class="filter-option">
-			<label for="salaryType">Salary Type</label>
-			<select class="filter" id="salaryType">
-				<option value="" selected></option>
-				<option value="Hourly">Hourly</option>
-				<option value="Yearly">Yearly</option>
-			</select>
-			</span>
-			<span class="filter-option">
-				<label for="new">New</label>
-				<input type="checkbox" id="new" name="new" class="check">
-			</span>
-			<% if (user.permissions !== 'leader') {%> 
-			<span class="filter-option">
-				<label for="show-archive">Archive</label>
-				<input type="checkbox" id="show-archive" name="show-archive" class="check">
-			</span>
-			<span class="filter-option">
-				<label for="new-interested">New Interested</label>
-				<input type="checkbox" id="new-interested" name="new-interested" class="check">
-			</span>
-			<% } %> 
-			</span class="filter-option">
-			<div class="tag-box">
-			<label for="filter-career-track">Career Tracks</label>
-			<select multiple class="tags custom-select" id="filter-career-track" class="custom-select">
-				<% for (let ct of classroom.validCareerTracks){%>
-				<option value="<%= ct %>"><%= ct %></option>
-				<% } %>
-			</select>
-			</div>
-			<div class="tag-box">
-			<label for="filter-tags">Tags</label>
-			<select multiple class="tags custom-select" id="filter-tags" class="custom-select">
-				<% for (let tag of classroom.validTags){%>
-				<option value="<%= tag %>"><%= tag %></option>
-				<% } %>
-			</select>
-			</div>
-		<Button type="submit" class="btn" id="filter-btn">Filter</Button></form>
+		<label for="title">Job Title</label>
+		<input type="text" id="title" class="filter multi-if-small"/>
+	</span>
+	<span class="filter-option">
+		<label for="salary">Minimum Pay</label>
+		<input type="number" id="salary" min="0" class="filter multi-if-small" step=".01"/>
+	</span>
+	<span class="filter-option">
+		<label for="salaryType">Salary Type</label>
+		<select class="filter multi-if-small" id="salaryType">
+			<option value="" selected></option>
+			<option value="Hourly">Hourly</option>
+			<option value="Yearly">Yearly</option>
+		</select>
+	</span>
+	<span class="filter-option">
+		<label for="new">New</label>
+		<input type="checkbox" id="new" name="new" class="check">
+	</span>
+	<% if (user.permissions !== 'leader') {%> 
+	<span class="filter-option">
+		<label for="show-archive">Archive</label>
+		<input type="checkbox" id="show-archive" name="show-archive" class="check">
+	</span>
+	<span class="filter-option">
+		<label for="new-interested">New Interested</label>
+		<input type="checkbox" id="new-interested" name="new-interested" class="check">
+	</span>
+	<% } %> 
+	<div class="tag-box">
+		<label for="filter-career-track">Career Tracks</label>
+		<select multiple class="tags custom-select" id="filter-career-track" class="custom-select">
+			<% for (let ct of classroom.validCareerTracks){%>
+			<option value="<%= ct %>"><%= ct %></option>
+			<% } %>
+		</select>
+	</div>
+	<div class="tag-box">
+		<label for="filter-tags">Tags</label>
+		<select multiple class="tags custom-select" id="filter-tags" class="custom-select">
+			<% for (let tag of classroom.validTags){%>
+			<option value="<%= tag %>"><%= tag %></option>
+			<% } %>
+		</select>
+	</div>
+	<Button type="submit" class="btn" id="filter-btn">Filter</Button>
+</form>
 <%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
 <div class="job" id="<%= job.id %>">
 	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo < 3){ %>
 				<span class="pill new">New</span>
 				<% } %></h2>
-	<h3 class="sub-header">Company: <%= job.company %></h3>
-	<h3 class="sub-header">Location: <%= job.location %></h3>
-	<h3 class="sub-header">Salary: $<%= job.salary %> <%=job.salaryType%></h3>
+	<h3 class="sub-header">Company: <div class="job-field"><%= job.company %></div></h3>
+	<h3 class="sub-header">Location: <div class="job-field"><%= job.location %></div></h3>
+	<h3 class="sub-header">Salary: <div class="job-field">$<%= job.salary %> <%=job.salaryType%></div></h3>
 	<h3 class="sub-header">Description:</h4>
 	<p class="description"><%=job.description%></p>
 	<% if (job.careerTracks.length) {%> 
