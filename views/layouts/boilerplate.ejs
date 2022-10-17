@@ -44,11 +44,13 @@
 		</nav>
 		<% if (success && success.length) {%>
 		<div class="success flash" role="alert">
-			<%= success %><button class="x">&#x2715;</button>
+			<p class="flash-message"><%= success %></p>
+			<button class="x">&#x2715;</button>
 		</div>
 		<% } %> <% if (error && error.length) {%>
 		<div class="fail flash" role="alert">
-			<%= error %><button class="x">&#x2715;</button>
+			<p class="flash-message"><%= error %></p>
+			<button class="x">&#x2715;</button>
 		</div>
 		<% } %>
 		<main><%- body %></main>

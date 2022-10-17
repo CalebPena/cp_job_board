@@ -1,12 +1,14 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="/css/admin.css" />
-<h1>Admin</h1>
-<h2>Class Code: <%= classroom.classCode %></h2>
-<h2>Leaders:</h2>
-<ul class="leaderList">
-	<% for (i=0;i < leaders.length; i++) { let cpClass =leaders[i].cpClass%>
-	<li class="leader-list">
-		<%= leaders[i].username %> <%=cpClass != undefined?cpClass.year+' '+cpClass.class+' '+cpClass.location:'' %>
+	<link rel="stylesheet" href="/css/admin.css" />
+	<h1>Admin</h1>
+	<h2>Class Code: <%= classroom.classCode %>
+	</h2>
+	<h2>Leaders:</h2>
+	<ul class="leaderList">
+		<% for (i=0;i < leaders.length; i++) { let cpClass=leaders[i].cpClass%>
+			<li class="leader-list">
+				<%= leaders[i].username %>
+					<%=cpClass !=undefined?cpClass.year+' '+cpClass.class+' '+cpClass.location:'' %>
 		<form
 			class="delete confirm-remove-user"
 			action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
@@ -20,133 +22,122 @@
 			<li class="leader-list">
 				<%= inter.title %>
 				<select class="interested-status" id="<%= inter.interestedId %>">
-					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
-					<option value="followUp"<%=inter.status==='followUp'?'selected':''%>>Followed Up</option>
-					<option value="nextSteps"<%=inter.status==='nextSteps'?'selected':''%>>Next Steps</option>
-					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
-				</select>
-				<%if(inter.date <= 3){ %>
-				<span class="pill">New</span>
-				<% } %>
+					<option value="new" <%=inter.status===' new'?'selected':''%>>New</option>
+						<option value="followUp" <%=inter.status==='followUp' ?'selected':''%>>Followed Up</option>
+						<option value="nextSteps" <%=inter.status==='nextSteps' ?'selected':''%>>Next Steps</option>
+						<option value="badFit" <%=inter.status==='badFit' ?'selected':''%>>Bad Fit</option>
+						</select>
 			</li>
 			<% } %>
+	</ul>
+	</li>
+	<% } %>
 		</ul>
-	</li>
-	<% } %>
-</ul>
-<h2>Pending Join Requests:</h2>
-<ul>
-	<% for (const leader of classroom.pendingLeaders) {%>
-		<li class="leader-list"><%= leader.username %>
-			<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/accept" method="post" class="inline-form confirm-leader-join"><button type="submit" class="accept accept-deny">Accept</button></form>
-			<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/deny" method="post" class="inline-form confirm-leader-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
-	<%}%>
-</ul>
-<form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
-	<h3>Add Leader</h3>
-	<div>
-		<span
-			><label for="password">Password</label
-			><input type="text" id="password" name="password" minlength="8" required
-		/>
-		</span>	
-			<span>
-				<label for="cpClass-year">Class</label>
-				<input
-					type="number"
-					id="cpClass-year"
-					name="cpClass[year]"
-					min="2010"
-					placeholder="Year"
-				/>
-				<select type="text" id="cpClass-class" name="cpClass[class]">
-					<option value="C1">C1</option>
-					<option value="C2">C2</option>
-					<option value="C3">C3</option>
-					<option value="C4">C4</option>
-				</select>
-				<input
-					type="text"
-					id="cpClass-location"
-					name="cpClass[location]"
-					maxlength="3"
-					placeholder="DEN"
-				/>
-		</span>
-	</div>
-	<div id="leaders"></div>
-	<div>
-		<button id="leader-btn-add" name="Leader">Add</button>
-		<button id="leader-btn-remove">Remove</button>
-	</div>
-	<button type="submit">Submit</button>
-</form>
-<h2>Admin:</h2>
-<ul class="adminList">
-	<% for (i=0;i < admin.length; i++) {%>
-	<li class="leader-list">
-		<%= admin[i].username %> <% if (user.permissions === 'owner') {%>
-		<form
-			class="delete confirm-remove-user"
-			action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete"
-			method="post"
-		>
-			<button type="submit">Remove From Class</button>
+		<h2>Pending Join Requests:</h2>
+		<ul>
+			<% for (const leader of classroom.pendingLeaders) {%>
+				<li class="leader-list">
+					<%= leader.username %>
+						<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/accept" method="post"
+							class="inline-form confirm-leader-join"><button type="submit"
+								class="accept accept-deny">Accept</button></form>
+						<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/deny" method="post"
+							class="inline-form confirm-leader-join"><button type="submit"
+								class="deny accept-deny">Deny</button></form>
+				</li>
+				<%}%>
+		</ul>
+		<form action="/class/<%= id %>/admin/add-leader" method="post" class="add">
+			<h3>Add Leader</h3>
+			<div>
+				<span><label for="password">Password</label><input type="text" id="password" name="password"
+						minlength="8" required class="multi-if-small"/>
+				</span>
+				<span>
+					<label for="cpClass-year">Class</label>
+					<span class="multi-if-small class-input">
+					<input type="number" id="cpClass-year" name="cpClass[year]" min="2010" placeholder="Year" />
+					<select type="text" id="cpClass-class" name="cpClass[class]">
+						<option value="C1">C1</option>
+						<option value="C2">C2</option>
+						<option value="C3">C3</option>
+						<option value="C4">C4</option>
+					</select>
+					<input type="text" id="cpClass-location" name="cpClass[location]" maxlength="3" placeholder="DEN" />
+					</span>
+				</span>
+			</div>
+			<div id="leaders"></div>
+			<div>
+				<button id="leader-btn-add" name="Leader">Add</button>
+				<button id="leader-btn-remove">Remove</button>
+			</div>
+			<button type="submit">Submit</button>
 		</form>
-		<% } %>
-	</li>
-	<% } %>
-</ul>
-<% if (user.permissions === 'owner') {%>
-<form action="/class/<%= id %>/admin/add-admin" method="post" class="add">
-	<h3>Add Admin</h3>
-	<label for="username">Username</label>
-	<input type="text" id="username" name="username" minlength="2" required />
-	<button type="submit">Submit</button>
-</form>
-<% } %>
-<h2>Tags:</h2>
-<ul>
-	<% for (let tag of classroom.validTags){%>
-		<li class="leader-list"><%= tag %>
-		<form
-			class="delete confirm-remove-tag"
-			action="/class/<%= id %>/admin/tag/<%= tag %>?_method=delete"
-			method="post"
-		>
-			<button type="submit">Remove Tag</button>
-		</form></li>
-	<% } %>
-</ul>
-<form action="/class/<%= id %>/admin/tag" method="post" class="add">
-	<h3>Add Tag</h3>
-	<label for="tag">Tag</label>
-	<input type="text" id="tag" name="tag" required>
-	<button type="submit">Add Tag</button>
-</form>
+		<h2>Admin:</h2>
+		<ul class="adminList">
+			<% for (i=0;i < admin.length; i++) {%>
+				<li class="leader-list">
+					<%= admin[i].username %>
+						<% if (user.permissions==='owner' ) {%>
+							<form class="delete confirm-remove-user"
+								action="/class/<%= id %>/admin/admin/<%= admin[i].id %>?_method=delete" method="post">
+								<button type="submit">Remove From Class</button>
+							</form>
+							<% } %>
+				</li>
+				<% } %>
+		</ul>
+		<% if (user.permissions==='owner' ) {%>
+			<form action="/class/<%= id %>/admin/add-admin" method="post" class="add">
+				<h3>Add Admin</h3>
+				<div>
+					<label for="username">Username</label>
+					<input type="text" id="username" name="username" class="multi-if-small" minlength="2" required />
+				</div>
+				<button type="submit">Submit</button>
+			</form>
+			<% } %>
+				<h2>Tags:</h2>
+				<ul>
+					<% for (let tag of classroom.validTags){%>
+						<li class="leader-list">
+							<%= tag %>
+								<form class="delete confirm-remove-tag"
+									action="/class/<%= id %>/admin/tag/<%= tag %>?_method=delete" method="post">
+									<button type="submit">Remove Tag</button>
+								</form>
+						</li>
+						<% } %>
+				</ul>
+				<form action="/class/<%= id %>/admin/tag" method="post" class="add">
+					<h3>Add Tag</h3>
+					<label for="tag">Tag</label>
+					<input type="text" id="tag" name="tag" required>
+					<button type="submit">Add Tag</button>
+				</form>
 
-<h2>Career Tracks:</h2>
-<ul>
-	<% for (let ct of classroom.validCareerTracks){%>
-		<li class="leader-list"><%= ct %>
-		<form
-			class="delete confirm-remove-tag"
-			action="/class/<%= id %>/admin/career-track/<%= ct %>?_method=delete"
-			method="post"
-		>
-			<button type="submit">Remove Career</button>
-		</form></li>
-	<% } %>
-</ul>
-<form action="/class/<%= id %>/admin/career-track" method="post" class="add">
-	<h3>Add Career Track</h3>
-	<label for="career">Career Track</label>
-	<input type="text" id="career" name="career" required>
-	<button type="submit">Add Career Track</button>
-</form>
+				<h2>Career Tracks:</h2>
+				<ul>
+					<% for (let ct of classroom.validCareerTracks){%>
+						<li class="leader-list">
+							<%= ct %>
+								<form class="delete confirm-remove-tag"
+									action="/class/<%= id %>/admin/career-track/<%= ct %>?_method=delete" method="post">
+									<button type="submit">Remove Career</button>
+								</form>
+						</li>
+						<% } %>
+				</ul>
+				<form action="/class/<%= id %>/admin/career-track" method="post" class="add">
+					<h3>Add Career Track</h3>
+					<label for="career">Career Track</label>
+					<input type="text" id="career" name="career" required>
+					<button type="submit">Add Career Track</button>
+				</form>
 
-<script>
-	const classId = '<%=classroom.id%>';
-</script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="/javascript/adminPanel.js"></script>
+				<script>
+					const classId = '<%=classroom.id%>';
+				</script>
+				<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+				<script src="/javascript/adminPanel.js"></script>

@@ -20,3 +20,22 @@ span,
 div {
 	white-space: nowrap;
 }
+
+input {
+	max-width: 95%;
+}
+@media (max-width: 600px) {
+	input {
+		display: block;
+	}
+}
+.class-input {
+	display: flex;
+	flex-direction: row;
+}
+
+@media (max-width: 300px) {
+	.class-input {
+		flex-direction: column;
+	}
+}

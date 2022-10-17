@@ -29,6 +29,7 @@ input {
 #max::-webkit-inner-spin-button,
 #max::-webkit-outer-spin-button {
 	-webkit-appearance: none;
+	appearance: none;
 	margin: 0;
 }
 

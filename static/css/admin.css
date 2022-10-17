@@ -2,6 +2,10 @@
 	display: inline;
 }
 
+input {
+	max-width: 95%;
+}
+
 button {
 	font-size: 25px;
 }
@@ -28,17 +32,6 @@ span {
 	white-space: nowrap;
 }
 
-.pill {
-	border: 1px solid black;
-	border-radius: 13px;
-	text-align: center;
-	padding: 3px;
-	margin: 4px 2px;
-	color: white;
-	background-color: #d42428;
-	font-size: 20px;
-}
-
 .inline-form {
 	display: inline;
 }
@@ -49,4 +42,21 @@ span {
 
 .accept {
 	background-color: rgba(63, 252, 0, 0.5);
+}
+
+.multi-if-small.class-input {
+	display: flex;
+	flex-direction: row;
+}
+
+@media (max-width: 600px) {
+	.multi-if-small {
+		display: block;
+	}
+}
+
+@media (max-width: 300px) {
+	.multi-if-small.class-input {
+		flex-direction: column;
+	}
 }
