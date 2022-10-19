@@ -30,7 +30,13 @@ module.exports.registerForm = (req, res) => {
 module.exports.register = catchAsync(async (req, res) => {
 	console.log(req.body);
 	try {
-		if (req.body.cpClass === '') delete req.body.cpClass;
+		if (
+			!req.body.cpClass.year ||
+			!req.body.cpClass.class ||
+			!req.body.cpClass.location
+		) {
+			delete req.body.cpClass;
+		}
 		validateUser(req.body);
 		const user = new User(req.body);
 		user.classes = [];
