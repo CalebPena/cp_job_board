@@ -19,13 +19,13 @@
 					name="cpClass[year]"
 					min="2010"
 					placeholder="Year"
-                    value="<%= user.cpClass.year %>"
+                    value="<%= user.cpClass?user.cpClass.year:2010 %>"
 				/>
 				<select type="text" id="cpClass-class" name="cpClass[class]">
-					<option value="C1"<%= user.cpClass.class==='C1'? 'selected':'' %>>C1</option>
-					<option value="C2"<%= user.cpClass.class==='C2'? 'selected':'' %>>C2</option>
-					<option value="C3"<%= user.cpClass.class==='C3'? 'selected':'' %>>C3</option>
-					<option value="C4"<%= user.cpClass.class==='C4'? 'selected':'' %>>C4</option>
+					<option value="C1"<%= user.cpClass?(user.cpClass.class==='C1'? 'selected':''):'' %>>C1</option>
+					<option value="C2"<%= user.cpClass?(user.cpClass.class==='C2'? 'selected':''):'' %>>C2</option>
+					<option value="C3"<%= user.cpClass?(user.cpClass.class==='C3'? 'selected':''):'' %>>C3</option>
+					<option value="C4"<%= user.cpClass?(user.cpClass.class==='C4'? 'selected':''):'' %>>C4</option>
 				</select>
 				<input
 					type="text"
@@ -33,7 +33,7 @@
 					name="cpClass[location]"
 					maxlength="3"
 					placeholder="DEN"
-                    value="<%= user.cpClass.location %>"
+                    value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
 				/>
 			</span></div></h2>    
 <a href="/change-password">Change Password</a>
