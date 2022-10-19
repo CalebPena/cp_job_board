@@ -30,6 +30,7 @@ main {
 	width: 100%;
 	hyphens: auto;
 	white-space: normal;
+	margin: 0px;
 }
 
 .fail {
