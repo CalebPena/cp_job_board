@@ -1,5 +1,4 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="/css/profile.css" />
 <form action="" method="post" class="confirm-update update-profile">
 <h1><%= user.username %></h1>
 <h2>Email: <%= user.email %></h2>
@@ -38,10 +37,11 @@
 			</span></div></h2>    
 <a href="/change-password">Change Password</a>
 <div class="save-or-reset">
-<button type="submit">Save</button><button type="reset" id="reset">Reset</button>
+<button type="submit">Save</button><button type="reset" id="reset" class="btn">Reset</button>
 </div>
 <div class="borderBottom"></div>
 </form>
+<div class="classrooms">
 <h3>Classrooms:</h3>
 <ul>
 <% for (i=0; i<user.classes.length; i++) {let classroom = user.classes[i]%>
@@ -53,6 +53,7 @@
     </li>
 <% } %> 
 </ul>
+</div>
 
 <% if (user.adminReq.length) {%> 
 <h2>Pending Admin Requests:</h2>

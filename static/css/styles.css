@@ -217,3 +217,392 @@ nav {
 		max-height: 300px;
 	}
 }
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	background: #FFF;
+}
+
+.toggle-button {
+	top: 18px;
+}
+
+.flash {
+	margin: 24px auto 0;
+	color: #FFF;
+	border: none;
+	width: 100%;
+    max-width: 762px;
+    font-size: 22px;
+}
+
+.fail {
+	background: #902428;
+	border: none;
+}
+
+.success {
+	background: #1dab48;
+	border: none;
+}
+
+.fail .x,
+.success .x {
+	color: #FFF;
+}
+
+main {
+	position: relative;
+	margin: 24px auto;
+	border: none;
+	width: 100%;
+	max-width: 762px;
+}
+
+label {
+	display: block;
+	margin-bottom: 10px;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+input {
+	max-width: 90% !important;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #F0F0F0;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #4F4F4F;
+}
+
+textarea {
+	max-width: 90% !important;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 16px;
+    background: #F0F0F0;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #4F4F4F;
+    resize: none;
+}
+
+input#code {
+	max-width: 500px !important;
+}
+
+input#name {
+	max-width: 450px !important;
+}
+
+select {
+	max-width: 90% !important;
+    width: 100%;
+    height: 51px;
+    margin-bottom: 20px;
+    background: #F0F0F0;
+    border-radius: 4px;
+    border: none;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #4F4F4F !important;
+}
+
+#cpClass-class {
+	width: auto;
+}
+
+#salaryType {
+	margin-bottom: 32px;
+}
+
+.filter-option {
+	display: block;
+	width: 100%;
+	margin: 0 !important;
+}
+
+.tag-box {
+	margin: 15px 0 0 !important;
+}
+
+.check {
+	width: auto;
+    margin-left: 7px;
+}
+
+form a {
+	color: #4F4F4F;
+}
+
+h1 {
+	margin: 0;
+	text-align: left !important;
+}
+
+h2 {
+	display: block;
+	margin-bottom: 10px;
+	margin-top: 0;
+	font-size: 20px;
+	font-weight: 700;
+}
+
+h3 {
+	text-align: left !important;
+	margin: 0 0 30px 0 !important;
+}
+
+/*should eliminate .big-btn*/
+/*should add class="btn create" to <a id="newJob"> on single class page*/
+.btn,
+.big-btn,
+#newJob {
+	position: relative;
+    display: inline-block;
+	width: auto;
+	min-width: 160px;
+	max-width: none;
+	padding: 15px 50px;
+	border-radius: 26px;
+	margin: 8px 0 0;
+	font-size: 18px;
+	color: #FFF;
+	text-decoration: none;
+	text-align: center;
+	background: #902428;
+	cursor: pointer;
+	border: none;
+}
+
+.big-btn.create,
+#newJob {
+	margin-bottom: 10px;
+	margin-top: 20px;
+}
+
+#newJob:hover {
+	color: #FFF !important;
+}
+
+#leader-btn-add,
+#leader-btn-remove {
+	margin-bottom: 20px;
+	margin-right: 10px;
+	background: #902428;
+	border: none;
+	border-radius: 4px;
+	color: #FFF;
+	font-size: 16px !important;
+}
+
+form .btn:last-child {
+	margin-top: 24px;
+}
+
+form.join {
+	margin-top: 40px;
+}
+
+form.add {
+	margin-bottom: 50px;
+}
+
+button[type=submit],
+button.submit {
+	padding: 15px 50px !important;
+	font-size: 18px !important;
+	color: #FFF;
+	text-decoration: none;
+	background: #902428;
+	cursor: pointer;
+	border: none;
+	border-radius: 26px;
+}
+
+.multi-if-small.class-input select {
+	width: auto;
+	margin-right: 10px;
+	width: 70px;
+	padding-left: 10px;
+}
+
+.multi-if-small.class-input input {
+	width: auto;
+	margin-right: 10px;
+}
+
+.border-box,
+.login-box,
+.classrooms,
+.job {
+	width: 100% !important;
+	padding: 35px 50px;
+	margin-top: 24px;
+	border: 1px solid #B4B4B4 !important;
+}
+
+main ul {
+	list-style: none;
+	padding: 0;
+}
+
+main ul li {
+	padding: 0;
+}
+
+.classrooms ul {
+	columns: 2;
+	max-width: 520px;
+	margin-bottom: 0;
+}
+
+.home {
+	margin: 0.6rem 0.5rem 0.4rem;
+}
+
+.filter-option {
+	width: auto;
+	display: inline-block;
+	margin-right: 30px !important;
+}
+
+.filter-option label,
+.filter-option input {
+	display: inline-block;
+}
+
+
+.filter-option:nth-child(1),
+.filter-option:nth-child(2),
+.filter-option:nth-child(3) {
+	width: 100%;
+	display: block;
+	margin-right: 0 !important;
+}
+
+.filter-option:nth-child(1) label,
+.filter-option:nth-child(2) label,
+.filter-option:nth-child(3) label,
+.filter-option:nth-child(1) input,
+.filter-option:nth-child(2) input,
+.filter-option:nth-child(3) input {
+	display: block;
+}
+
+.job {
+	border: 1px solid #B4B4B4 !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+    background-color: transparent !important;
+    color: #4F4F4F !important;
+    margin: 24px 0 0 !important;
+}
+
+.job .jobTitle {
+	margin-bottom: 20px !important;
+	padding: 0 !important;
+}
+
+.job .sub-header {
+	font-size: 18px !important;
+	margin-bottom: 8px !important;
+	padding: 0 !important;
+}
+
+.job .description {
+	margin: 10px 0 20px 0 !important;
+}
+
+.job .buttons .btn {
+	margin: 0 0 0 10px !important;
+	padding: 15px 50px !important;
+	border-radius: 26px !important;
+	border: none !important;
+    font-size: 18px !important;
+    background: #902428 !important;
+    color: #FFF !important;
+}
+
+.job .interested-box {
+	margin-top: 30px;
+	border: none !important;
+	background: #F0F0F0;
+}
+
+.job .interested-toggle {
+	width: 100% !important;
+}
+
+.salary-title {
+    margin: 40px 0 24px !important;
+}
+
+form.update-profile h1 {
+	margin-bottom: 30px;
+}
+
+form.update-profile #status {
+	max-width: 500px !important;
+}
+
+.save-or-reset {
+	margin-bottom: 50px;
+}
+
+.save-or-reset #reset {
+	margin-left: 10px;
+}
+
+.list-classes {
+	margin-bottom: 28px;
+}
+
+.list-classes .confirm-leave {
+	margin-top: 8px;
+}
+
+@media (max-width: 700px) {
+	main {
+		max-width: 90%;
+	}
+
+	.border-box,
+	.login-box,
+	.classrooms,
+	.job {
+		padding: 20px 15px;
+	}
+
+	.btn,
+	.big-btn {
+		border-radius: 23px;
+		padding: 12px 30px;
+	}
+
+	button[type=submit] {
+		padding: 12px 30px !important;
+		border-radius: 23px;
+	}
+
+	.classrooms ul {
+		columns: 1;
+	}
+
+	input#code {
+		max-width: 80% !important;
+	}
+
+	.flash {
+		max-width: 88%;
+	}
+}

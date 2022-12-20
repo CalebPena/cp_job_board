@@ -2,10 +2,10 @@
 <link rel="stylesheet" href="/css/jobs.css" />
 <h1>Job Listings:</h1>
 	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
-<a href="/class/<%= classroom.id %>/create" id="newJob">New Job</a>
+<a href="/class/<%= classroom.id %>/create" id="newJob" class="create">New Job</a>
 <% } %> 
 
-<form id="filter-jobs">
+<form id="filter-jobs" class="border-box">
 	<span class="filter-option">
 		<label for="title">Job Title</label>
 		<input type="text" id="title" class="filter multi-if-small"/>
@@ -55,7 +55,7 @@
 	<Button type="submit" class="btn" id="filter-btn">Filter</Button>
 </form>
 <%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
-<div class="job" id="<%= job.id %>">
+<div class="job border-box" id="<%= job.id %>">
 	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo < 3){ %>
 				<span class="pill new">New</span>
 				<% } %></h2>

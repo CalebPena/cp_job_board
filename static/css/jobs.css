@@ -88,26 +88,6 @@ input {
 	transform: scale(2);
 }
 
-#newJob {
-	text-decoration: none;
-	font-size: 50px;
-	border: 1px solid black;
-	border-radius: 5px;
-	color: black;
-	padding: 5px;
-	background-color: #b5b6b9;
-	text-align: center;
-	margin: 20px 40%;
-	display: block;
-	min-width: 100px;
-	transition: background 0.1s;
-}
-
-#newJob:hover {
-	cursor: pointer;
-	color: #902428;
-}
-
 .job {
 	border: 1px solid black;
 	border-radius: 10px;

@@ -28,7 +28,6 @@ module.exports.registerForm = (req, res) => {
 };
 
 module.exports.register = catchAsync(async (req, res) => {
-	console.log(req.body);
 	try {
 		if (
 			!req.body.cpClass.year ||
