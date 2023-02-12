@@ -10,6 +10,10 @@ button {
 	font-size: 25px;
 }
 
+.border-bottom {
+	border-bottom: 1px solid #B4B4B4;
+}
+
 .leader-list {
 	font-size: 30px;
 	font-weight: bold;
@@ -48,6 +52,10 @@ span {
 .multi-if-small.class-input {
 	display: flex;
 	flex-direction: row;
+}
+
+.list-button {
+	margin: 2px;
 }
 
 @media (max-width: 600px) {

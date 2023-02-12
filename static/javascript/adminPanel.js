@@ -10,7 +10,7 @@ const addMultiSelect = function () {
 					<input type="text" class="multi-if-small" id="usernames" name="usernames" minlength="2" required/></span>
                     <span><label for="emails">Email</label>
 					<input type="emails" class="multi-if-small" id="emails" name="emails" required/></span>`;
-	template.innerHTML = `<div class="username">${inside}</div>`;
+	template.innerHTML = `<div class="username border-bottom">${inside}</div>`;
 	multiTextInputs.appendChild(template.content.firstElementChild);
 };
 
