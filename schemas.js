@@ -65,6 +65,7 @@ const jobListingSchema = new Schema({
 const JobListing = mongoose.model('job_Listing', jobListingSchema);
 
 const userScema = new Schema({
+	username: {type: String, required: true, unique: true},
 	email: { type: String, required: true, unique: true },
 	classes: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	status: { type: String, required: true, enum: ['Leader', 'Alumni', 'Coach'] },
@@ -76,7 +77,7 @@ const userScema = new Schema({
 	adminReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	resetCode: new Schema({ code: String, created: Date }),
 });
-userScema.plugin(passportLocalMongoose);
+userScema.plugin(passportLocalMongoose, {usernameField: 'email'});
 
 const User = mongoose.model('user', userScema);
 
