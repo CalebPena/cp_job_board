@@ -112,9 +112,10 @@
 			<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
 				<select class="interested-status" id="<%= String(inter._id) %>">
 					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
-					<option value="followUp"<%=inter.status==='followUp'?'selected':''%>>Followed Up</option>
-					<option value="nextSteps"<%=inter.status==='nextSteps'?'selected':''%>>Next Steps</option>
+					<option value="reviewed"<%=inter.status==='reviewed'?'selected':''%>>Reviewed</option>
+					<option value="withEmployer"<%=inter.status==='withEmployer'?'selected':''%>>With Employer</option>
 					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
+					<option value="employed"<%=inter.status==='employed'?'selected':''%>>Employed</option>
 				</select></div>
 		<% } %> 
 	</div>

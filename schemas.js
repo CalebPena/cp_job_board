@@ -36,8 +36,9 @@ const interestedScema = new Schema({
 	status: {
 		type: String,
 		default: 'new',
-		enum: ['new', 'followUp', 'nextSteps', 'badFit'],
+		enum: ['new', 'reviewed', 'withEmployer', 'badFit', 'employed'],
 	},
+	dreamJob: {type: Boolean, default: false}
 });
 
 const jobListingSchema = new Schema({
