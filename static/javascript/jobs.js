@@ -273,3 +273,16 @@ document.querySelectorAll('.interested-box').forEach((inter) => {
 		);
 	});
 });
+
+const descriptions = document.querySelectorAll('.description');
+for (let i = 0; i < descriptions.length; i++) {
+	const description = new Quill(`#description-${i}`, {
+		theme: 'bubble',
+		readOnly: true,
+	});
+	try {
+		description.setContents(JSON.parse(description.getText()));
+	} catch (error) {
+		continue
+	}
+}

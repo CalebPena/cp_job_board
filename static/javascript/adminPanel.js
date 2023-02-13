@@ -53,6 +53,14 @@ document
 	.querySelectorAll('.confirm-leader-join')
 	.forEach(confirmMsg('Are you sure that you want to accept/deny this leader'));
 
+document
+	.querySelectorAll('.delete-classroom')
+	.forEach(
+		confirmMsg(
+			'Are you sure that you want to delete this class. This change will be permanent.'
+		)
+	);
+
 const interestedStatus = document
 	.querySelectorAll('.interested-status')
 	.forEach((select) => {

@@ -37,7 +37,7 @@ const job = Joi.object({
 		max: Joi.number().min(0),
 	}),
 	salaryType: Joi.string().required().valid('Hourly', 'Yearly').escapeHTML(),
-	description: Joi.string().required().trim().escapeHTML(),
+	description: Joi.string().required(),
 	tags: Joi.array().items(Joi.string().valid().escapeHTML()).single(),
 });
 

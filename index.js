@@ -71,14 +71,21 @@ app.use(express.static('public'));
 app.use(mongoSanitize());
 app.use(helmet());
 
-const scriptSrcUrls = ['https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js'];
+const scriptSrcUrls = [
+	'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
+	'https://cdn.quilljs.com/1.0.0/quill.js',
+];
+const styleSrcUrls = [
+	'https://cdn.quilljs.com/1.0.0/quill.snow.css',
+	'https://cdn.quilljs.com/1.3.6/quill.bubble.css',
+];
 app.use(
 	helmet.contentSecurityPolicy({
 		directives: {
 			defaultSrc: [],
 			connectSrc: ["'self'"],
 			scriptSrc: ["'unsafe-inline'", "'self'", ...scriptSrcUrls],
-			styleSrc: ["'self'", "'unsafe-inline'"],
+			styleSrc: ["'self'", "'unsafe-inline'", ...styleSrcUrls],
 			workerSrc: ["'self'", 'blob:'],
 			childSrc: ['blob:'],
 			objectSrc: [],
@@ -87,6 +94,7 @@ app.use(
 		},
 	})
 );
+app.use(helmet.crossOriginEmbedderPolicy({ policy: 'credentialless' }));
 
 app.use(methodOverride('_method'));
 

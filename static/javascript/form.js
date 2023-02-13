@@ -55,3 +55,35 @@ class CustomSelect {
 document.querySelectorAll('.custom-select').forEach((selectElement) => {
 	new CustomSelect(selectElement);
 });
+
+const options = [
+	['bold', 'italic', 'underline', 'strike'],
+	[{ list: 'ordered' }, { list: 'bullet' }],
+	['link'],
+	['clean'],
+];
+
+const description = new Quill('#description', {
+	modules: { toolbar: options },
+	theme: 'snow',
+});
+
+const toolbar = description.getModule('toolbar');
+
+toolbar.addHandler('link', function (value) {
+	if (value) {
+		const href = prompt('Enter the URL');
+		this.quill.format('link', href);
+	} else {
+		this.quill.format('link', false);
+	}
+});
+
+description.on('editor-change', function (eventName, ...args) {
+	console.log(JSON.stringify(description.getContents()));
+});
+
+const jobForm = document.querySelector('#job-form')
+jobForm.addEventListener('submit', (e) => {
+	jobForm.description.value = JSON.stringify(description.getContents());
+})

@@ -248,3 +248,7 @@ input {
 		flex-direction: column;
 	}
 }
+
+.ql-editor {
+	font-size: 15px;
+}

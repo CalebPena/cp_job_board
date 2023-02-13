@@ -1,8 +1,9 @@
 <% layout('layouts/boilerplate') %>
+<link href="https://cdn.quilljs.com/1.0.0/quill.snow.css" rel="stylesheet" />
 <link rel="stylesheet" href="/css/jobs.css" />
 <h1>New Job Listing</h1>
 <div class="border-box">
-	<form action="/class/<%= id %>/create" method="post">
+	<form action="/class/<%= id %>/create" method="post" id="job-form">
 		<div>
 			<span>
 				<label for="title">Job Title</label>
@@ -63,16 +64,15 @@
 				<option value="Yearly">Yearly</option>
 			</select>
 		</div>
-		<label for="description">Description:</label>
-		<div>
-			<textarea
-				name="description"
-				id="description"
-				cols="30"
-				rows="10"
-				required
-			></textarea>
-		</div>
+		<label>Description:</label>
+		<div id="description"></div>
+		<input
+			type="text"
+			name="description"
+			class="hide"
+			id="hiddenArea"
+			aria-hidden="true"
+		/>
 		<div>
 			<label for="career">Career Tracks:</label>
 			<select multiple name="careerTracks" id="career" class="custom-select">
@@ -92,4 +92,5 @@
 		<div><button type="submit">Submit</button></div>
 	</form>
 </div>
+<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
 <script src="/javascript/form.js"></script>

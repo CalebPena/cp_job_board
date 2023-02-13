@@ -33,4 +33,6 @@ router.post('/career-track', validateCareerDropdown, admin.addCareer);
 
 router.delete('/career-track/:careerTrack', admin.removeCareer);
 
+router.delete('/', isOwner, admin.deleteClassroom)
+
 module.exports = router;

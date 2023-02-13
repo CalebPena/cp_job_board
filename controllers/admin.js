@@ -1,5 +1,5 @@
 const catchAsync = require('../utiles/catchAsync');
-const { User } = require('../schemas');
+const { User, Classroom, JobListing } = require('../schemas');
 const { validateUser } = require('../utiles/joiValidation');
 const moment = require('moment');
 const ExpressError = require('../utiles/expressError');
@@ -213,4 +213,11 @@ module.exports.removeCareer = catchAsync(async (req, res) => {
 	req.classroom.save();
 	req.flash('success', 'Removed career track');
 	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.deleteClassroom = catchAsync(async (req, res) => {
+	const classroom = await Classroom.findById(req.params.id);
+	await JobListing.deleteMany({ _id: { $in: classroom.jobListings } });
+	await Classroom.deleteOne({ _id: req.params.id });;
+	res.redirect('/');
 });

@@ -254,6 +254,10 @@ body {
 	color: #FFF;
 }
 
+.hide {
+	display: none;
+}
+
 main {
 	position: relative;
 	margin: 24px auto;
