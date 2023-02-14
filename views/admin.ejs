@@ -20,7 +20,10 @@
 				<% for (job in interested[leaders[i].id]) { let inter =
 				interested[leaders[i].id][job];%>
 				<li class="leader-list">
-					<%= inter.title %>
+					<div class="job-title">
+						<span><%= inter.title %></span>
+						<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
+					</div>
 					<select class="interested-status" id="<%= inter.interestedId %>">
 						<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
 						<option value="reviewed"<%=inter.status==='reviewed'?'selected':''%>>Reviewed</option>

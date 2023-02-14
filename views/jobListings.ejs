@@ -85,8 +85,8 @@
 	<div class="buttons">
 		<% if (user.permissions === 'leader') {%>
 			<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
-			<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
-		</button>
+				<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
+			</button>
 		<% } %> <% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
 		<% if (job.archive !== true) {%> 
@@ -99,7 +99,17 @@
 		</form>
 		<% } %>  
 		<% } %> 
-	</div>	
+	</div>
+	<div class="<%= job.userIsInterested ? '' : 'hide' %>">
+		<span class="dream-job">
+			<label for="dream-job-<%=job.id%>" class="dream-job-label">This is my dream job</label>
+			<input 
+				type="checkbox"
+				id="dream-job-<%=job.id%>"
+				class="check dream-job-checkbox"
+				jobId="<%=job.id%>" <%=job.dreamJob? 'checked' : '' %>>
+			</span>
+	</div>
 	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
 		<div class="interested-box">
 			<span class="interested-toggle">
@@ -109,14 +119,17 @@
 		</span>
 		<div class="all-interested">
 		<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
-			<div class="interested"><span class="interested-field">Username: <%=inter.user.username%> <%=inter.cpClass?inter.cpClass:''%></span><span class="interested-field">Email: <%=inter.user.email%></span>
+			<div class="interested">
+				<span class="interested-field">Email: <%=inter.user.email%></span>
+				<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
 				<select class="interested-status" id="<%= String(inter._id) %>">
 					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
 					<option value="reviewed"<%=inter.status==='reviewed'?'selected':''%>>Reviewed</option>
 					<option value="withEmployer"<%=inter.status==='withEmployer'?'selected':''%>>With Employer</option>
 					<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
 					<option value="employed"<%=inter.status==='employed'?'selected':''%>>Employed</option>
-				</select></div>
+				</select>
+			</div>
 		<% } %> 
 	</div>
 	<% } %> 

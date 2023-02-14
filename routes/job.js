@@ -13,6 +13,8 @@ router.post('/interested', isInClass, job.interested);
 
 router.post('/not-interested', isInClass, job.notInterested);
 
+router.post('/dream-job', isInClass, job.toggleDreamJob);
+
 router.get('/', isAdmin, job.editForm);
 
 router.patch('/', isAdmin, validateJob, job.edit);

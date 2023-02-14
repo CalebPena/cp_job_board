@@ -30,10 +30,22 @@ for (i = 0; i < interestedBtns.length; i++) {
 	let btn = interestedBtns[i];
 	let jobId = btn.getAttribute('jobId');
 	btn.addEventListener('click', (e) => {
-		e.preventDefault;
+		e.preventDefault();
 		changeBtn(btn, classId, jobId);
 	});
 }
+
+const dreamJobs = document.querySelectorAll('.dream-job-checkbox');
+dreamJobs.forEach((checkbox) => {
+	let jobId = checkbox.getAttribute('jobId')
+	checkbox.addEventListener('change', (e) => {
+		axios
+			.post(`/class/${classId}/${jobId}/dream-job`, { dreamJob: checkbox.checked })
+			.catch(function (error) {
+				console.error(error);
+			});
+	})
+})
 
 class Filter {
 	constructor(jobs) {

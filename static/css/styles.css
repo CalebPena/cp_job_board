@@ -575,6 +575,23 @@ form.update-profile #status {
 	margin-top: 8px;
 }
 
+.pill {
+	border: 1px solid black;
+	border-radius: 13px;
+	text-align: center;
+	padding: 3px;
+	margin: 4px 2px;
+	color: white;
+	background-color: #902428;
+}
+
+.new {
+	background-color: #d42428;
+	font-size: medium;
+	color: white;
+	font-weight: normal;
+}
+
 @media (max-width: 700px) {
 	main {
 		max-width: 90%;

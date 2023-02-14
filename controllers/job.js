@@ -25,6 +25,18 @@ module.exports.notInterested = catchAsync(async (req, res) => {
 	}
 });
 
+module.exports.toggleDreamJob = catchAsync(async (req, res) => {
+	const job = await JobListing.findById(req.params.jobId);
+	job.interested = job.interested.map((inter) => {
+		if (inter.user == req.user.id) {
+			inter.dreamJob = req.body.dreamJob;
+		}
+		return inter;
+	});
+	await job.save()
+	res.json({ result: 'changed dream job status' });
+})
+
 module.exports.editForm = catchAsync(async (req, res) => {
 	const job = await JobListing.findById(req.params.jobId);
 	job.classId = req.classroom.id;

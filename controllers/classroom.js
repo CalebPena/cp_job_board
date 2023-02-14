@@ -22,10 +22,14 @@ module.exports.jobListings = catchAsync(async (req, res) => {
 	for (i = 0; i < jobs.length; i++) {
 		let job = jobs[i];
 		job.id = String(job._id);
-		if (job.interested.some((u) => u.user._id == req.user.id)) {
-			job.userIsInterested = true;
-		} else {
-			job.userIsInterested = false;
+
+		job.userIsInterested = false;
+		for (let inter of job.interested) {
+			if (inter.user._id == req.user.id) {
+				job.userIsInterested = true;
+				job.dreamJob = inter.dreamJob
+				break
+			}
 		}
 		job.createdDaysAgo = parseInt(
 			moment.duration(moment() - job.dateAdded).asDays()

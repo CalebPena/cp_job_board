@@ -48,16 +48,6 @@ input {
 	margin: 10px;
 }
 
-.pill {
-	border: 1px solid black;
-	border-radius: 13px;
-	text-align: center;
-	padding: 3px;
-	margin: 4px 2px;
-	color: white;
-	background-color: #902428;
-}
-
 .select {
 	border: black;
 	display: flex;
@@ -101,13 +91,6 @@ input {
 	margin: 0px;
 	padding: 3px;
 	overflow-wrap: break-word;
-}
-
-.new {
-	background-color: #d42428;
-	font-size: medium;
-	color: white;
-	font-weight: normal;
 }
 
 .sub-header {
@@ -184,6 +167,11 @@ input {
 	overflow: hidden;
 }
 
+.interested-status {
+	background-color: #b5b6b9;
+	height: 20px;
+}
+
 .interested-box {
 	border-top: 1px solid black;
 	padding: 3px;
@@ -195,7 +183,7 @@ input {
 }
 
 .interested.active {
-	height: 30px;
+	height: 50px;
 }
 
 .interested-arrow {
@@ -251,4 +239,16 @@ input {
 
 .ql-editor {
 	font-size: 15px;
+}
+
+.dream-job {
+	margin-left: auto;
+	display: inline;
+	position: relative;
+	float: right;
+	right: 10px;
+	margin-top: 5px;
+}
+.dream-job-label {
+	display: inline-block;
 }
