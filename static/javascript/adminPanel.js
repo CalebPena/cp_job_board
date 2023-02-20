@@ -6,7 +6,7 @@ const removeMultiSelect = function () {
 const addMultiSelect = function () {
 	const multiTextInputs = document.querySelector('#leaders');
 	const template = document.createElement('template');
-	const inside = `<span><label for="usernames">Username</label>
+	const inside = `<span><label for="usernames">Full Name</label>
 					<input type="text" class="multi-if-small" id="usernames" name="usernames" minlength="2" required/></span>
                     <span><label for="emails">Email</label>
 					<input type="emails" class="multi-if-small" id="emails" name="emails" required/></span>`;
