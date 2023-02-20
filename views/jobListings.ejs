@@ -100,7 +100,7 @@
 		<% } %>  
 		<% } %> 
 	</div>
-	<div class="<%= job.userIsInterested ? '' : 'hide' %>">
+	<div class="<%= job.userIsInterested ? '' : 'hide' %>" id="dream-job-form-<%=job.id%>">
 		<span class="dream-job">
 			<label for="dream-job-<%=job.id%>" class="dream-job-label">This is my dream job</label>
 			<input 

@@ -79,11 +79,11 @@ toolbar.addHandler('link', function (value) {
 	}
 });
 
-description.on('editor-change', function (eventName, ...args) {
-	console.log(JSON.stringify(description.getContents()));
-});
-
 const jobForm = document.querySelector('#job-form')
 jobForm.addEventListener('submit', (e) => {
 	jobForm.description.value = JSON.stringify(description.getContents());
 })
+
+try {
+	description.setContents(JSON.parse(description.getText()));
+} catch (error) {}

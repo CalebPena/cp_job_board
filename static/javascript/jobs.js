@@ -1,6 +1,7 @@
 const interestedBtns = document.querySelectorAll('.interestedBtn');
 
 const changeBtn = function (element, classId, jobId) {
+	const dreamJob = document.querySelector(`#dream-job-form-${jobId}`);
 	if (element.classList.contains('not-inter')) {
 		axios
 			.post(`/class/${classId}/${jobId}/interested`, {})
@@ -8,6 +9,7 @@ const changeBtn = function (element, classId, jobId) {
 				element.classList.remove('not-inter');
 				element.classList.add('inter');
 				element.innerHTML = 'Remove from Interested';
+				dreamJob.classList.remove('hide');
 			})
 			.catch(function (error) {
 				console.error(error);
@@ -19,6 +21,7 @@ const changeBtn = function (element, classId, jobId) {
 				element.classList.remove('inter');
 				element.classList.add('not-inter');
 				element.innerHTML = 'Add to Interested';
+				dreamJob.classList.add('hide')
 			})
 			.catch(function (error) {
 				console.error(error);
