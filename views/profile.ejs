@@ -1,16 +1,18 @@
 <% layout('layouts/boilerplate') %>
 <form action="" method="post" class="confirm-update update-profile">
-<h1><%= user.username %></h1>
-<h2>Email: <%= user.email %></h2>
-<h2>
-    <label for="status">Role: </label>
-	<select name="status" id="status">
-		<option value="Leader" <%= user.status==='Leader'? 'selected':'' %>>Leader</option>
-		<option value="Alumni" <%= user.status==='Alumni'? 'selected':'' %>>Alumni</option>
-		<option value="Coach" <%= user.status==='Coach'? 'selected':'' %>>Coach</option>
-    </select>
-</h2>
-<h2><div id="cpClass-box"><span>
+	<h1><%= user.username %></h1>
+	<h2>Email: <%= user.email %></h2>
+	<h2>
+		<label for="status">Role: </label>
+		<select name="status" id="status">
+			<option value="Leader" <%= user.status==='Leader'? 'selected':'' %>>Leader</option>
+			<option value="Alumni" <%= user.status==='Alumni'? 'selected':'' %>>Alumni</option>
+			<option value="Coach" <%= user.status==='Coach'? 'selected':'' %>>Coach</option>
+		</select>
+	</h2>
+	<h2>
+		<div id="cpClass-box">
+			<span>
 				<label for="cpClass-year">Class</label>
 				<input
 					type="number"
@@ -18,7 +20,7 @@
 					name="cpClass[year]"
 					min="2010"
 					placeholder="Year"
-                    value="<%= user.cpClass?user.cpClass.year:2010 %>"
+					value="<%= user.cpClass?user.cpClass.year:2010 %>"
 				/>
 				<select type="text" id="cpClass-class" name="cpClass[class]">
 					<option value="C1"<%= user.cpClass?(user.cpClass.class==='C1'? 'selected':''):'' %>>C1</option>
@@ -32,14 +34,20 @@
 					name="cpClass[location]"
 					maxlength="3"
 					placeholder="DEN"
-                    value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
+					value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
 				/>
-			</span></div></h2>    
-<a href="/change-password">Change Password</a>
-<div class="save-or-reset">
-<button type="submit">Save</button><button type="reset" id="reset" class="btn">Reset</button>
-</div>
-<div class="borderBottom"></div>
+			</span>
+		</div>
+	</h2>
+	<h2>
+		<label for="career-track">Career Track: </label>
+		<input type="text" id="career-track" name="careerTrack" value="<%= user.careerTrack %>">
+	</h2>    
+	<a href="/change-password">Change Password</a>
+	<div class="save-or-reset">
+	<button type="submit">Save</button><button type="reset" id="reset" class="btn">Reset</button>
+	</div>
+	<div class="borderBottom"></div>
 </form>
 <div class="classrooms">
 <h3>Classrooms:</h3>

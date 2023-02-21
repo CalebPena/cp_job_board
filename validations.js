@@ -66,6 +66,7 @@ const user = Joi.object({
 		.valid('Leader', 'Alumni', 'Coach')
 		.escapeHTML(),
 	cpClass: cpClass,
+	careerTrack: Joi.string().trim().escapeHTML(),
 	password: Joi.string().trim().min(8).required().escapeHTML(),
 	classes: Joi.array(),
 });

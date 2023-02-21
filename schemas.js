@@ -75,6 +75,7 @@ const userScema = new Schema({
 		class: { type: String, enum: ['C1', 'C2', 'C3', 'C4'], default: 'C1' },
 		location: { type: String, default: 'DEN' },
 	}),
+	careerTrack: {type: String},
 	adminReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	resetCode: new Schema({ code: String, created: Date }),
 });

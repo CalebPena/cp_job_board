@@ -120,7 +120,7 @@
 		<div class="all-interested">
 		<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
 			<div class="interested">
-				<span class="interested-field">Email: <%=inter.user.email%></span>
+				<span class="interested-field">Name: <%=inter.user.username%></span>
 				<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
 				<select class="interested-status" id="<%= String(inter._id) %>">
 					<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>

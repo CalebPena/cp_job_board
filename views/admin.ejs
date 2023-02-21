@@ -8,7 +8,8 @@
 	<% for (i=0;i < leaders.length; i++) { let cpClass=leaders[i].cpClass%>
 		<li class="leader-list">
 			<span><%= leaders[i].username %></span>
-			<span><%=cpClass !=undefined?cpClass.year+' '+cpClass.class+' '+cpClass.location:'' %></span>
+			<span><%=cpClass != undefined?cpClass.year+' '+cpClass.class+' '+cpClass.location:'' %></span>
+			<div><%= leaders[i].careerTrack ?? '' %></div>
 			<form
 				class="delete confirm-remove-user"
 				action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
