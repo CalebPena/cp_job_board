@@ -4,7 +4,7 @@ const cpCLass = document.querySelector('#cpClass-box');
 const careerTrack = document.querySelector('#career-track')
 
 const showIfLeader = function () {
-	if (s.value === 'Leader') {
+	if (['Leader', 'Alumni'].includes(s.value)) {
 		cpCLass.style.display = 'block';
 		careerTrack.style.display = 'block';
 	} else {

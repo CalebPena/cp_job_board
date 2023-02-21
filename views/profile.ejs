@@ -50,28 +50,45 @@
 	<div class="borderBottom"></div>
 </form>
 <div class="classrooms">
-<h3>Classrooms:</h3>
-<ul>
-<% for (i=0; i<user.classes.length; i++) {let classroom = user.classes[i]%>
-    <li class="list-classes">
-        <%= classroom.className %> 
-        <form class="confirm-leave leave" action="/class/<%= classroom.id %>?_method=delete" method="post">
-			<button type="submit">Leave</button>
-		</form>
-    </li>
-<% } %> 
-</ul>
+	<h3>Classrooms:</h3>
+	<ul>
+	<% for (i=0; i<user.classes.length; i++) {let classroom = user.classes[i]%>
+		<li class="list-classes">
+			<%= classroom.className %> 
+			<form class="confirm-leave leave" action="/class/<%= classroom.id %>?_method=delete" method="post">
+				<button type="submit">Leave</button>
+			</form>
+		</li>
+	<% } %> 
+	</ul>
 </div>
 
 <% if (user.adminReq.length) {%> 
-<h2>Pending Admin Requests:</h2>
-<ul>
-	<% for (let classroom of user.adminReq) {%>
-		<li><%= classroom.className %>
-			<form action="/class/<%= classroom.id %>/admin-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
-			<form action="/class/<%= classroom.id %>/admin-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
-	<%}%>
-</ul>
+	<h2>Pending Admin Requests:</h2>
+	<ul>
+		<% for (let classroom of user.adminReq) {%>
+			<li><%= classroom.className %>
+				<form action="/class/<%= classroom.id %>/admin-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
+				<form action="/class/<%= classroom.id %>/admin-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
+		<%}%>
+	</ul>
 <% } %> 
+<% if (interested.length > 0) {%>
+	<div class="classrooms">
+		<% for (let i=0; i<interested.length; i++) { let inter = interested[i]; %>
+			<div>
+				<ul>
+					<li>
+						<div class="job-title">
+							<span><%= inter.jobTitle %></span>
+							<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
+							<div>Status: <%= inter.status %></div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		<% } %>
+	</divclass>
+<% } %>
 <script src="/javascript/cpClass.js"></script>
 <script src="/javascript/profile.js"></script>
