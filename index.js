@@ -74,6 +74,7 @@ app.use(helmet());
 const scriptSrcUrls = [
 	'https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js',
 	'https://cdn.quilljs.com/1.0.0/quill.js',
+	'https://unpkg.com/quill-paste-smart@latest/dist/quill-paste-smart.js',
 ];
 const styleSrcUrls = [
 	'https://cdn.quilljs.com/1.0.0/quill.snow.css',
