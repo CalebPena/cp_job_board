@@ -4,12 +4,12 @@
 <h2>Class Code: <%= classroom.classCode %>
 </h2>
 <h2>Leaders:</h2>
-<ul class="leaderList">
+<ul class="leaderList section">
 	<% for (i=0;i < leaders.length; i++) { let cpClass=leaders[i].cpClass%>
 		<li class="leader-list">
 			<span><%= leaders[i].username %></span>
 			<span><%=cpClass != undefined?cpClass.year+' '+cpClass.class+' '+cpClass.location:'' %></span>
-			<div><%= leaders[i].careerTrack ?? '' %></div>
+			<h2><%= leaders[i].careerTrack ?? '' %></h2>
 			<form
 				class="delete confirm-remove-user"
 				action="/class/<%= id %>/admin/leader/<%= leaders[i].id %>?_method=delete"
@@ -26,11 +26,11 @@
 						<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
 					</div>
 					<select class="interested-status" id="<%= inter.interestedId %>">
-						<option value="new" <%=inter.status==='new'?'selected':''%>>New</option>
-						<option value="reviewed"<%=inter.status==='reviewed'?'selected':''%>>Reviewed</option>
-						<option value="withEmployer"<%=inter.status==='withEmployer'?'selected':''%>>With Employer</option>
-						<option value="badFit"<%=inter.status==='badFit'?'selected':''%>>Bad Fit</option>
-						<option value="employed"<%=inter.status==='employed'?'selected':''%>>Employed</option>
+						<option value="New" <%=inter.status==='New'?'selected':''%>>New</option>
+						<option value="Reviewed"<%=inter.status==='Reviewed'?'selected':''%>>Reviewed</option>
+						<option value="With Employer"<%=inter.status==='With Employer'?'selected':''%>>With Employer</option>
+						<option value="Screened"<%=inter.status==='Screened'?'selected':''%>>Screened</option>
+						<option value="Employed"<%=inter.status==='Employed'?'selected':''%>>Employed</option>
 					</select>
 				</li>
 				<% } %>
@@ -39,20 +39,20 @@
 	<% } %>
 </ul>
 <h2>Pending Join Requests:</h2>
-<ul>
+<ul class="section">
 	<% for (const leader of classroom.pendingLeaders) {%>
 		<li class="leader-list">
 			<%= leader.username %>
 				<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/accept" method="post"
-					class="inline-form confirm-leader-join border-box"><button type="submit"
+					class="inline-form confirm-leader-join"><button type="submit"
 						class="accept accept-deny">Accept</button></form>
 				<form action="/class/<%= id %>/admin/leader/<%= leader.id %>/deny" method="post"
-					class="inline-form confirm-leader-join border-box"><button type="submit"
+					class="inline-form confirm-leader-join"><button type="submit"
 						class="deny accept-deny">Deny</button></form>
 		</li>
 	<%}%>
 </ul>
-<form action="/class/<%= id %>/admin/add-leader" method="post" class="add border-box">
+<form action="/class/<%= id %>/admin/add-leader" method="post" class="add border-box section">
 	<h3>Add Leader</h3>
 	<div class="border-bottom">
 		<span><label for="password">Password</label><input type="text" id="password" name="password"
@@ -80,7 +80,7 @@
 	<button type="submit">Submit</button>
 </form>
 <h2>Admin:</h2>
-<ul class="adminList">
+<ul class="adminList section">
 	<% for (i=0;i < admin.length; i++) {%>
 		<li class="leader-list">
 			<%= admin[i].username %>
@@ -94,7 +94,7 @@
 	<% } %>
 </ul>
 <% if (user.permissions==='owner' ) {%>
-	<form action="/class/<%= id %>/admin/add-admin" method="post" class="add border-box">
+	<form action="/class/<%= id %>/admin/add-admin" method="post" class="add border-box section">
 		<h3>Add Admin</h3>
 		<div>
 			<label for="username">Full Name</label>
@@ -104,7 +104,7 @@
 	</form>
 <% } %>
 <h2>Tags:</h2>
-<ul>
+<ul class="section">
 	<% for (let tag of classroom.validTags){%>
 		<li class="leader-list">
 			<%= tag %>
@@ -115,7 +115,7 @@
 		</li>
 		<% } %>
 </ul>
-<form action="/class/<%= id %>/admin/tag" method="post" class="add border-box">
+<form action="/class/<%= id %>/admin/tag" method="post" class="add border-box section">
 	<h3>Add Tag</h3>
 	<label for="tag">Tag</label>
 	<input type="text" id="tag" name="tag" required>
@@ -123,7 +123,7 @@
 </form>
 
 <h2>Career Tracks:</h2>
-<ul>
+<ul class="section">
 	<% for (let ct of classroom.validCareerTracks){%>
 		<li class="leader-list">
 			<%= ct %>
@@ -134,7 +134,7 @@
 		</li>
 		<% } %>
 </ul>
-<form action="/class/<%= id %>/admin/career-track" method="post" class="add border-box">
+<form action="/class/<%= id %>/admin/career-track" method="post" class="add border-box section">
 	<h3>Add Career Track</h3>
 	<label for="career">Career Track</label>
 	<input type="text" id="career" name="career" required>

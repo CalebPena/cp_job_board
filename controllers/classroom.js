@@ -1,5 +1,5 @@
 const catchAsync = require('../utiles/catchAsync');
-const { Classroom, JobListing, User } = require('../schemas');
+const { Classroom, JobListing } = require('../schemas');
 const moment = require('moment');
 const ObjectId = require('mongoose').Types.ObjectId;
 
@@ -170,14 +170,18 @@ module.exports.changeStatus = catchAsync(async (req, res) => {
 		const job = await JobListing.findOne({
 			'interested._id': ObjectId(req.params.selectId),
 		});
+		console.log(0);
 		job.interested.forEach((inter) => {
 			if (inter.id === req.params.selectId) {
 				inter.status = req.body.status;
 			}
 		});
+		console.log(1);
 		await job.save();
+		console.log(2);
 		res.status(200).json(job);
 	} catch (err) {
-		res.status(400);
+		console.error(err);
+		res.status(400).json({});
 	}
 });

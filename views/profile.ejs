@@ -3,50 +3,57 @@
 	<h1><%= user.username %></h1>
 	<h2>Email: <%= user.email %></h2>
 	<h2>
-		<label for="status">Role: </label>
+		Role: <%= user.status %>
+		<!-- <label for="status">Role: </span></label>
 		<select name="status" id="status">
 			<option value="Leader" <%= user.status==='Leader'? 'selected':'' %>>Leader</option>
 			<option value="Alumni" <%= user.status==='Alumni'? 'selected':'' %>>Alumni</option>
 			<option value="Coach" <%= user.status==='Coach'? 'selected':'' %>>Coach</option>
-		</select>
+		</select> -->
 	</h2>
-	<h2>
-		<div id="cpClass-box">
-			<span>
-				<label for="cpClass-year">Class</label>
-				<input
-					type="number"
-					id="cpClass-year"
-					name="cpClass[year]"
-					min="2010"
-					placeholder="Year"
-					value="<%= user.cpClass?user.cpClass.year:2010 %>"
-				/>
-				<select type="text" id="cpClass-class" name="cpClass[class]">
-					<option value="C1"<%= user.cpClass?(user.cpClass.class==='C1'? 'selected':''):'' %>>C1</option>
-					<option value="C2"<%= user.cpClass?(user.cpClass.class==='C2'? 'selected':''):'' %>>C2</option>
-					<option value="C3"<%= user.cpClass?(user.cpClass.class==='C3'? 'selected':''):'' %>>C3</option>
-					<option value="C4"<%= user.cpClass?(user.cpClass.class==='C4'? 'selected':''):'' %>>C4</option>
-				</select>
-				<input
-					type="text"
-					id="cpClass-location"
-					name="cpClass[location]"
-					maxlength="3"
-					placeholder="DEN"
-					value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
-				/>
-			</span>
-		</div>
-	</h2>
-	<h2>
-		<label for="career-track">Career Track: </label>
-		<input type="text" id="career-track" name="careerTrack" value="<%= user.careerTrack %>">
-	</h2>    
+	<% if (user.cpClass) {%>
+		<h2>
+			Class: <%= user.cpClass.year+' '+user.cpClass.class+' '+user.cpClass.location%>
+			<!-- <div id="cpClass-box">
+				<span>
+					<label for="cpClass-year">Class</label>
+					<input
+						type="number"
+						id="cpClass-year"
+						name="cpClass[year]"
+						min="2010"
+						placeholder="Year"
+						value="<%= user.cpClass?user.cpClass.year:2010 %>"
+					/>
+					<select type="text" id="cpClass-class" name="cpClass[class]">
+						<option value="C1"<%= user.cpClass?(user.cpClass.class==='C1'? 'selected':''):'' %>>C1</option>
+						<option value="C2"<%= user.cpClass?(user.cpClass.class==='C2'? 'selected':''):'' %>>C2</option>
+						<option value="C3"<%= user.cpClass?(user.cpClass.class==='C3'? 'selected':''):'' %>>C3</option>
+						<option value="C4"<%= user.cpClass?(user.cpClass.class==='C4'? 'selected':''):'' %>>C4</option>
+					</select>
+					<input
+						type="text"
+						id="cpClass-location"
+						name="cpClass[location]"
+						maxlength="3"
+						placeholder="DEN"
+						value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
+					/>
+				</span> -->
+			</div>
+		</h2>
+	<% } %>
+	<% if (user.careerTrack) {%>
+		<h2>
+			Career Track: <%= user.careerTrack %>
+			<!-- <label for="career-track">Career Track: </label>
+			<input type="text" id="career-track" name="careerTrack" value="<%= user.careerTrack %>"> -->
+		</h2>
+	<% } %>
 	<a href="/change-password">Change Password</a>
-	<div class="save-or-reset">
+	<!-- <div class="save-or-reset">
 	<button type="submit">Save</button><button type="reset" id="reset" class="btn">Reset</button>
-	</div>
+	</div> -->
 	<div class="borderBottom"></div>
 </form>
 <div class="classrooms">
@@ -80,8 +87,10 @@
 				<ul>
 					<li>
 						<div class="job-title">
-							<span><%= inter.jobTitle %></span>
-							<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
+							<div><span class="job-title-interested"><%= inter.jobTitle %></span>
+								<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
+							</div>
+							<div>Company: <%= inter.company %></div>
 							<div>Status: <%= inter.status %></div>
 						</div>
 					</li>
@@ -90,5 +99,5 @@
 		<% } %>
 	</divclass>
 <% } %>
-<script src="/javascript/cpClass.js"></script>
+<!-- <script src="/javascript/cpClass.js"></script> -->
 <script src="/javascript/profile.js"></script>

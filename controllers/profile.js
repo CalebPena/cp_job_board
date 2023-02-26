@@ -15,7 +15,8 @@ module.exports.renderProfile = async (req, res) => {
 					interested.push({
 						status: inter.status,
 						dreamJob: inter.dreamJob,
-						jobTitle: job.jobTitle
+						jobTitle: job.jobTitle,
+						company: job.company
 					})
 				}
 			}

@@ -9,9 +9,9 @@ const confirmMsg = function (msg, e) {
 	};
 };
 
-document
-	.querySelectorAll('.confirm-update')
-	.forEach(confirmMsg('Are you sure that you want to update your profile.'));
+// document
+// 	.querySelectorAll('.confirm-update')
+// 	.forEach(confirmMsg('Are you sure that you want to update your profile.'));
 
 document
 	.querySelectorAll('.confirm-leave')

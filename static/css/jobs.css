@@ -127,6 +127,8 @@ input {
 	margin: 0px 10%;
 	margin-bottom: 10px;
 	overflow-wrap: break-word;
+	max-height: 20rem;
+	overflow-y: auto;
 }
 
 .tags {

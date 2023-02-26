@@ -36,6 +36,7 @@ module.exports.register = catchAsync(async (req, res) => {
 		) {
 			delete req.body.cpClass;
 		}
+		if (!req.body.careerTrack) delete req.body.careerTrack
 		validateUser(req.body);
 		const user = new User(req.body);
 		user.classes = [];

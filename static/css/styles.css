@@ -218,6 +218,10 @@ nav {
 	}
 }
 
+.job-title-interested {
+	font-size: 20px;
+}
+
 * {
 	box-sizing: border-box;
 }

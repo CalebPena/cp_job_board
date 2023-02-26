@@ -6,6 +6,6 @@ const isLoggedIn = require('../utiles/loggedIn');
 
 router.get('/', isLoggedIn, profile.renderProfile);
 
-router.post('/', isLoggedIn, profile.updateProfile);
+// router.post('/', isLoggedIn, profile.updateProfile);
 
 module.exports = router;

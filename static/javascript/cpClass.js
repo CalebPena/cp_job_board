@@ -1,7 +1,7 @@
 const s = document.querySelector('#status');
 const reset = document.querySelector('#reset');
 const cpCLass = document.querySelector('#cpClass-box');
-const careerTrack = document.querySelector('#career-track')
+const careerTrack = document.querySelector('#career-track-box')
 
 const showIfLeader = function () {
 	if (['Leader', 'Alumni'].includes(s.value)) {
