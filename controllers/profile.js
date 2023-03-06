@@ -16,8 +16,9 @@ module.exports.renderProfile = async (req, res) => {
 						status: inter.status,
 						dreamJob: inter.dreamJob,
 						jobTitle: job.jobTitle,
-						company: job.company
-					})
+						company: job.company,
+						archived: job.archive,
+					});
 				}
 			}
 		}

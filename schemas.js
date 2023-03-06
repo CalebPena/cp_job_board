@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const config = require('platformsh-config').config();
 const passportLocalMongoose = require('passport-local-mongoose');
 
-main().catch((err) => console.log(err));
+main().catch((err) => console.error(err));
 
 async function main() {
 	const mongoConnection = config.isValidPlatform()

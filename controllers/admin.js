@@ -33,7 +33,8 @@ module.exports.adminPage = async (req, res) => {
 						interestedId: job.interested.filter((l) => l.user == leader.id)[0]
 							.id,
 						status: job.interested.filter((l) => l.user == leader.id)[0].status,
-						dreamJob: job.interested.filter((l) => l.user == leader.id)[0].dreamJob
+						dreamJob: job.interested.filter((l) => l.user == leader.id)[0]
+							.dreamJob,
 					};
 				}),
 		});
@@ -132,6 +133,14 @@ module.exports.deleteLeader = catchAsync(async (req, res) => {
 	req.classroom.leaders = req.classroom.leaders.filter(function (ele) {
 		return ele.id != req.params.leaderId;
 	});
+
+	for (let job of req.classroom.jobListings) {
+		job.interested = job.interested.filter(function (inter) {
+			return inter.user != req.params.leaderId;
+		});
+		await job.save();
+	}
+
 	await req.classroom.save();
 	await User.findByIdAndUpdate(
 		req.params.leaderId,
@@ -219,6 +228,6 @@ module.exports.removeCareer = catchAsync(async (req, res) => {
 module.exports.deleteClassroom = catchAsync(async (req, res) => {
 	const classroom = await Classroom.findById(req.params.id);
 	await JobListing.deleteMany({ _id: { $in: classroom.jobListings } });
-	await Classroom.deleteOne({ _id: req.params.id });;
+	await Classroom.deleteOne({ _id: req.params.id });
 	res.redirect('/');
 });

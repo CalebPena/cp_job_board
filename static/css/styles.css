@@ -159,6 +159,14 @@ nav {
 	border-radius: 10px;
 }
 
+.job-profile {
+	margin-bottom: 10px;
+}
+
+.archived {
+	font-size: small;
+}
+
 @media (max-width: 700px) {
 	main {
 		width: 100%;

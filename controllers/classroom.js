@@ -170,15 +170,12 @@ module.exports.changeStatus = catchAsync(async (req, res) => {
 		const job = await JobListing.findOne({
 			'interested._id': ObjectId(req.params.selectId),
 		});
-		console.log(0);
 		job.interested.forEach((inter) => {
 			if (inter.id === req.params.selectId) {
 				inter.status = req.body.status;
 			}
 		});
-		console.log(1);
 		await job.save();
-		console.log(2);
 		res.status(200).json(job);
 	} catch (err) {
 		console.error(err);

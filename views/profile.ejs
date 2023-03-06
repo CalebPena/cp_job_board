@@ -82,21 +82,23 @@
 <% } %> 
 <% if (interested.length > 0) {%>
 	<div class="classrooms">
-		<% for (let i=0; i<interested.length; i++) { let inter = interested[i]; %>
-			<div>
-				<ul>
+		<ul>
+			<% for (let i=0; i<interested.length; i++) { let inter = interested[i]; %>
+				<div>
 					<li>
-						<div class="job-title">
-							<div><span class="job-title-interested"><%= inter.jobTitle %></span>
+						<div class="job-profile">
+							<div>
+								<span class="job-title-interested"><%= inter.jobTitle %></span>
 								<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
 							</div>
+							<% if (inter.archived) { %><div class="archived">*This Job Has Been Archived</div><% } %>
 							<div>Company: <%= inter.company %></div>
 							<div>Status: <%= inter.status %></div>
 						</div>
 					</li>
-				</ul>
-			</div>
-		<% } %>
+				</div>
+			<% } %>
+		</ul>
 	</divclass>
 <% } %>
 <!-- <script src="/javascript/cpClass.js"></script> -->
