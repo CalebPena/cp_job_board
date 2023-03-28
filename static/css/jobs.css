@@ -183,6 +183,11 @@ input {
 	height: 60px;
 }
 
+.interested-status {
+    background-color: #b5b6b9;
+    height: 20px;
+}
+
 .interested-arrow {
 	position: absolute;
 	top: 0px;
