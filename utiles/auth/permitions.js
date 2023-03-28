@@ -9,6 +9,7 @@ module.exports = catchAsync(async function (req, res, next) {
 	};
 	req.classroom = await Classroom.findById(classId)
 		.populate('leaders')
+		.populate('coaches')
 		.populate('admin')
 		.populate('owner')
 		.populate('jobListings')
@@ -18,6 +19,8 @@ module.exports = catchAsync(async function (req, res, next) {
 		req.user.permissions = 'owner';
 	} else if (Array.from(req.classroom.admin).some(hasId)) {
 		req.user.permissions = 'admin';
+	} else if (Array.from(req.classroom.coaches).some(hasId)) {
+		req.user.permissions = 'coach';
 	} else if (Array.from(req.classroom.leaders).some(hasId)) {
 		req.user.permissions = 'leader';
 	} else {

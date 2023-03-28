@@ -80,6 +80,16 @@
 		<%}%>
 	</ul>
 <% } %> 
+<% if (user.coachReq.length) {%> 
+	<h2>Pending Coach Requests:</h2>
+	<ul>
+		<% for (let classroom of user.coachReq) {%>
+			<li><%= classroom.className %>
+				<form action="/class/<%= classroom.id %>/coach-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
+				<form action="/class/<%= classroom.id %>/coach-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
+		<%}%>
+	</ul>
+<% } %> 
 <% if (interested.length > 0) {%>
 	<div class="classrooms">
 		<ul>

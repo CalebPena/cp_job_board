@@ -169,11 +169,6 @@ input {
 	overflow: hidden;
 }
 
-.interested-status {
-	background-color: #b5b6b9;
-	height: 20px;
-}
-
 .interested-box {
 	border-top: 1px solid black;
 	padding: 3px;
@@ -185,7 +180,7 @@ input {
 }
 
 .interested.active {
-	height: 50px;
+	height: 60px;
 }
 
 .interested-arrow {
@@ -207,7 +202,7 @@ input {
 }
 
 .interested-field {
-	margin: 0px 10px;
+	margin: 20px 0px;
 }
 
 .salary-title {

@@ -230,6 +230,12 @@ nav {
 	font-size: 20px;
 }
 
+.interested-status-coach {
+	background-color: #b5b6b9;
+	font-size: medium;
+	margin-bottom: 3px;
+}
+
 * {
 	box-sizing: border-box;
 }
@@ -602,6 +608,7 @@ form.update-profile #status {
 	font-size: medium;
 	color: white;
 	font-weight: normal;
+	display: inline-block;
 }
 
 @media (max-width: 700px) {

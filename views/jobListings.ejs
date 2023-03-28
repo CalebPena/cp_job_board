@@ -110,7 +110,7 @@
 				jobId="<%=job.id%>" <%=job.dreamJob? 'checked' : '' %>>
 			</span>
 	</div>
-	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
+	<% if (['owner', 'admin', 'coach'].includes(user.permissions)) {%>
 		<div class="interested-box">
 			<span class="interested-toggle">
 			<h4 class="interestedIntro">Interested:
@@ -122,13 +122,19 @@
 			<div class="interested">
 				<span class="interested-field">Name: <%=inter.user.username%></span>
 				<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
-				<select class="interested-status" id="<%= String(inter._id) %>">
-					<option value="New" <%=inter.status==='New' ?'selected':''%>>New</option>
-					<option value="Reviewed" <%=inter.status==='Reviewed' ?'selected':''%>>Reviewed</option>
-					<option value="With Employer" <%=inter.status==='With Employer' ?'selected':''%>>With Employer</option>
-					<option value="Screened" <%=inter.status==='Screened' ?'selected':''%>>Screened</option>
-					<option value="Filled" <%=inter.status==='Filled' ?'selected':''%>>Filled</option>
-				</select>
+				<% if (['admin', 'owner' ].includes(user.permissions)) { %>
+					<select class="interested-status" id="<%= String(inter._id) %>">
+						<option value="New" <%=inter.status==='New' ?'selected':''%>>New</option>
+						<option value="Reviewed" <%=inter.status==='Reviewed' ?'selected':''%>>Reviewed</option>
+						<option value="With Employer" <%=inter.status==='With Employer' ?'selected':''%>>With Employer</option>
+						<option value="Not Selected" <%=inter.status==='Not Selected' ?'selected':''%>>Not Selected</option>
+						<option value="Filled" <%=inter.status==='Filled' ?'selected':''%>>Filled</option>
+					</select>
+				<% } else {%>
+					<div class="interested-status-coach">
+						<%= inter.status %>
+					</div>
+				<% } %>
 			</div>
 		<% } %> 
 	</div>

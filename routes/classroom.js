@@ -23,6 +23,10 @@ router.post('/admin-join', classroom.adminJoin);
 
 router.post('/admin-deny', classroom.adminDeny);
 
+router.post('/coach-join', classroom.coachJoin);
+
+router.post('/coach-deny', classroom.coachDeny);
+
 router.get('/jobs', isInClass, classroom.jobs);
 
 router.get('/create', isAdmin, classroom.createForm);

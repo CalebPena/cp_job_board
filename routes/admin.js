@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router({ mergeParams: true });
 const isOwner = require('../utiles/auth/owner');
 const isAdmin = require('../utiles/auth/admin');
+const seeLeaders = require('../utiles/auth/seeLeaders');
 const {
 	validateTagDropdown,
 	validateCareerDropdown,
@@ -9,13 +10,19 @@ const {
 
 const admin = require('../controllers/admin');
 
-router.use(isAdmin);
+router.use(seeLeaders);
 
 router.get('/', admin.adminPage);
+
+router.use(isAdmin);
 
 router.post('/add-admin', isOwner, admin.addAdmin);
 
 router.delete('/admin/:adminId', isOwner, admin.deleteAdmin);
+
+router.post('/add-coach', isOwner, admin.addCoach);
+
+router.delete('/coach/:coachId', isOwner, admin.deleteCoach);
 
 router.post('/add-leader', admin.addLeader);
 
@@ -33,6 +40,6 @@ router.post('/career-track', validateCareerDropdown, admin.addCareer);
 
 router.delete('/career-track/:careerTrack', admin.removeCareer);
 
-router.delete('/', isOwner, admin.deleteClassroom)
+router.delete('/', isOwner, admin.deleteClassroom);
 
 module.exports = router;

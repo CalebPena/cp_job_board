@@ -20,6 +20,7 @@ const classroomSchema = new Schema({
 	className: { type: String, required: true },
 	leaders: [{ type: mongoose.ObjectId, ref: 'user' }],
 	admin: [{ type: mongoose.ObjectId, ref: 'user' }],
+	coaches: [{ type: mongoose.ObjectId, ref: 'user' }],
 	owner: { type: mongoose.ObjectId, ref: 'user', required: true },
 	jobListings: [{ type: mongoose.ObjectId, ref: 'job_Listing' }],
 	classCode: { type: String, unique: true, required: true },
@@ -76,6 +77,7 @@ const userScema = new Schema({
 	}),
 	careerTrack: {type: String},
 	adminReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
+	coachReq: [{ type: mongoose.ObjectId, ref: 'classroom' }],
 	resetCode: new Schema({ code: String, created: Date }),
 });
 userScema.plugin(passportLocalMongoose, {usernameField: 'email'});

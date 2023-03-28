@@ -42,6 +42,7 @@ module.exports.adminPage = async (req, res) => {
 	res.render('admin', {
 		id: req.params.id,
 		admin: req.classroom.admin,
+		coaches: req.classroom.coaches,
 		leaders: req.classroom.leaders,
 		interested: interested,
 	});
@@ -55,6 +56,11 @@ module.exports.addAdmin = catchAsync(async (req, res) => {
 			'error',
 			'You can not add yourself as an admin, or admin does not exist'
 		);
+		res.redirect(`/class/${req.params.id}/admin`);
+		return;
+	}
+	if (newAdmin.adminReq.some((request) => request == req.params.id)) {
+		req.flash('error', 'Request already sent');
 		res.redirect(`/class/${req.params.id}/admin`);
 		return;
 	}
@@ -83,6 +89,53 @@ module.exports.deleteAdmin = catchAsync(async (req, res) => {
 		},
 	});
 	req.flash('success', 'Removed Admin');
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.addCoach = catchAsync(async (req, res) => {
+	const username = req.body.username;
+	const newCoach = await User.findOne({ username: username });
+	const adminIsCoach = req.classroom.admin.some(
+		(admin) => admin.username === username
+	);
+	if (!newCoach || newCoach.id === req.user.id || adminIsCoach) {
+		req.flash(
+			'error',
+			'You can not add an admin as a coach, or coach does not exist'
+		);
+		res.redirect(`/class/${req.params.id}/admin`);
+		return;
+	}
+	if (newCoach.coachReq.some((request) => request == req.params.id)) {
+		req.flash('error', 'Request already sent');
+		res.redirect(`/class/${req.params.id}/admin`);
+		return;
+	}
+	newCoach.coachReq.push(req.params.id);
+	await newCoach.save();
+
+	req.flash('success', `Requested ${username} to become a coach`);
+	res.redirect(`/class/${req.params.id}/admin`);
+});
+
+module.exports.deleteCoach = catchAsync(async (req, res) => {
+	const startCoachNum = req.classroom.coaches.length;
+	req.classroom.coaches = req.classroom.coaches.filter((ele) => {
+		if (req.params.coachId == req.user.id) return true;
+		return ele.id != req.params.coachId;
+	});
+	if (req.classroom.coaches.length === startCoachNum) {
+		req.flash('error', 'Coach not in class');
+		res.redirect(`/class/${req.params.id}/admin`);
+		return;
+	}
+	await req.classroom.save();
+	const answer = await User.findByIdAndUpdate(req.params.coachId, {
+		$pullAll: {
+			classes: [{ _id: req.params.id }],
+		},
+	});
+	req.flash('success', 'Removed Coach');
 	res.redirect(`/class/${req.params.id}/admin`);
 });
 

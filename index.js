@@ -111,7 +111,8 @@ app.use(
 		if (req.user) {
 			res.locals.user = await User.findById(req.user.id)
 				.populate('classes')
-				.populate('adminReq');
+				.populate('adminReq')
+				.populate('coachReq');
 			res.locals.user.permissions = false;
 		} else {
 			res.locals.user = false;

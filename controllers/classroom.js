@@ -98,6 +98,9 @@ module.exports.adminJoin = catchAsync(async (req, res) => {
 		res.locals.user.adminReq = res.locals.user.adminReq.filter(
 			(cl) => cl.id !== req.params.id
 		);
+		res.locals.user.coachReq = res.locals.user.coachReq.filter(
+			(cl) => cl.id !== req.params.id
+		);
 		await Classroom.findByIdAndUpdate(
 			req.params.id,
 			{
@@ -127,6 +130,49 @@ module.exports.adminDeny = catchAsync(async (req, res) => {
 	);
 	await res.locals.user.save();
 	req.flash('success', 'Rejected admin request');
+	res.redirect(`/profile`);
+});
+
+module.exports.coachJoin = catchAsync(async (req, res) => {
+	try {
+		if (!req.user.coachReq.includes(req.params.id)) {
+			throw 'not invited to join';
+		}
+		res.locals.user.coachReq = res.locals.user.coachReq.filter(
+			(cl) => cl.id !== req.params.id
+		);
+		res.locals.user.adminReq = res.locals.user.coachReq.filter(
+			(cl) => cl.id !== req.params.id
+		);
+		await Classroom.findByIdAndUpdate(
+			req.params.id,
+			{
+				$addToSet: { coaches: req.user.id },
+			},
+			{ useFindAndModify: false }
+		);
+		res.locals.user.classes.push(req.classroom.id);
+		await res.locals.user.save();
+	} catch (err) {
+		req.flash('error', `Failed to join`);
+		res.redirect(`/profile`);
+		return;
+	}
+	req.flash('success', 'Joined class as coach');
+	res.redirect(`/class/${req.params.id}`);
+});
+
+module.exports.coachDeny = catchAsync(async (req, res) => {
+	if (!req.user.coachReq.includes(req.params.id)) {
+		req.flash('error', 'You were not invited to join this class');
+		res.redirect('/profile');
+		return;
+	}
+	res.locals.user.coachReq = res.locals.user.coachReq.filter(
+		(cl) => cl.id !== req.params.id
+	);
+	await res.locals.user.save();
+	req.flash('success', 'Rejected coach request');
 	res.redirect(`/profile`);
 });
 

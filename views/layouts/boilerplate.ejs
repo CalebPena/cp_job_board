@@ -27,7 +27,7 @@
 					<li>
 						<a href="/class/<%=classroom.id%>" class="nav-link">JOB PAGE</a>
 					</li>
-					<% if (user.permissions === 'admin' || user.permissions == 'owner')
+					<% if ( ['coach', 'admin', 'owner'].includes(user.permissions))
 					{%>
 					<li>
 						<a href="/class/<%=classroom.id%>/admin" class="nav-link">ADMIN</a>
