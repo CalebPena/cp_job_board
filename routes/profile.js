@@ -8,4 +8,6 @@ router.get('/', isLoggedIn, profile.renderProfile);
 
 // router.post('/', isLoggedIn, profile.updateProfile);
 
+router.patch('/username', isLoggedIn, profile.updateUsername);
+
 module.exports = router;

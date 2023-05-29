@@ -1,10 +1,17 @@
 <% layout('layouts/boilerplate') %>
-<form action="" method="post" class="confirm-update update-profile">
-	<h1><%= user.username %></h1>
-	<h2>Email: <%= user.email %></h2>
+	<!-- <form action="" method="post" class="confirm-update update-profile"> -->
+	<h1>
+		<%= user.username %>
+	</h1>
+	<form action="/profile/username?_method=patch" method="POST" class="update-username">
+		<input type="text" value="<%= user.username %>" name="username">
+		<button type="submit">Update</button>
+	</form>
+	<h2>Email: <%= user.email %>
+	</h2>
 	<h2>
 		Role: <%= user.status %>
-		<!-- <label for="status">Role: </span></label>
+			<!-- <label for="status">Role: </span></label>
 		<select name="status" id="status">
 			<option value="Leader" <%= user.status==='Leader'? 'selected':'' %>>Leader</option>
 			<option value="Alumni" <%= user.status==='Alumni'? 'selected':'' %>>Alumni</option>
@@ -26,90 +33,106 @@
 						value="<%= user.cpClass?user.cpClass.year:2010 %>"
 					/>
 					<select type="text" id="cpClass-class" name="cpClass[class]">
-						<option value="C1"<%= user.cpClass?(user.cpClass.class==='C1'? 'selected':''):'' %>>C1</option>
-						<option value="C2"<%= user.cpClass?(user.cpClass.class==='C2'? 'selected':''):'' %>>C2</option>
-						<option value="C3"<%= user.cpClass?(user.cpClass.class==='C3'? 'selected':''):'' %>>C3</option>
-						<option value="C4"<%= user.cpClass?(user.cpClass.class==='C4'? 'selected':''):'' %>>C4</option>
-					</select>
-					<input
-						type="text"
-						id="cpClass-location"
-						name="cpClass[location]"
-						maxlength="3"
-						placeholder="DEN"
-						value="<%= user.cpClass?user.cpClass.location:'DEN' %>"
-					/>
+						<option value="C1"<%= user.cpClass?(user.cpClass.class===' C1'? 'selected' :''):'' %>>C1</option>
+				<option value="C2" <%=user.cpClass?(user.cpClass.class==='C2' ? 'selected' :''):'' %>>C2</option>
+				<option value="C3" <%=user.cpClass?(user.cpClass.class==='C3' ? 'selected' :''):'' %>>C3</option>
+				<option value="C4" <%=user.cpClass?(user.cpClass.class==='C4' ? 'selected' :''):'' %>>C4</option>
+				</select>
+				<input type="text" id="cpClass-location" name="cpClass[location]" maxlength="3" placeholder="DEN"
+					value="<%= user.cpClass?user.cpClass.location:'DEN' %>" />
 				</span> -->
-			</div>
+				</div>
 		</h2>
-	<% } %>
-	<% if (user.careerTrack) {%>
-		<h2>
-			Career Track: <%= user.careerTrack %>
-			<!-- <label for="career-track">Career Track: </label>
+		<% } %>
+			<% if (user.careerTrack) {%>
+				<h2>
+					Career Track: <%= user.careerTrack %>
+						<!-- <label for="career-track">Career Track: </label>
 			<input type="text" id="career-track" name="careerTrack" value="<%= user.careerTrack %>"> -->
-		</h2>
-	<% } %>
-	<a href="/change-password">Change Password</a>
-	<!-- <div class="save-or-reset">
+				</h2>
+				<% } %>
+					<a href="/change-password">Change Password</a>
+					<!-- <div class="save-or-reset">
 	<button type="submit">Save</button><button type="reset" id="reset" class="btn">Reset</button>
 	</div> -->
-	<div class="borderBottom"></div>
-</form>
-<div class="classrooms">
-	<h3>Classrooms:</h3>
-	<ul>
-	<% for (i=0; i<user.classes.length; i++) {let classroom = user.classes[i]%>
-		<li class="list-classes">
-			<%= classroom.className %> 
-			<form class="confirm-leave leave" action="/class/<%= classroom.id %>?_method=delete" method="post">
-				<button type="submit">Leave</button>
-			</form>
-		</li>
-	<% } %> 
-	</ul>
-</div>
+					<div class="borderBottom"></div>
+					<!-- </form> -->
+					<div class="classrooms">
+						<h3>Classrooms:</h3>
+						<ul>
+							<% for (i=0; i<user.classes.length; i++) {let classroom=user.classes[i]%>
+								<li class="list-classes">
+									<%= classroom.className %>
+										<form class="confirm-leave leave"
+											action="/class/<%= classroom.id %>?_method=delete" method="post">
+											<button type="submit">Leave</button>
+										</form>
+								</li>
+								<% } %>
+						</ul>
+					</div>
 
-<% if (user.adminReq.length) {%> 
-	<h2>Pending Admin Requests:</h2>
-	<ul>
-		<% for (let classroom of user.adminReq) {%>
-			<li><%= classroom.className %>
-				<form action="/class/<%= classroom.id %>/admin-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
-				<form action="/class/<%= classroom.id %>/admin-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
-		<%}%>
-	</ul>
-<% } %> 
-<% if (user.coachReq.length) {%> 
-	<h2>Pending Coach Requests:</h2>
-	<ul>
-		<% for (let classroom of user.coachReq) {%>
-			<li><%= classroom.className %>
-				<form action="/class/<%= classroom.id %>/coach-join" method="post" class="inline-form confirm-admin-join"><button type="submit" class="accept accept-deny">Accept</button></form>
-				<form action="/class/<%= classroom.id %>/coach-deny" method="post" class="inline-form confirm-admin-join"><button type="submit" class="deny accept-deny">Deny</button></form></li>
-		<%}%>
-	</ul>
-<% } %> 
-<% if (interested.length > 0) {%>
-	<div class="classrooms">
-		<ul>
-			<% for (let i=0; i<interested.length; i++) { let inter = interested[i]; %>
-				<div>
-					<li>
-						<div class="job-profile">
-							<div>
-								<span class="job-title-interested"><%= inter.jobTitle %></span>
-								<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
-							</div>
-							<% if (inter.archived) { %><div class="archived">*This Job Has Been Archived</div><% } %>
-							<div>Company: <%= inter.company %></div>
-							<div>Status: <%= inter.status %></div>
-						</div>
-					</li>
-				</div>
-			<% } %>
-		</ul>
-	</divclass>
-<% } %>
-<!-- <script src="/javascript/cpClass.js"></script> -->
-<script src="/javascript/profile.js"></script>
+					<% if (user.adminReq.length) {%>
+						<h2>Pending Admin Requests:</h2>
+						<ul>
+							<% for (let classroom of user.adminReq) {%>
+								<li>
+									<%= classroom.className %>
+										<form action="/class/<%= classroom.id %>/admin-join" method="post"
+											class="inline-form confirm-admin-join"><button type="submit"
+												class="accept accept-deny">Accept</button></form>
+										<form action="/class/<%= classroom.id %>/admin-deny" method="post"
+											class="inline-form confirm-admin-join"><button type="submit"
+												class="deny accept-deny">Deny</button></form>
+								</li>
+								<%}%>
+						</ul>
+						<% } %>
+							<% if (user.coachReq.length) {%>
+								<h2>Pending Coach Requests:</h2>
+								<ul>
+									<% for (let classroom of user.coachReq) {%>
+										<li>
+											<%= classroom.className %>
+												<form action="/class/<%= classroom.id %>/coach-join" method="post"
+													class="inline-form confirm-admin-join"><button type="submit"
+														class="accept accept-deny">Accept</button></form>
+												<form action="/class/<%= classroom.id %>/coach-deny" method="post"
+													class="inline-form confirm-admin-join"><button type="submit"
+														class="deny accept-deny">Deny</button></form>
+										</li>
+										<%}%>
+								</ul>
+								<% } %>
+									<% if (interested.length> 0) {%>
+										<div class="classrooms">
+											<ul>
+												<% for (let i=0; i<interested.length; i++) { let inter=interested[i]; %>
+													<div>
+														<li>
+															<div class="job-profile">
+																<div>
+																	<span class="job-title-interested">
+																		<%= inter.jobTitle %>
+																	</span>
+																	<% if (inter.dreamJob) { %><span
+																			class="pill new">Dream Job</span>
+																		<% } %>
+																</div>
+																<% if (inter.archived) { %>
+																	<div class="archived">*This Job Has Been Archived
+																	</div>
+																	<% } %>
+																		<div>Company: <%= inter.company %>
+																		</div>
+																		<div>Status: <%= inter.status %>
+																		</div>
+															</div>
+														</li>
+													</div>
+													<% } %>
+											</ul>
+											</divclass>
+											<% } %>
+												<!-- <script src="/javascript/cpClass.js"></script> -->
+												<script src="/javascript/profile.js"></script>

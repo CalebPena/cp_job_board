@@ -6,6 +6,7 @@ const {
 	careerTrackDropdownValidation,
 	tagDropdownValidation,
 	cpClassValidation,
+	username,
 } = require('../validations');
 
 module.exports.validateClassroom = function (req, res, next) {
@@ -15,6 +16,11 @@ module.exports.validateClassroom = function (req, res, next) {
 
 module.exports.validateUser = function (obj) {
 	const { error } = userValidation.validate(obj);
+	validInput(error);
+};
+
+module.exports.validateUsername = function (obj) {
+	const { error } = username.validate(obj);
 	validInput(error);
 };
 

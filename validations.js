@@ -57,8 +57,12 @@ const cpClass = Joi.object({
 
 module.exports.cpClassValidation = cpClass;
 
+const username = Joi.string().required().trim().escapeHTML();
+
+module.exports.username = username;
+
 const user = Joi.object({
-	username: Joi.string().required().trim().escapeHTML(),
+	username: username,
 	email: Joi.string().required().trim().email().escapeHTML(),
 	status: Joi.string()
 		.required()
