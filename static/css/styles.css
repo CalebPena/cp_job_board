@@ -514,7 +514,8 @@ main ul li {
 
 .filter-option:nth-child(1),
 .filter-option:nth-child(2),
-.filter-option:nth-child(3) {
+.filter-option:nth-child(3),
+.filter-option:nth-child(4) {
 	width: 100%;
 	display: block;
 	margin-right: 0 !important;
@@ -523,9 +524,11 @@ main ul li {
 .filter-option:nth-child(1) label,
 .filter-option:nth-child(2) label,
 .filter-option:nth-child(3) label,
+.filter-option:nth-child(4) label,
 .filter-option:nth-child(1) input,
 .filter-option:nth-child(2) input,
-.filter-option:nth-child(3) input {
+.filter-option:nth-child(3) input,
+.filter-option:nth-child(4) input {
 	display: block;
 }
 

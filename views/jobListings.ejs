@@ -1,150 +1,203 @@
 <% layout('layouts/boilerplate') %>
-<link rel="stylesheet" href="/css/jobs.css" />
-<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
-<h1>Job Listings:</h1>
-	<% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
-<a href="/class/<%= classroom.id %>/create" id="newJob" class="create">New Job</a>
-<% } %> 
-
-<form id="filter-jobs" class="border-box">
-	<span class="filter-option">
-		<label for="title">Job Title</label>
-		<input type="text" id="title" class="filter multi-if-small"/>
-	</span>
-	<span class="filter-option">
-		<label for="salary">Minimum Pay</label>
-		<input type="number" id="salary" min="0" class="filter multi-if-small" step=".01"/>
-	</span>
-	<span class="filter-option">
-		<label for="salaryType">Salary Type</label>
-		<select class="filter multi-if-small" id="salaryType">
-			<option value="" selected></option>
-			<option value="Hourly">Hourly</option>
-			<option value="Yearly">Yearly</option>
-		</select>
-	</span>
-	<span class="filter-option">
-		<label for="new">New</label>
-		<input type="checkbox" id="new" name="new" class="check">
-	</span>
-	<% if (user.permissions !== 'leader') {%> 
-	<span class="filter-option">
-		<label for="show-archive">Archive</label>
-		<input type="checkbox" id="show-archive" name="show-archive" class="check">
-	</span>
-	<span class="filter-option">
-		<label for="new-interested">New Interested</label>
-		<input type="checkbox" id="new-interested" name="new-interested" class="check">
-	</span>
-	<% } %> 
-	<div class="tag-box">
-		<label for="filter-career-track">Career Tracks</label>
-		<select multiple class="tags custom-select" id="filter-career-track" class="custom-select">
-			<% for (let ct of classroom.validCareerTracks){%>
-			<option value="<%= ct %>"><%= ct %></option>
-			<% } %>
-		</select>
-	</div>
-	<div class="tag-box">
-		<label for="filter-tags">Tags</label>
-		<select multiple class="tags custom-select" id="filter-tags" class="custom-select">
-			<% for (let tag of classroom.validTags){%>
-			<option value="<%= tag %>"><%= tag %></option>
-			<% } %>
-		</select>
-	</div>
-	<Button type="submit" class="btn" id="filter-btn">Filter</Button>
-</form>
-<%for (let i = 0; i < jobs.length; i++) {let job = jobs[i]; %>
-<div class="job border-box" id="<%= job.id %>">
-	<h2 class="jobTitle"><%= job.jobTitle %> <%if(job.createdDaysAgo < 3){ %>
-				<span class="pill new">New</span>
-				<% } %></h2>
-	<h3 class="sub-header">Company: <div class="job-field"><%= job.company %></div></h3>
-	<h3 class="sub-header">Location: <div class="job-field"><%= job.location %></div></h3>
-	<h3 class="sub-header">Salary: <div class="job-field">$<%= job.salary %> <%=job.salaryType%></div></h3>
-	<h3 class="sub-header">Description:</h4>
-	<p class="description" id="description-<%=i%>"><%=job.description%></p>
-	<% if (job.careerTracks.length) {%> 
-	<div class="careerTracks">
-		<h3 class="sub-header">For:</h3>
-		<div class="careerPills">
-			<% for (let j = 0; j < job.careerTracks.length; j++) {%>
-			<span class="pill"><%= job.careerTracks[j] %> </span><% } %>
-		</div>
-	</div>
-	<% } %> 
-	<% if (job.tags.length) {%> 
-	<h3 class="sub-header">Tags:</h3>
-	<div class="tags">
-		<% for (let j = 0; j < job.tags.length; j++) {%>
-		<span class="pill"><%=job.tags[j]%> </span>
+	<link rel="stylesheet" href="/css/jobs.css" />
+	<link rel="stylesheet" href="https://cdn.quilljs.com/1.3.6/quill.bubble.css">
+	<h1>Job Listings:</h1>
+	<% if (user.permissions==='owner' || user.permissions==='admin' ) {%>
+		<a href="/class/<%= classroom.id %>/create" id="newJob" class="create">New Job</a>
 		<% } %>
-	</div>
-	<% } %> 
-	<div class="buttons">
-		<% if (user.permissions === 'leader') {%>
-			<button type="button" class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>" jobId="<%=job.id%>">
-				<%= job.userIsInterested ? 'Remove from Interested' : 'Add to Interested' %>
-			</button>
-		<% } %> <% if (user.permissions === 'owner' || user.permissions === 'admin') {%>
-		<a href="/class/<%= classroom.id %>/<%=job.id%>" class="btn">Edit</a>
-		<% if (job.archive !== true) {%> 
-		<form class="confirm-archive"action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete" method="post">
-			<button type="submit" class="btn">Archive</button>
-		</form>
-		<% } else {%>
-		<form class="confirm-bring-back"action="/class/<%=classroom.id%>/<%= job.id %>/archive?_method=patch" method="post">
-			<button type="submit" class="btn">Bring Back</button>
-		</form>
-		<% } %>  
-		<% } %> 
-	</div>
-	<div class="<%= job.userIsInterested ? '' : 'hide' %>" id="dream-job-form-<%=job.id%>">
-		<span class="dream-job">
-			<label for="dream-job-<%=job.id%>" class="dream-job-label">This is my dream job</label>
-			<input 
-				type="checkbox"
-				id="dream-job-<%=job.id%>"
-				class="check dream-job-checkbox"
-				jobId="<%=job.id%>" <%=job.dreamJob? 'checked' : '' %>>
-			</span>
-	</div>
-	<% if (['owner', 'admin', 'coach'].includes(user.permissions)) {%>
-		<div class="interested-box">
-			<span class="interested-toggle">
-			<h4 class="interestedIntro">Interested:
-			<span class="arrow-closed interested-arrow">▶</span>
-			</h4>
-		</span>
-		<div class="all-interested">
-		<% for (j=0; j<job.interested.length; j++) {let inter = job.interested[j];%> 
-			<div class="interested">
-				<span class="interested-field">Name: <%=inter.user.username%></span>
-				<% if (inter.dreamJob) { %><span class="pill new">Dream Job</span><% } %>
-				<% if (['admin', 'owner' ].includes(user.permissions)) { %>
-					<select class="interested-status" id="<%= String(inter._id) %>">
-						<option value="New" <%=inter.status==='New' ?'selected':''%>>New</option>
-						<option value="Reviewed" <%=inter.status==='Reviewed' ?'selected':''%>>Reviewed</option>
-						<option value="With Employer" <%=inter.status==='With Employer' ?'selected':''%>>With Employer</option>
-						<option value="Not Selected" <%=inter.status==='Not Selected' ?'selected':''%>>Not Selected</option>
-						<option value="Filled" <%=inter.status==='Filled' ?'selected':''%>>Filled</option>
+
+			<form id="filter-jobs" class="border-box">
+				<span class="filter-option">
+					<label for="title">Job Title</label>
+					<input type="text" id="title" class="filter multi-if-small" />
+				</span>
+				<span class="filter-option">
+					<label for="company">Company</label>
+					<input type="text" id="company" class="filter multi-if-small" />
+				</span>
+				<span class="filter-option">
+					<label for="salary">Minimum Pay</label>
+					<input type="number" id="salary" min="0" class="filter multi-if-small" step=".01" />
+				</span>
+				<span class="filter-option">
+					<label for="salaryType">Salary Type</label>
+					<select class="filter multi-if-small" id="salaryType">
+						<option value="" selected></option>
+						<option value="Hourly">Hourly</option>
+						<option value="Yearly">Yearly</option>
 					</select>
-				<% } else {%>
-					<div class="interested-status-coach">
-						<%= inter.status %>
-					</div>
+				</span>
+				<span class="filter-option">
+					<label for="new">New</label>
+					<input type="checkbox" id="new" name="new" class="check">
+				</span>
+				<% if (user.permissions !=='leader' ) {%>
+					<span class="filter-option">
+						<label for="show-archive">Archive</label>
+						<input type="checkbox" id="show-archive" name="show-archive" class="check">
+					</span>
+					<span class="filter-option">
+						<label for="new-interested">New Interested</label>
+						<input type="checkbox" id="new-interested" name="new-interested" class="check">
+					</span>
+					<% } %>
+						<div class="tag-box">
+							<label for="filter-career-track">Career Tracks</label>
+							<select multiple class="tags custom-select" id="filter-career-track" class="custom-select">
+								<% for (let ct of classroom.validCareerTracks){%>
+									<option value="<%= ct %>">
+										<%= ct %>
+									</option>
+									<% } %>
+							</select>
+						</div>
+						<div class="tag-box">
+							<label for="filter-tags">Tags</label>
+							<select multiple class="tags custom-select" id="filter-tags" class="custom-select">
+								<% for (let tag of classroom.validTags){%>
+									<option value="<%= tag %>">
+										<%= tag %>
+									</option>
+									<% } %>
+							</select>
+						</div>
+						<Button type="submit" class="btn" id="filter-btn">Filter</Button>
+			</form>
+			<%for (let i=0; i < jobs.length; i++) {let job=jobs[i]; %>
+				<div class="job border-box" id="<%= job.id %>">
+					<h2 class="jobTitle">
+						<%= job.jobTitle %>
+							<%if(job.createdDaysAgo < 3){ %>
+								<span class="pill new">New</span>
+								<% } %>
+					</h2>
+					<h3 class="sub-header">Company: <div class="job-field">
+							<%= job.company %>
+						</div>
+					</h3>
+					<h3 class="sub-header">Location: <div class="job-field">
+							<%= job.location %>
+						</div>
+					</h3>
+					<h3 class="sub-header">Salary: <div class="job-field">$<%= job.salary %>
+								<%=job.salaryType%>
+						</div>
+					</h3>
+					<h3 class="sub-header">Description:</h4>
+						<p class="description" id="description-<%=i%>">
+							<%=job.description%>
+						</p>
+						<% if (job.careerTracks.length) {%>
+							<div class="careerTracks">
+								<h3 class="sub-header">For:</h3>
+								<div class="careerPills">
+									<% for (let j=0; j < job.careerTracks.length; j++) {%>
+										<span class="pill">
+											<%= job.careerTracks[j] %>
+										</span>
+										<% } %>
+								</div>
+							</div>
+							<% } %>
+								<% if (job.tags.length) {%>
+									<h3 class="sub-header">Tags:</h3>
+									<div class="tags">
+										<% for (let j=0; j < job.tags.length; j++) {%>
+											<span class="pill">
+												<%=job.tags[j]%>
+											</span>
+											<% } %>
+									</div>
+									<% } %>
+										<div class="buttons">
+											<% if (user.permissions==='leader' ) {%>
+												<button type="button"
+													class="interestedBtn btn <%= job.userIsInterested ? 'inter' : 'not-inter' %>"
+													jobId="<%=job.id%>">
+													<%= job.userIsInterested ? 'Remove from Interested'
+														: 'Add to Interested' %>
+												</button>
+												<% } %>
+													<% if (user.permissions==='owner' || user.permissions==='admin' )
+														{%>
+														<a href="/class/<%= classroom.id %>/<%=job.id%>"
+															class="btn">Edit</a>
+														<% if (job.archive !==true) {%>
+															<form class="confirm-archive"
+																action="/class/<%=classroom.id%>/<%= job.id %>?_method=delete"
+																method="post">
+																<button type="submit" class="btn">Archive</button>
+															</form>
+															<% } else {%>
+																<form class="confirm-bring-back"
+																	action="/class/<%=classroom.id%>/<%= job.id %>/archive?_method=patch"
+																	method="post">
+																	<button type="submit" class="btn">Bring
+																		Back</button>
+																</form>
+																<% } %>
+																	<% } %>
+										</div>
+										<div class="<%= job.userIsInterested ? '' : 'hide' %>"
+											id="dream-job-form-<%=job.id%>">
+											<span class="dream-job">
+												<label for="dream-job-<%=job.id%>" class="dream-job-label">This is my
+													dream job</label>
+												<input type="checkbox" id="dream-job-<%=job.id%>"
+													class="check dream-job-checkbox" jobId="<%=job.id%>"
+													<%=job.dreamJob? 'checked' : '' %>>
+											</span>
+										</div>
+										<% if (['owner', 'admin' , 'coach' ].includes(user.permissions)) {%>
+											<div class="interested-box">
+												<span class="interested-toggle">
+													<h4 class="interestedIntro">Interested:
+														<span class="arrow-closed interested-arrow">▶</span>
+													</h4>
+												</span>
+												<div class="all-interested">
+													<% for (j=0; j<job.interested.length; j++) {let
+														inter=job.interested[j];%>
+														<div class="interested">
+															<span class="interested-field">Name:
+																<%=inter.user.username%></span>
+															<% if (inter.dreamJob) { %><span class="pill new">Dream
+																	Job</span>
+																<% } %>
+																	<% if (['admin', 'owner'
+																		].includes(user.permissions)) { %>
+																		<select class="interested-status"
+																			id="<%= String(inter._id) %>">
+																			<option value="New" <%=inter.status==='New'
+																				?'selected':''%>>New</option>
+																			<option value="Reviewed"
+																				<%=inter.status==='Reviewed'
+																				?'selected':''%>>Reviewed</option>
+																			<option value="With Employer"
+																				<%=inter.status==='With Employer'
+																				?'selected':''%>>With Employer</option>
+																			<option value="Not Selected"
+																				<%=inter.status==='Not Selected'
+																				?'selected':''%>>Not Selected</option>
+																			<option value="Filled"
+																				<%=inter.status==='Filled'
+																				?'selected':''%>>Filled</option>
+																		</select>
+																		<% } else {%>
+																			<div class="interested-status-coach">
+																				<%= inter.status %>
+																			</div>
+																			<% } %>
+														</div>
+														<% } %>
+												</div>
+												<% } %>
+											</div>
+				</div>
 				<% } %>
-			</div>
-		<% } %> 
-	</div>
-	<% } %> 
-	</div>
-</div>
-<% } %>
-<script>
-	const classId = '<%=classroom.id%>';
-</script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
-<script src="/javascript/jobs.js"></script>
+					<script>
+						const classId = '<%=classroom.id%>';
+					</script>
+					<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+					<script src="https://cdn.quilljs.com/1.0.0/quill.js"></script>
+					<script src="/javascript/jobs.js"></script>

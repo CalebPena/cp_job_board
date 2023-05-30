@@ -21,7 +21,7 @@ const changeBtn = function (element, classId, jobId) {
 				element.classList.remove('inter');
 				element.classList.add('not-inter');
 				element.innerHTML = 'Add to Interested';
-				dreamJob.classList.add('hide')
+				dreamJob.classList.add('hide');
 			})
 			.catch(function (error) {
 				console.error(error);
@@ -40,20 +40,23 @@ for (i = 0; i < interestedBtns.length; i++) {
 
 const dreamJobs = document.querySelectorAll('.dream-job-checkbox');
 dreamJobs.forEach((checkbox) => {
-	let jobId = checkbox.getAttribute('jobId')
+	let jobId = checkbox.getAttribute('jobId');
 	checkbox.addEventListener('change', (e) => {
 		axios
-			.post(`/class/${classId}/${jobId}/dream-job`, { dreamJob: checkbox.checked })
+			.post(`/class/${classId}/${jobId}/dream-job`, {
+				dreamJob: checkbox.checked,
+			})
 			.catch(function (error) {
 				console.error(error);
 			});
-	})
-})
+	});
+});
 
 class Filter {
 	constructor(jobs) {
 		this.jobs = jobs;
 		this.title = undefined;
+		this.company = undefined;
 		this.careerTracks = [];
 		this.salary = 0;
 		this.salaryType = undefined;
@@ -79,6 +82,9 @@ class Filter {
 	}
 	_update(formData) {
 		formData.title ? (this.title = formData.title) : (this.title = undefined);
+		formData.company
+			? (this.company = formData.company)
+			: (this.company = undefined);
 		formData.salary !== ''
 			? (this.salary = parseFloat(formData.salary))
 			: (this.salary = 0);
@@ -96,6 +102,7 @@ class Filter {
 		const threeDaysAgo = new Date().getTime() - 3 * 24 * 60 * 60 * 1000;
 		return function (job) {
 			if (!that.archived && job.archive === true) return false;
+			if (that.archived && job.archive === false) return false;
 
 			if (
 				that.newInterested &&
@@ -104,6 +111,9 @@ class Filter {
 				return false;
 			}
 			if (that.title && !that._in(job.jobTitle, that.title)) {
+				return false;
+			}
+			if (that.company && !that._in(job.company, that.company)) {
 				return false;
 			}
 			if (that.salary > job.salary.min) return false;
@@ -298,6 +308,6 @@ for (let i = 0; i < descriptions.length; i++) {
 	try {
 		description.setContents(JSON.parse(description.getText()));
 	} catch (error) {
-		continue
+		continue;
 	}
 }
