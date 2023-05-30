@@ -3,7 +3,7 @@
 }
 
 .section {
-	margin-bottom: 50px
+	margin-bottom: 50px;
 }
 
 input {
@@ -20,12 +20,16 @@ button {
 	padding: 5px;
 }
 
+.company-sub-header {
+	font-size: medium;
+}
+
 .employed-label {
 	display: inline-block;
 }
 
 .border-bottom {
-	border-bottom: 1px solid #B4B4B4;
+	border-bottom: 1px solid #b4b4b4;
 }
 
 .leader-list {

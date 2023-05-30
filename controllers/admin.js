@@ -20,6 +20,7 @@ module.exports.adminPage = async (req, res) => {
 					return {
 						JobId: job.id,
 						title: job.jobTitle,
+						company: job.company,
 						date: parseInt(
 							moment
 								.duration(
