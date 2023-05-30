@@ -78,6 +78,15 @@ select {
 	cursor: pointer;
 }
 
+.show-password label {
+	font-size: medium;
+	display: inline;
+}
+
+.show-password input {
+	width: auto;
+}
+
 #cpClass-year {
 	width: 70px;
 }
